@@ -17,13 +17,12 @@ public class WeatherForecastControllerTest
     [Fact]
     public void GetWeatherForecastShouldReturnData()
     {
-
         ILogger<WeatherForecastController> logger = new Logger<WeatherForecastController>(new LoggerFactory());
         var controller = new WeatherForecastController(logger);
+        
         controller.ControllerContext.HttpContext = new DefaultHttpContext();
         
         var result = controller.Get().Count();
-        
         Assert.True(result > 0);
     }
 }
