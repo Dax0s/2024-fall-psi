@@ -12,8 +12,6 @@ namespace backend.Tests.Controllers;
 [TestSubject(typeof(WeatherForecastController))]
 public class WeatherForecastControllerTest
 { 
-    private readonly ITestOutputHelper output;
-    
     [Fact]
     public void GetWeatherForecastShouldReturnData()
     {
