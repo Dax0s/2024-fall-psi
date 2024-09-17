@@ -1,3 +1,6 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -23,7 +26,7 @@ public class ReactionTimeController : ControllerBase
 
         const int MIN_WAIT = 2 * MILLISECONDS_IN_SECOND;
         const int MAX_WAIT = 5 * MILLISECONDS_IN_SECOND;
-        
+
         return new ReactionTime { MillisecondsToWait = Random.Shared.Next(MIN_WAIT, MAX_WAIT) };
     }
 }
