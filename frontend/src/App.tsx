@@ -2,13 +2,16 @@ import React, {useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import ReactionButton from './ReactionButton';
+
 function App() {
   const [weather, setWeather] = useState('');
   const getWeather = async () => {
     try {
       const tmp = await fetch("http://localhost:5252/weatherforecast")
       const json = await tmp.json()
-      console.log(json[0])
+      console.log(json)
+      console.log(json[4])
       setWeather(json[0].summary);
     } catch (e) {
       console.log(e)
@@ -32,6 +35,8 @@ function App() {
         </a>
         <button onClick={getWeather}>Get weather</button>
         <p>{weather}</p>
+        <hr style={{width: '100%', color: '#61dbfb'}}/>
+        <ReactionButton />
       </header>
     </div>
   );
