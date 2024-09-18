@@ -1,130 +1,117 @@
-import React, { Component } from 'react';
+import React, { useRef, useState } from 'react';
 import './ReactionButton.css';
-
-enum ReactionState {
-  OFF,
-  RED,
-  GREEN,
-}
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-class ReactionButton extends Component {
-  state = {
-    latestStartTime: 0,
-    reactionTime: null,
-    greenLightTime: 0,
+async function fetchWaitTime() {
+  const tmp = await fetch('http://localhost:5252/reactiontime');
+  const json = await tmp.json();
+  return json.millisecondsToWait;
+}
 
-    tries: 0,
-    reactionTimeSum: 0,
+enum ReactionState {
+  BASE,
+  WAIT,
+  GO,
+}
 
-    label: 'TEST REACTION TIME',
-    class: 'whiteReactionBtn',
-    reactionState: ReactionState.OFF,
-  };
+function ReactionButton() {
+  let goTime = useRef(0);
 
-  clickOnOff = async () => {
-    const tmp = await fetch('http://localhost:5252/reactiontime');
-    const json = await tmp.json();
+  let tries = useRef(0);
+  let reactionTimeSum = useRef(0);
 
-    this.setState({
-      label: 'WAIT',
-      class: 'redReactionBtn',
-      reactionState: ReactionState.RED,
-    });
+  let latestStartTime = useRef(0);
+  let reactionState = useRef(ReactionState.BASE);
 
-    const startTime = performance.now();
-    this.setState({ latestStartTime: startTime });
+  const [reactionTimeLabel, setReactionTimeLabel] = useState(
+    'TEST YOUR REACTION TIME',
+  );
 
-    await delay(json.millisecondsToWait);
+  const [buttonLabel, setButtonLabel] = useState('PRESS ME TO START');
+  const [buttonClass, setButtonClass] = useState('whiteReactionBtn');
 
-    if (
-      this.state.reactionState === ReactionState.RED &&
-      this.state.latestStartTime === startTime
-    ) {
-      this.setState({
-        label: 'PRESS NOW',
-        class: 'greenReactionBtn',
-        reactionState: ReactionState.GREEN,
-      });
-    }
-    this.setState({ greenLightTime: performance.now() });
-  };
-  clickOnRed = () => {
-    this.setState({
-      label: 'TOO SOON, TRY AGAIN',
-      class: 'orangeReactionBtn',
-      reactionState: ReactionState.OFF,
-    });
-  };
-  clickOnGreen = (timeNow: number) => {
-    const renderingDelay = 75;
-    const currentReactionTime =
-      timeNow - this.state.greenLightTime - renderingDelay;
-    this.setState({
-      reactionTime: currentReactionTime,
+  const [averageLabel, setAverageLabel] = useState('');
 
-      tries: this.state.tries + 1,
-      reactionTimeSum: this.state.reactionTimeSum + currentReactionTime,
-
-      label: 'TRY AGAIN',
-      class: 'whiteReactionBtn',
-      reactionState: ReactionState.OFF,
-    });
-  };
-
-  handleClick = async () => {
-    const timeNow = performance.now();
-    switch (this.state.reactionState) {
-      case ReactionState.OFF:
-        this.clickOnOff();
+  async function handleClick() {
+    switch (reactionState.current) {
+      case ReactionState.BASE:
+        await clickOnBaseState();
         break;
-      case ReactionState.RED:
-        this.clickOnRed();
+      case ReactionState.WAIT:
+        reactionState.current = ReactionState.BASE;
+        setButtonLabel('TOO SOON, TRY AGAIN');
+        setButtonClass('orangeReactionBtn');
         break;
-      case ReactionState.GREEN:
-        this.clickOnGreen(timeNow);
+      case ReactionState.GO:
+        clickOnGoState();
         break;
       default:
+        break;
     }
+  }
+
+  const clickOnBaseState = async () => {
+    const msToWait = await fetchWaitTime();
+
+    reactionState.current = ReactionState.WAIT;
+    setButtonLabel('WAIT');
+    setButtonClass('redReactionBtn');
+
+    const startTime = performance.now();
+    latestStartTime.current = startTime;
+
+    await delay(msToWait);
+
+    if (
+      reactionState.current === ReactionState.WAIT &&
+      latestStartTime.current === startTime
+    ) {
+      reactionState.current = ReactionState.GO;
+      setButtonLabel('PRESS NOW');
+      setButtonClass('greenReactionBtn');
+    }
+
+    goTime.current = performance.now();
   };
 
-  render() {
-    const mainLabel =
-      this.state.reactionTime != null
-        ? 'Reaction time: ' + this.state.reactionTime + ' ms'
-        : 'TEST YOUR REACTION TIME';
+  const clickOnGoState = () => {
+    const stopTime = performance.now();
+    const pageDelay = 100;
+    const reactionTime = stopTime - goTime.current - pageDelay;
 
-    let averageLabel = '';
-    if (this.state.tries > 0) {
-      averageLabel +=
-        'Average reaction time: ' +
-        Math.floor(this.state.reactionTimeSum / this.state.tries) +
-        ' ms';
-      averageLabel += ' ';
-      averageLabel +=
-        '(' +
-        this.state.tries +
+    tries.current = tries.current + 1;
+    reactionTimeSum.current = reactionTimeSum.current + reactionTime;
+    const averageReactionTime = reactionTimeSum.current / tries.current;
+
+    reactionState.current = ReactionState.BASE;
+    setButtonLabel('TRY AGAIN');
+    setButtonClass('whiteReactionBtn');
+
+    setReactionTimeLabel('REACTION TIME: ' + Math.floor(reactionTime) + ' ms');
+    setAverageLabel(
+      'AVERAGE REACTION TIME: ' +
+        Math.floor(averageReactionTime) +
+        ' ms' +
+        ' (' +
+        tries.current +
         ' ' +
-        (this.state.tries === 1 ? 'try' : 'tries') +
-        ')';
-    }
-    return (
-      <>
-        <h1>{mainLabel}</h1>
-        <button
-          id="reactionBtn"
-          className={this.state.class}
-          onClick={this.handleClick}
-        >
-          {this.state.label}
-        </button>
-        <p>{averageLabel}</p>
-      </>
+        (tries.current > 1 ? 'tries' : 'try') +
+        ')',
     );
-  }
+  };
+
+  return (
+    <>
+      <h1>{reactionTimeLabel}</h1>
+      <button id="reactionBtn" className={buttonClass} onClick={handleClick}>
+        {buttonLabel}
+      </button>
+      <p>{averageLabel}</p>
+    </>
+  );
 }
 
 export default ReactionButton;
