@@ -1,0 +1,31 @@
+#reactionBtn {
+  width: 500px;
+  height: 500px;
+
+  border-width: 0px;
+  border-radius: 100px;
+
+  font-size: 30pt;
+  font-weight: bold;
+}
+#reactionBtn:hover {
+  filter: brightness(80%);
+}
+
+.whiteReactionBtn {
+  color: black;
+  background-color: white;
+}
+
+.redReactionBtn {
+  color: white;
+  background-color: red;
+}
+.orangeReactionBtn {
+  color: white;
+  background-color: orange;
+}
+.greenReactionBtn {
+  color: white;
+  background-color: green;
+}
