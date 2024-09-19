@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import ReactionButton from './ReactionButton';
+import ReactionButton from './components/reaction-game/ReactionButton';
 
 function App() {
   const [weather, setWeather] = useState('');
