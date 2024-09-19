@@ -18,13 +18,13 @@ enum ReactionState {
 }
 
 function ReactionButton() {
-  let goTime = useRef(0);
+  const goTime = useRef(0);
 
-  let tries = useRef(0);
-  let reactionTimeSum = useRef(0);
+  const tries = useRef(0);
+  const reactionTimeSum = useRef(0);
 
-  let latestStartTime = useRef(0);
-  let reactionState = useRef(ReactionState.BASE);
+  const latestStartTime = useRef(0);
+  const reactionState = useRef(ReactionState.BASE);
 
   const [reactionTimeLabel, setReactionTimeLabel] = useState(
     'TEST YOUR REACTION TIME',
