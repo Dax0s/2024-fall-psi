@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
 
+using Models;
+
 [ApiController]
 [Route("[controller]")]
 public class ReactionTimeController : ControllerBase
