@@ -1,8 +1,10 @@
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import {
-  createBrowserRouter, Route,
-  RouterProvider, useParams
+  createBrowserRouter,
+  Route,
+  RouterProvider,
+  useParams,
 } from 'react-router-dom';
 import './index.css';
 import App from './App';
@@ -10,7 +12,7 @@ import reportWebVitals from './reportWebVitals';
 
 const Loader = () => {
   const { gameName } = useParams();
-  
+
   const GamePage = lazy(() => import(`./games/${gameName}`));
 
   return (
@@ -18,7 +20,7 @@ const Loader = () => {
       <GamePage />
     </Suspense>
   );
-}
+};
 
 const router = createBrowserRouter([
   {
@@ -28,7 +30,7 @@ const router = createBrowserRouter([
   {
     path: '/games/:gameName',
     element: <Loader />,
-  }
+  },
 ]);
 
 const root = ReactDOM.createRoot(

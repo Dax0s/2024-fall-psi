@@ -36,8 +36,10 @@ function App() {
         <button onClick={getWeather}>Get weather</button>
         <p>{weather}</p>
         <hr style={{ width: '100%', color: '#61dbfb' }} />
-        <div className='Games-grid'>
-          <Link to={'games/reaction-game'} className='Grid-item'>Reaction Game</Link>
+        <div className="Games-grid">
+          <Link to={'games/reaction-game'} className="Grid-item">
+            Reaction Game
+          </Link>
         </div>
       </header>
     </div>
