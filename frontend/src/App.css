@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+.Games-grid {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 16px;
+}
+
+.Grid-item {
+  padding: 20px;
+  text-align: center;
+  background-color: #61dbfb;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.Grid-item:hover {
+  background-color: #21a1f1;
+}
+
