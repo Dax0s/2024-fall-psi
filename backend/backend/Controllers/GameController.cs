@@ -11,21 +11,22 @@ namespace MemoryGameAPI.Controllers
     {
         private static List<int> generatedNumbers = new List<int>();
 
-        // Endpoint to start the game and generate the grid numbers
         [HttpGet("start")]
-        public ActionResult<List<int>> StartGame()
+        public ActionResult<List<int?>> StartGame()
         {
             Random rand = new Random();
-            generatedNumbers = Enumerable.Range(1, 6)
-                                         .OrderBy(x => rand.Next())
-                                         .Take(5)
-                                         .ToList();
+            // Generate unique numbers from 1 to 5
+            List<int> generatedNumbers = Enumerable.Range(1, 5)
+                                                   .OrderBy(x => rand.Next())
+                                                   .ToList();
 
-            // Pad the rest of the grid with random numbers between 1 and 6
-            List<int> gridNumbers = new List<int>(generatedNumbers);
+            // Create a list of nullable integers and add generated numbers
+            List<int?> gridNumbers = new List<int?>(generatedNumbers.Select(n => (int?)n));
+
+            // Pad the rest of the grid with nulls (to maintain 16 items in the grid)
             while (gridNumbers.Count < 16)
             {
-                gridNumbers.Add(rand.Next(1, 7)); // Numbers between 1 and 6
+                gridNumbers.Add(null); // Fill remaining slots with nulls
             }
 
             // Shuffle the grid
