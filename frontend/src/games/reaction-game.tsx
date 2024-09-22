@@ -93,13 +93,13 @@ function ReactionButton() {
     setReactionTimeLabel('REACTION TIME: ' + Math.floor(reactionTime) + ' ms');
     setAverageLabel(
       'AVERAGE REACTION TIME: ' +
-      Math.floor(averageReactionTime) +
-      ' ms' +
-      ' (' +
-      tries.current +
-      ' ' +
-      (tries.current > 1 ? 'tries' : 'try') +
-      ')',
+        Math.floor(averageReactionTime) +
+        ' ms' +
+        ' (' +
+        tries.current +
+        ' ' +
+        (tries.current > 1 ? 'tries' : 'try') +
+        ')',
     );
   };
 

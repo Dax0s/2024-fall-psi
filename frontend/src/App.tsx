@@ -1,4 +1,3 @@
-
 import React, { useState, Suspense, lazy } from 'react';
 import {
   createBrowserRouter,
@@ -46,33 +45,33 @@ function HomePage() {
   };
 
   return (
-      <div className="app">
-        <header className="app-header">
-          <img src={logo} className="app-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="app-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          <button onClick={getWeather}>Get weather</button>
-          <p>{weather}</p>
-          <hr style={{ width: '100%', color: '#61dbfb' }} />
-          <div className="games-grid">
-            <Link to={'games/reaction-game'} className="grid-item">
-              Reaction Game
-            </Link>
-          </div>
-        </header>
-      </div>
+    <div className="app">
+      <header className="app-header">
+        <img src={logo} className="app-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.tsx</code> and save to reload.
+        </p>
+        <a
+          className="app-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+        <button onClick={getWeather}>Get weather</button>
+        <p>{weather}</p>
+        <hr style={{ width: '100%', color: '#61dbfb' }} />
+        <div className="games-grid">
+          <Link to={'games/reaction-game'} className="grid-item">
+            Reaction Game
+          </Link>
+        </div>
+      </header>
+    </div>
   );
 }
 
 export default function App() {
-  return <RouterProvider router={router} />
+  return <RouterProvider router={router} />;
 }
