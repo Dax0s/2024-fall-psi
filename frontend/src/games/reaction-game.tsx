@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import './ReactionButton.css';
+import '../stylesheets/ReactionButton.css';
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -114,4 +114,14 @@ function ReactionButton() {
   );
 }
 
-export default ReactionButton;
+function Game() {
+  return (
+    <div className="app">
+      <header className="app-header">
+        <ReactionButton />
+      </header>
+    </div>
+  );
+}
+
+export default Game;

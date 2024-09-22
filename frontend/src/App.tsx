@@ -1,10 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  useParams,
+} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 
-import ReactionButton from './components/reaction-game/ReactionButton';
+const Loader = () => {
+  const { gameName } = useParams();
 
-function App() {
+  const GamePage = lazy(() => import(`./games/${gameName}`));
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <GamePage />
+    </Suspense>
+  );
+};
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <HomePage />,
+  },
+  {
+    path: '/games/:gameName',
+    element: <Loader />,
+  },
+]);
+
+function HomePage() {
   const [weather, setWeather] = useState('');
   const getWeather = async () => {
     try {
@@ -18,14 +45,14 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div className="app">
+      <header className="app-header">
+        <img src={logo} className="app-logo" alt="logo" />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
         <a
-          className="App-link"
+          className="app-link"
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
@@ -35,10 +62,16 @@ function App() {
         <button onClick={getWeather}>Get weather</button>
         <p>{weather}</p>
         <hr style={{ width: '100%', color: '#61dbfb' }} />
-        <ReactionButton />
+        <div className="games-grid">
+          <Link to={'games/reaction-game'} className="grid-item">
+            Reaction Game
+          </Link>
+        </div>
       </header>
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  return <RouterProvider router={router} />;
+}
