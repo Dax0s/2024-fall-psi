@@ -2,7 +2,6 @@ import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import {
   createBrowserRouter,
-  Route,
   RouterProvider,
   useParams,
 } from 'react-router-dom';

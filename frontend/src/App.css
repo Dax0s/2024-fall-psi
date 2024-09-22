@@ -1,8 +1,8 @@
-.App {
+.app {
   text-align: center;
 }
 
-.App-logo {
+.app-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -13,7 +13,7 @@
   }
 }
 
-.App-header {
+.app-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -24,7 +24,7 @@
   color: white;
 }
 
-.App-link {
+.app-link {
   color: #61dafb;
 }
 
@@ -37,13 +37,13 @@
   }
 }
 
-.Games-grid {
+.games-grid {
   display: grid;
   grid-template-columns: auto auto auto;
   gap: 16px;
 }
 
-.Grid-item {
+.grid-item {
   padding: 20px;
   text-align: center;
   background-color: #61dbfb;
@@ -53,6 +53,6 @@
   transition: background-color 0.3s;
 }
 
-.Grid-item:hover {
+.grid-item:hover {
   background-color: #21a1f1;
 }
