@@ -66,6 +66,9 @@ function HomePage() {
           <Link to={'games/reaction-game'} className="grid-item">
             Reaction Game
           </Link>
+          <Link to={'games/memory-game'} className="grid-item">
+            Memory Game
+          </Link>
         </div>
       </header>
     </div>
