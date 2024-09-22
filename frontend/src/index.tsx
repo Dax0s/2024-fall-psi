@@ -1,43 +1,16 @@
-import React, { lazy, Suspense } from 'react';
+
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {
-  createBrowserRouter,
-  RouterProvider,
-  useParams,
-} from 'react-router-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
-const Loader = () => {
-  const { gameName } = useParams();
-
-  const GamePage = lazy(() => import(`./games/${gameName}`));
-
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <GamePage />
-    </Suspense>
-  );
-};
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-  },
-  {
-    path: '/games/:gameName',
-    element: <Loader />,
-  },
-]);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <App />
   </React.StrictMode>,
 );
 

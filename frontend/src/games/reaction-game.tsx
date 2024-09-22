@@ -3,8 +3,8 @@ import ReactionButton from '../components/reaction-game/ReactionButton';
 
 function Game() {
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="app">
+      <header className="app-header">
         <ReactionButton />
       </header>
     </div>
