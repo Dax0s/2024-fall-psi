@@ -7,18 +7,19 @@ namespace MemoryGameAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class GameController : ControllerBase
+    public class MemoryGameWithNumbersController : ControllerBase
     {
         private static List<int> generatedNumbers = new List<int>();
 
         [HttpGet("start")]
-        public ActionResult<List<int?>> StartGame()
+        public ActionResult<List<int?>> StartGame([FromQuery] int maxNumber)
         {
             Random rand = new Random();
-            // Generate unique numbers from 1 to 5
-            List<int> generatedNumbers = Enumerable.Range(1, 5)
-                                                   .OrderBy(x => rand.Next())
-                                                   .ToList();
+
+            // Generate unique numbers from 1 to maxNumber
+            generatedNumbers = Enumerable.Range(1, maxNumber)
+                                         .OrderBy(x => rand.Next())
+                                         .ToList();
 
             // Create a list of nullable integers and add generated numbers
             List<int?> gridNumbers = new List<int?>(generatedNumbers.Select(n => (int?)n));
@@ -32,17 +33,6 @@ namespace MemoryGameAPI.Controllers
             // Shuffle the grid
             gridNumbers = gridNumbers.OrderBy(x => rand.Next()).ToList();
             return Ok(gridNumbers);
-        }
-
-        // Endpoint to verify if the clicked sequence is correct
-        [HttpPost("verify")]
-        public ActionResult<bool> VerifySequence([FromBody] List<int> clickedNumbers)
-        {
-            if (clickedNumbers.SequenceEqual(generatedNumbers))
-            {
-                return Ok(true); // Correct order
-            }
-            return Ok(false); // Incorrect order
         }
     }
 }
