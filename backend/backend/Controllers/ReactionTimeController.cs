@@ -22,7 +22,6 @@ public class ReactionTimeController : ControllerBase
     [HttpGet(Name = "GetNumber")]
     public ReactionTime Get()
     {
-        Response.Headers.Append("Access-Control-Allow-Origin", "http://localhost:3000");
 
         const int millisecondsInSecond = 1000;
 

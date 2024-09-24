@@ -9,6 +9,14 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowLocalhost",
+                builder => builder.WithOrigins("http://localhost:3000")
+                                  .AllowAnyHeader()
+                                  .AllowAnyMethod());
+        });
+
         // Add services to the container.
 
         builder.Services.AddControllers();
@@ -24,10 +32,15 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+        app.UseCors("AllowLocalhost");
 
-        app.UseHttpsRedirection();
+        app.UseRouting();
 
         app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.UseHttpsRedirection();
 
         app.MapControllers();
 
