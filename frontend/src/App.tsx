@@ -56,6 +56,9 @@ function HomePage() {
           <Link to={'games/memory-game-with-numbers'} className="grid-item">
             Memory Game
           </Link>
+          <Link to={'games/aim-trainer-game'} className="grid-item">
+            Aim Trainer
+          </Link>
         </div>
       </header>
     </div>
