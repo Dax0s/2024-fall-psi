@@ -3,7 +3,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace backend.Controllers;
+namespace backend.ReactionTimeGame.Controllers;
 
 using Models;
 

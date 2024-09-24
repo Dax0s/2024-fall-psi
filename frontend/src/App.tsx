@@ -32,17 +32,6 @@ const router = createBrowserRouter([
 ]);
 
 function HomePage() {
-  const [weather, setWeather] = useState('');
-  const getWeather = async () => {
-    try {
-      const tmp = await fetch('http://localhost:5252/weatherforecast');
-      const json = await tmp.json();
-      console.log(json[0]);
-      setWeather(json[0].summary);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   return (
     <div className="app">
@@ -59,8 +48,6 @@ function HomePage() {
         >
           Learn React
         </a>
-        <button onClick={getWeather}>Get weather</button>
-        <p>{weather}</p>
         <hr style={{ width: '100%', color: '#61dbfb' }} />
         <div className="games-grid">
           <Link to={'games/reaction-game'} className="grid-item">
