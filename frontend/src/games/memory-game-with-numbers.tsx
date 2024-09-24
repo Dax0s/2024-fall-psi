@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { verify } from "crypto";
+import { useState, useEffect } from "react";
 
 const MemoryGameWithNumbers = () => {
     const [grid, setGrid] = useState<(number | null)[]>([]);
@@ -8,6 +9,26 @@ const MemoryGameWithNumbers = () => {
     const [result, setResult] = useState<string | null>(null);
     const [victoryList, setVictoryList] = useState<number[]>([1, 2, 3, 4, 5]);
     const [maxNumber, setMaxNumber] = useState<number>(5); 
+    const TIMER = 3000;
+
+    useEffect(() => {
+        if (clickedNumbers.length === victoryList.length) {
+            verifySequence();
+        }
+        if (clickedNumbers.some(number => number == null)) {
+            verifySequence();
+        }
+    }, [clickedNumbers]);
+
+    useEffect(() => {
+        if (result === "Correct!") {
+            const newNumber = maxNumber;
+            setVictoryList((prevList) => [...prevList, newNumber]);
+            setTimeout(() => {
+            }, TIMER);
+            startGame();
+        }
+    }, [maxNumber]); 
 
     const startGame = async () => {
         try {
@@ -23,13 +44,13 @@ const MemoryGameWithNumbers = () => {
             setTimeout(() => {
                 setShowNumbers(false);
                 setResult("");
-            }, 3000);
+            }, TIMER);
         } catch (error) {
             console.error("Error starting game:", error);
         }
     };
 
-    const handleClick = (num: number | null, index: number) => {
+    const handleClick = (num: number | null) => {
         if (num !== null && !clickedNumbers.includes(num)) {
             setClickedNumbers([...clickedNumbers, num]);
 
@@ -37,6 +58,9 @@ const MemoryGameWithNumbers = () => {
                 const newGrid = [...prevGrid];
                 return newGrid;
             });
+        }
+        if (num == null) {
+            verifySequence();
         }
     };
 
@@ -48,39 +72,24 @@ const MemoryGameWithNumbers = () => {
                 setMaxNumber(prevMax => prevMax + 1);
             } else {
                 setResult("You lose. Try again! Your score: " + victoryList.length);
+                setShowNumbers(true);
             }
         } catch (error) {
             console.error("Error verifying sequence:", error);
         }
     };
 
-    useEffect(() => {
-        if (clickedNumbers.length === victoryList.length) {
-            verifySequence();
-        }
-    }, [clickedNumbers]);
-
-    useEffect(() => {
-        if (result === "Correct!") {
-            const newNumber = maxNumber; // New number will be the updated maxNumber
-            setVictoryList((prevList) => [...prevList, newNumber]);
-            setTimeout(() => {
-            }, 2000);
-            startGame(); // Start the game after updating the list
-        }
-    }, [maxNumber]); 
-
     return (
         <div>
             <h1>Memory Game</h1>
             {!isGameStarted && <button onClick={startGame}>Start Game</button>}
             {isGameStarted && (
-                <div className="grid grid-cols-4 gap-2 mt-5">
+                <div className="grid grid-cols-4 gap-2 mt-5 w-80">
                     {grid.map((number, index) => (
                         <div
                             key={index}
-                            className="w-24 h-24 bg-gray-100 flex justify-center items-center text-2xl cursor-pointer border-2 border-gray-300 hover:bg-gray-200"
-                            onClick={showNumbers ? undefined : () => handleClick(number, index)}
+                            className="w-12 h-12 bg-gray-100 flex justify-center items-center text-2xl cursor-pointer border-2 border-gray-300 hover:bg-gray-200"
+                            onClick={showNumbers ? undefined : () => handleClick(number)}
                         >
                             {showNumbers ? number : "?"}
                         </div>
