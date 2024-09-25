@@ -23,6 +23,13 @@ public class AimTrainerGameController : ControllerBase
             _ => 10
         };
 
+        int timeToLive = gameInfo.difficulty switch
+        {
+            Difficulty.MEDIUM => 1250,
+            Difficulty.HARD => 1000,
+            _ => 1500
+        };
+
         for (var i = 0; i < amountOfDots; i++)
         {
             Vector2 tmp = new Vector2(random.Next(gameInfo.screenSize.X), random.Next(gameInfo.screenSize.Y));
@@ -37,7 +44,7 @@ public class AimTrainerGameController : ControllerBase
             dots.Add(new DotInfo(tmp, spawnTime));
         }
 
-        return Ok(new GameStartResponse(dots, amountOfDots));
+        return Ok(new GameStartResponse(dots, amountOfDots, timeToLive));
     }
 
     // [HttpGet("ScreenSize")]
