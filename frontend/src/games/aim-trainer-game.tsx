@@ -33,20 +33,24 @@ function delay(ms: number) {
 }
 
 async function fetchGameStartInfo(difficulty: Difficulty, width: number, height: number) {
-    const tmp = await fetch('http://localhost:5252/aimtrainergame/startgame', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            difficulty: difficulty,
-            screenSize: {
-                x: width - SIZE_OF_BALL - BORDER,
-                y: height - SIZE_OF_BALL - BORDER
-            }
-        } as GameStartRequest)
-    });
-    return await tmp.json() as GameStartResponse;
+    try {
+        const tmp = await fetch('http://localhost:5252/aimtrainergame/startgame', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                difficulty: difficulty,
+                screenSize: {
+                    x: width - SIZE_OF_BALL - BORDER,
+                    y: height - SIZE_OF_BALL - BORDER
+                }
+            } as GameStartRequest)
+        });
+        return await tmp.json() as GameStartResponse;
+    } catch(e) {
+        return undefined;
+    }
 }
 
 function styleElement(element: HTMLDivElement, {pos: {x, y}}: PointSpawnElement) {
@@ -97,6 +101,14 @@ const AimTrainerGame = () => {
 
         setIsLoading(true);
         const gameData = await fetchGameStartInfo(difficulty, width, height);
+
+        if (!gameData) {
+            setIsLoading(false);
+            alert("Failed to fetch game data from server")
+
+            return;
+        }
+
         setDotsLeft(gameData.amountOfDots)
         setScore(0)
         setIsLoading(false);
