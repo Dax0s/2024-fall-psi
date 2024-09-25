@@ -20,21 +20,24 @@ type PointSpawnElement = {
     spawnTime: number;
 }
 
+const SIZE_OF_BALL = 96
+const BORDER = 100
+
 function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchGameStartInfo() {
+async function fetchGameStartInfo(width: number, height: number) {
     const tmp = await fetch('http://localhost:5252/aimtrainergame/startgame', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            difficulty: Difficulty.EASY,
+            difficulty: Difficulty.HARD,
             screenSize: {
-                x: 500,
-                y: 500
+                x: width - SIZE_OF_BALL - BORDER,
+                y: height - SIZE_OF_BALL - BORDER
             }
         } as GameStartRequest)
     });
@@ -43,20 +46,20 @@ async function fetchGameStartInfo() {
 }
 
 const AimTrainerGame = () => {
-    fetchGameStartInfo();
-
     async function startGame() {
-        const gameData = await fetchGameStartInfo();
+        const { innerWidth: width, innerHeight: height } = window;
+
+        const gameData = await fetchGameStartInfo(width, height);
 
         for (const dotInfo of gameData) {
             await delay(dotInfo.spawnTime);
 
-            const parentElement = document.querySelector("#game-area")
+            const parentElement = document.querySelector("body")
             const element = document.createElement("div");
             element.className = "w-24 h-24 bg-sky-500 rounded-full";
             element.style.position = "absolute";
-            element.style.top = `${dotInfo.pos.y}px`
-            element.style.left = `${dotInfo.pos.x}px`
+            element.style.top = `${dotInfo.pos.y + BORDER / 2}px`
+            element.style.left = `${dotInfo.pos.x + BORDER / 2}px`
 
             element.addEventListener("click", () => {
                 element.remove()
@@ -70,7 +73,6 @@ const AimTrainerGame = () => {
     return (
         <>
             <button onClick={startGame}>Start game</button>
-            <div id="game-area" style={{width: "100%", height: "100%", position: "relative"}}></div>
         </>
     )
 }
