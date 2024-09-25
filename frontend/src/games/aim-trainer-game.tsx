@@ -124,7 +124,7 @@ const AimTrainerGame = () => {
                 <div className="m-4 absolute flex flex-col">
                     <p>Left: {dotsLeft}</p>
                 </div> : null}
-            {gameIsStarted || score > 0 ?
+            {gameIsStarted || score > 0 || dotsLeft > 0 ?
                 <div className="m-4 absolute right-0 flex flex-col">
                     <p>Score: {score}</p>
                 </div> : null}
