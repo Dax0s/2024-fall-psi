@@ -1,10 +1,7 @@
 import {useState} from "react";
-
-enum Difficulty {
-    EASY,
-    MEDIUM,
-    HARD
-}
+import Difficulty from "../components/aim-trainer-game/Difficulty";
+import DifficultyPicker from "../components/aim-trainer-game/DifficultyPicker";
+import difficulty from "../components/aim-trainer-game/Difficulty";
 
 type GameStartRequest = {
     difficulty: Difficulty;
@@ -29,14 +26,14 @@ function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchGameStartInfo(width: number, height: number) {
+async function fetchGameStartInfo(difficulty: Difficulty, width: number, height: number) {
     const tmp = await fetch('http://localhost:5252/aimtrainergame/startgame', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            difficulty: Difficulty.HARD,
+            difficulty: difficulty,
             screenSize: {
                 x: width - SIZE_OF_BALL - BORDER,
                 y: height - SIZE_OF_BALL - BORDER
@@ -71,10 +68,11 @@ async function spawnDots(gameData: PointSpawnElement[]) {
 
 const AimTrainerGame = () => {
     const [gameIsStarted, setGameIsStarted] = useState(false);
+    const [difficulty, setDifficulty] = useState(Difficulty.EASY);
 
     async function startGame() {
         const { innerWidth: width, innerHeight: height } = window;
-        const gameData = await fetchGameStartInfo(width, height);
+        const gameData = await fetchGameStartInfo(difficulty, width, height);
         setGameIsStarted(true);
         await spawnDots(gameData);
         setGameIsStarted(false);
@@ -82,7 +80,17 @@ const AimTrainerGame = () => {
 
     return (
         <>
-            {!gameIsStarted ? <button onClick={startGame}>Start game</button> : null}
+            {!gameIsStarted ?
+            <div className="flex flex-col-reverse items-center justify-center h-screen">
+                <button
+                    className="px-8 py-4 my-4 text-xl font-bold text-white bg-cyan-500 hover:bg-blue-900 rounded-full duration-300 shadow-lg hover:shadow-xl"
+                    onClick={startGame}
+                >
+                    Start Game
+                </button>
+                <DifficultyPicker defaultDifficulty={difficulty} setParentDifficulty={setDifficulty} />
+            </div> : null}
+
         </>
     )
 }
