@@ -1,3 +1,5 @@
+import {useState} from "react";
+
 enum Difficulty {
     EASY,
     MEDIUM,
@@ -41,38 +43,46 @@ async function fetchGameStartInfo(width: number, height: number) {
             }
         } as GameStartRequest)
     });
-    const json = await tmp.json() as PointSpawnElement[];
-    return json;
+    return await tmp.json() as PointSpawnElement[];
+}
+
+async function spawnDots(gameData: PointSpawnElement[]) {
+    const parentElement = document.querySelector("body");
+
+    if (!parentElement)
+        return;
+
+    for (const dotInfo of gameData) {
+        await delay(dotInfo.spawnTime);
+
+        const element = document.createElement("div");
+        element.addEventListener("click", () => {
+            element.remove();
+        })
+
+        element.className = "w-24 h-24 bg-sky-500 rounded-full";
+        element.style.position = "absolute";
+        element.style.top = `${dotInfo.pos.y + BORDER / 2}px`;
+        element.style.left = `${dotInfo.pos.x + BORDER / 2}px`;
+
+        parentElement.appendChild(element);
+    }
 }
 
 const AimTrainerGame = () => {
+    const [gameIsStarted, setGameIsStarted] = useState(false);
+
     async function startGame() {
         const { innerWidth: width, innerHeight: height } = window;
-
         const gameData = await fetchGameStartInfo(width, height);
-
-        for (const dotInfo of gameData) {
-            await delay(dotInfo.spawnTime);
-
-            const parentElement = document.querySelector("body")
-            const element = document.createElement("div");
-            element.className = "w-24 h-24 bg-sky-500 rounded-full";
-            element.style.position = "absolute";
-            element.style.top = `${dotInfo.pos.y + BORDER / 2}px`
-            element.style.left = `${dotInfo.pos.x + BORDER / 2}px`
-
-            element.addEventListener("click", () => {
-                element.remove()
-            })
-
-            if (parentElement)
-                parentElement.appendChild(element)
-        }
+        setGameIsStarted(true);
+        await spawnDots(gameData);
+        setGameIsStarted(false);
     }
 
     return (
         <>
-            <button onClick={startGame}>Start game</button>
+            {!gameIsStarted ? <button onClick={startGame}>Start game</button> : null}
         </>
     )
 }
