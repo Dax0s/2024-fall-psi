@@ -14,6 +14,6 @@ public class AimTrainerGameControllerTest
     [Fact]
     public void METHOD()
     {
-        
+
     }
 }

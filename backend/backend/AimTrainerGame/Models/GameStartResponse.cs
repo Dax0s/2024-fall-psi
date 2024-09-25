@@ -3,4 +3,4 @@
 
 namespace backend.AimTrainerGame.Models;
 
-public record GameStartValuesDTO(List<DotInfo> dotInfos);
+public record GameStartResponse(List<DotInfo> dotInfos);

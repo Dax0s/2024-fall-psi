@@ -11,27 +11,20 @@ namespace backend.AimTrainerGame.Controllers;
 public class AimTrainerGameController : ControllerBase
 {
     [HttpPost("StartGame")]
-    public ActionResult<GameStartValuesDTO> StartGame([FromBody] GameStartPropertiesDTO gameInfo)
+    public ActionResult<GameStartResponse> StartGame([FromBody] GameStartRequest gameInfo)
     {
         var random = new Random();
         List<DotInfo> dots = [];
         for (var i = 0; i < 10; i++)
         {
-            var tmp = new Vector2(random.Next(gameInfo.screenSize.X), random.Next(gameInfo.screenSize.Y));
+            Vector2 tmp = new Vector2(random.Next(gameInfo.screenSize.X), random.Next(gameInfo.screenSize.Y));
 
-            int spawnTime;
-            switch (gameInfo.difficulty)
+            int spawnTime = gameInfo.difficulty switch
             {
-                case Difficulty.HARD:
-                    spawnTime = random.Next(0, 1000);
-                    break;
-                case Difficulty.MEDIUM:
-                    spawnTime = random.Next(500, 1500);
-                    break;
-                default:
-                    spawnTime = random.Next(1000, 2000);
-                    break;
-            }
+                Difficulty.MEDIUM => random.Next(0, 1000),
+                Difficulty.HARD => random.Next(0, 1000),
+                _ => random.Next(0, 1000)
+            };
 
             dots.Add(new DotInfo(tmp, spawnTime));
         }
