@@ -15,21 +15,29 @@ public class AimTrainerGameController : ControllerBase
     {
         var random = new Random();
         List<DotInfo> dots = [];
-        for (var i = 0; i < 10; i++)
+
+        int amountOfDots = gameInfo.difficulty switch
+        {
+            Difficulty.MEDIUM => 15,
+            Difficulty.HARD => 20,
+            _ => 10
+        };
+
+        for (var i = 0; i < amountOfDots; i++)
         {
             Vector2 tmp = new Vector2(random.Next(gameInfo.screenSize.X), random.Next(gameInfo.screenSize.Y));
 
             int spawnTime = gameInfo.difficulty switch
             {
-                Difficulty.MEDIUM => random.Next(0, 1000),
+                Difficulty.MEDIUM => random.Next(250, 1250),
                 Difficulty.HARD => random.Next(0, 1000),
-                _ => random.Next(0, 1000)
+                _ => random.Next(500, 1500)
             };
 
             dots.Add(new DotInfo(tmp, spawnTime));
         }
 
-        return Ok(dots);
+        return Ok(new GameStartResponse(dots, amountOfDots));
     }
 
     // [HttpGet("ScreenSize")]
