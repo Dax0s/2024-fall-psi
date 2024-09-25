@@ -15,21 +15,21 @@ public class AimTrainerGameController : ControllerBase
     {
         var random = new Random();
         List<DotInfo> dots = [];
-        var spawnTime = 0;
         for (var i = 0; i < 10; i++)
         {
             var tmp = new Vector2(random.Next(gameInfo.screenSize.X), random.Next(gameInfo.screenSize.Y));
 
+            int spawnTime;
             switch (gameInfo.difficulty)
             {
                 case Difficulty.HARD:
-                    spawnTime += random.Next(0, 1000);
+                    spawnTime = random.Next(0, 1000);
                     break;
                 case Difficulty.MEDIUM:
-                    spawnTime += random.Next(500, 1500);
+                    spawnTime = random.Next(500, 1500);
                     break;
                 default:
-                    spawnTime += random.Next(1000, 2000);
+                    spawnTime = random.Next(1000, 2000);
                     break;
             }
 
