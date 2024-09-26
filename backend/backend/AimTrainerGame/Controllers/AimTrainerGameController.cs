@@ -27,9 +27,6 @@ public class AimTrainerGameController : ControllerBase
     [HttpPost("StartGame")]
     public ActionResult<GameStartResponse> StartGame([FromBody] GameStartRequest gameInfo)
     {
-        var random = new Random();
-        List<DotInfo> dots = [];
-
         int amountOfDots = gameInfo.difficulty switch
         {
             Difficulty.EASY => ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:AmountOfDots:easy", DEFAULT_DOTS),
@@ -46,6 +43,8 @@ public class AimTrainerGameController : ControllerBase
             _ => DEFAULT_TIME_TO_LIVE
         };
 
+        var random = new Random();
+        var dots = new List<DotInfo>(amountOfDots);
         for (var i = 0; i < amountOfDots; i++)
         {
             Vector2 tmp = new Vector2(random.Next(gameInfo.screenSize.X), random.Next(gameInfo.screenSize.Y));

@@ -8,6 +8,7 @@ using backend.AimTrainerGame.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
@@ -20,8 +21,8 @@ public class AimTrainerGameControllerTest
     [Fact]
     public void StartGameShouldReturnNotNull()
     {
-        ILogger<AimTrainerGameController> logger = new Logger<AimTrainerGameController>(new LoggerFactory());
-        var controller = new AimTrainerGameController();
+        IConfiguration config = new ConfigurationBuilder().Build();
+        var controller = new AimTrainerGameController(config);
 
         var result = controller.StartGame(new GameStartRequest(Difficulty.EASY, new Vector2(1920, 1080)));
         Assert.True(result != null);
@@ -30,8 +31,9 @@ public class AimTrainerGameControllerTest
     [Fact]
     public void StartGameEasyShouldReturn10Dots()
     {
-        ILogger<AimTrainerGameController> logger = new Logger<AimTrainerGameController>(new LoggerFactory());
-        var controller = new AimTrainerGameController();
+        // It currently fails, because it can't get config values (at least that's my guess)
+        IConfiguration config = new ConfigurationBuilder().Build();
+        var controller = new AimTrainerGameController(config);
 
         var result = controller.StartGame(new GameStartRequest(Difficulty.EASY, new Vector2(1920, 1080)));
         Assert.True(((result.Result as OkObjectResult).Value as GameStartResponse).dotInfos.Count == 10);
@@ -41,8 +43,8 @@ public class AimTrainerGameControllerTest
     [Fact]
     public void StartGameHardShouldNotReturn10Dots()
     {
-        ILogger<AimTrainerGameController> logger = new Logger<AimTrainerGameController>(new LoggerFactory());
-        var controller = new AimTrainerGameController();
+        IConfiguration config = new ConfigurationBuilder().Build();
+        var controller = new AimTrainerGameController(config);
 
         var result = controller.StartGame(new GameStartRequest(Difficulty.HARD, new Vector2(1920, 1080)));
         Assert.True(((result.Result as OkObjectResult).Value as GameStartResponse).dotInfos.Count != 10);

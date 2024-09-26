@@ -12,7 +12,7 @@ public struct Vector2
     [JsonPropertyName("y")]
     public int Y { get; set; }
 
-    public Vector2(int x, int y)
+    public Vector2(int x = 0, int y = 0)
     {
         X = x;
         Y = y;
@@ -22,11 +22,5 @@ public struct Vector2
     {
         X = vector.X;
         Y = vector.Y;
-    }
-
-    public Vector2()
-    {
-        X = 0;
-        Y = 0;
     }
 }
