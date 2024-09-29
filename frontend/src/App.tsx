@@ -31,7 +31,6 @@ const router = createBrowserRouter([
 ]);
 
 function HomePage() {
-
   return (
     <div className="app">
       <header className="app-header">

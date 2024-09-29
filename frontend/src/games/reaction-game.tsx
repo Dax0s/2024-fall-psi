@@ -30,7 +30,7 @@ function ReactionButton() {
   );
 
   const [buttonLabel, setButtonLabel] = useState('PRESS ME TO START');
-    const [buttonClass, setButtonClass] = useState('bg-white text-black');
+  const [buttonClass, setButtonClass] = useState('bg-white text-black');
 
   const [averageLabel, setAverageLabel] = useState('');
 
@@ -42,7 +42,7 @@ function ReactionButton() {
       case ReactionState.WAIT:
         reactionState.current = ReactionState.BASE;
         setButtonLabel('TOO SOON, TRY AGAIN');
-            setButtonClass('bg-orange-500 text-white hover:brightness-80');
+        setButtonClass('bg-orange-500 text-white hover:brightness-80');
         break;
       case ReactionState.GO:
         clickOnGoState();
@@ -57,7 +57,7 @@ function ReactionButton() {
 
     reactionState.current = ReactionState.WAIT;
     setButtonLabel('WAIT');
-      setButtonClass('bg-red-500 text-white');
+    setButtonClass('bg-red-500 text-white');
 
     const startTime = performance.now();
     latestStartTime.current = startTime;
@@ -70,7 +70,7 @@ function ReactionButton() {
     ) {
       reactionState.current = ReactionState.GO;
       setButtonLabel('PRESS NOW');
-        setButtonClass('bg-green-500 text-white');
+      setButtonClass('bg-green-500 text-white');
     }
 
     goTime.current = performance.now();
@@ -87,7 +87,7 @@ function ReactionButton() {
 
     reactionState.current = ReactionState.BASE;
     setButtonLabel('TRY AGAIN');
-      setButtonClass('bg-white text-black');
+    setButtonClass('bg-white text-black');
 
     setReactionTimeLabel('REACTION TIME: ' + Math.floor(reactionTime) + ' ms');
     setAverageLabel(
@@ -104,12 +104,15 @@ function ReactionButton() {
 
   return (
     <>
-          <h1 className="text-2xl font-bold mb-4">{reactionTimeLabel}</h1>
-          <button id="reactionBtn" className={`${buttonClass} w-[500px] h-[500px] border-0 rounded-full text-[30pt] font-bold hover:brightness-75`}
-              onClick={handleClick}>
+      <h1 className="text-2xl font-bold mb-4">{reactionTimeLabel}</h1>
+      <button
+        id="reactionBtn"
+        className={`${buttonClass} w-[500px] h-[500px] border-0 rounded-full text-[30pt] font-bold hover:brightness-75`}
+        onClick={handleClick}
+      >
         {buttonLabel}
       </button>
-          <p className="mt-4 text-lg">{averageLabel}</p>
+      <p className="mt-4 text-lg">{averageLabel}</p>
     </>
   );
 }
