@@ -64,8 +64,8 @@ function styleElement(
   element.className = 'w-24 h-24 bg-sky-500 rounded-full';
   element.style.position = 'absolute';
   console.log(`x: ${x}, y: ${y}`);
-  element.style.top = `${x + BORDER / 2}px`;
-  element.style.left = `${y + BORDER / 2}px`;
+  element.style.top = `${y + BORDER / 2}px`;
+  element.style.left = `${x + BORDER / 2}px`;
 }
 
 const AimTrainerGame = () => {
@@ -106,6 +106,10 @@ const AimTrainerGame = () => {
 
   async function startGame() {
     const { innerWidth: width, innerHeight: height } = window;
+
+    console.log('------------');
+    console.log(`width: ${width}, height: ${height}`);
+    console.log('------------');
 
     setIsLoading(true);
     const gameData = await fetchGameStartInfo(difficulty, width, height);

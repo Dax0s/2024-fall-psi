@@ -20,11 +20,4 @@ public struct Vector2
         X = vector.X;
         Y = vector.Y;
     }
-
-    public int SquaredDistance(Vector2 other)
-    {
-        int dx = this.X - other.X;
-        int dy = this.Y - other.Y;
-        return dx * dx + dy * dy;
-    }
 }

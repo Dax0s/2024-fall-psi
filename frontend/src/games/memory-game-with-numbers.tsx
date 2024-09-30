@@ -1,4 +1,3 @@
-import { verify } from 'crypto';
 import { useState, useEffect } from 'react';
 
 const MemoryGameWithNumbers = () => {
@@ -83,9 +82,16 @@ const MemoryGameWithNumbers = () => {
   };
 
   return (
-    <div>
-      <h1>Memory Game</h1>
-      {!isGameStarted && <button onClick={startGame}>Start Game</button>}
+    <div className="flex flex-col items-center mt-10">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Memory Game</h1>
+      {!isGameStarted && (
+        <button
+          className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-green-600 transition duration-300"
+          onClick={startGame}
+        >
+          Start Game
+        </button>
+      )}
       {isGameStarted && (
         <div className="grid grid-cols-4 gap-2 mt-5 w-80">
           {grid.map((number, index) => (
@@ -99,7 +105,9 @@ const MemoryGameWithNumbers = () => {
           ))}
         </div>
       )}
-      {result && <h2>{result}</h2>}
+      {result && (
+        <h2 className="text-2xl font-medium mt-6 text-gray-800">{result}</h2>
+      )}
     </div>
   );
 };

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using backend.Utils;
 
 namespace backend.AimTrainerGame.Models;
 

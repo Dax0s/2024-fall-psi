@@ -15,6 +15,15 @@ export type DotCanvasInfo = {
 const defaultCanvasColor = 'aliceblue';
 const defaultCanvasDotColor = 'hotpink';
 
+const minDotCount = 1;
+const maxDotCount = 1000;
+const dotCountStep = 1;
+
+// In milliseconds
+const minDuration = 50;
+const maxDuration = 10000;
+const durationStep = 50;
+
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -139,18 +148,18 @@ const DotCountGame = () => {
           id="maxDotsInput"
           className="col-start-4 col-span-1"
           type="number"
-          min="1"
-          max="1000"
-          step="1"
+          min={minDotCount}
+          max={maxDotCount}
+          step={dotCountStep}
         />
         <label className="col-start-5 col-span-1">Duration (ms):</label>
         <input
           id="durationInput"
           className="col-start-6 col-span-1"
           type="number"
-          min="50"
-          max="10000"
-          step="50"
+          min={minDuration}
+          max={maxDuration}
+          step={durationStep}
         />
         <button className="col-start-7 col-span-1" onClick={handleClick}>
           GO
@@ -171,9 +180,9 @@ const DotCountGame = () => {
           id="answerInput"
           className="col-start-2 col-span-2"
           type="number"
-          min="1"
-          max="1000"
-          step="1"
+          min={minDotCount}
+          max={maxDotCount}
+          step={dotCountStep}
         />
         <button className="col-start-4 col-span-1" onClick={handleAnswer}>
           CHECK

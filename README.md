@@ -5,5 +5,5 @@
 
 ### To add more games
 
--- Create a `.tsx` file in "src\games" and lay out your game components
--- Add a Link component grid item in "App.tsx", change the route and label 
+- Create a `.tsx` file in "src\games" and lay out your game components
+- Add a Link component grid item in "App.tsx", change the route and label 
