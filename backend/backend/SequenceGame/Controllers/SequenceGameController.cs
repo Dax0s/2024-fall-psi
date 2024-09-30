@@ -9,10 +9,11 @@ namespace backend.SequenceGame.Controllers
     public class SequenceGameController : ControllerBase
     {
         [HttpGet("getSequence")]
-        public ActionResult<List<int>> GetSequence([FromQuery][Optional] string? sequence)
+        public ActionResult<List<int>> GetSequence([FromQuery] string sequence = "")
         {
-            string newSequenceString = string.IsNullOrEmpty(sequence) ? "" : sequence;
-            List<int> newSequence = new List<int>([1, 5, 2, 3]);
+            Random random = new Random();
+            List<int> newSequence = string.IsNullOrEmpty(sequence) ? new List<int>() : sequence.Split(',').Select(int.Parse).ToList();
+            newSequence.Add(random.Next(1, 10));
 
             return Ok(newSequence);
         }
