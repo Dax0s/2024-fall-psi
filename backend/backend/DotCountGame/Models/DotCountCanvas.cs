@@ -25,7 +25,8 @@ public class DotCountCanvas
         FillInRandomDots(dotCount, occupiableChunkCount);
     }
 
-    private static int NextPerfectSquare(int number) {
+    private static int NextPerfectSquare(int number)
+    {
         int nextSquareRoot = (int)Math.Ceiling(Math.Sqrt((double)number));
         return nextSquareRoot * nextSquareRoot;
     }
@@ -75,8 +76,10 @@ public class DotCountCanvas
 
         Random.Shared.Shuffle(chunkTopLefts);
 
-        foreach (Dot topLeftDot in chunkTopLefts) {
-            if (Dots.Count >= dotCount) {
+        foreach (Dot topLeftDot in chunkTopLefts)
+        {
+            if (Dots.Count >= dotCount)
+            {
                 return;
             }
 

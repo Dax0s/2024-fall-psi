@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using backend.DotCountGame.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace backend.DotCountGame.Controllers;
 

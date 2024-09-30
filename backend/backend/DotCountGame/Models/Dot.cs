@@ -15,7 +15,8 @@ public class Dot
         _center = center;
     }
 
-    public int X {
+    public int X
+    {
         get
         {
             return _center.X;
@@ -26,7 +27,8 @@ public class Dot
         }
     }
 
-    public int Y {
+    public int Y
+    {
         get
         {
             return _center.Y;

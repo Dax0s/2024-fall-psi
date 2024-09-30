@@ -32,7 +32,6 @@ const router = createBrowserRouter([
 ]);
 
 function HomePage() {
-
   return (
     <div className="app">
       <header className="app-header">
@@ -47,7 +46,7 @@ function HomePage() {
             Aim Trainer
           </Link>
           <Link to={'games/dot-count-game'} className="grid-item">
-            Dot Counting 
+            Dot Counting
           </Link>
         </div>
       </header>
