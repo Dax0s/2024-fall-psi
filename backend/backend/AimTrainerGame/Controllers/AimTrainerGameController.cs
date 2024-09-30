@@ -50,17 +50,17 @@ public class AimTrainerGameController : ControllerBase
     // [HttpGet("ScreenSize")]
     // public ActionResult<Vector2> GetScreenSize()
     // {
-        // Console.WriteLine($"Screen size: {_screenSize.X} {_screenSize.Y}");
-        // return Ok(_screenSize);
+    // Console.WriteLine($"Screen size: {_screenSize.X} {_screenSize.Y}");
+    // return Ok(_screenSize);
     // }
 
     // [HttpGet]
     // public ActionResult<string> Get()
     // {
-        // {
-            // when: time,
-            // where: Pos
-        // }
-        // return Ok("Test string");
+    // {
+    // when: time,
+    // where: Pos
+    // }
+    // return Ok("Test string");
     // }
 }

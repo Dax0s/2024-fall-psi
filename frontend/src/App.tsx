@@ -46,6 +46,9 @@ function HomePage() {
           <Link to={'games/aim-trainer-game'} className="grid-item">
             Aim Trainer
           </Link>
+          <Link to={'games/dot-count-game'} className="grid-item">
+            Dot Counting 
+          </Link>
         </div>
       </header>
     </div>
