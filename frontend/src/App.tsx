@@ -5,7 +5,6 @@ import {
   useParams,
 } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import logo from './logo.svg';
 import './App.css';
 
 const Loader = () => {
@@ -32,7 +31,6 @@ const router = createBrowserRouter([
 ]);
 
 function HomePage() {
-
   return (
     <div className="app">
       <header className="app-header">
