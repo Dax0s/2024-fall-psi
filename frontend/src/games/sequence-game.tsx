@@ -6,10 +6,10 @@ function delay(ms: number) {
 }
 
 const SequenceGame = () => {
-  const [sequence, setSequence] = useState<(number)[]>([]);
-  const userSequence = useRef<number[]>([]);
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [litUpButtonId, setLitUpButtonId] = useState<number>();
+  const [sequence, setSequence] = useState<(number)[]>([]);
+  const correctClicks = useRef(0);
 
   useEffect(() => {
     if (sequence.length > 0) {
@@ -45,14 +45,16 @@ const SequenceGame = () => {
     setLitUpButtonId(buttonId);
     delay(100).then(() => setLitUpButtonId(undefined));
     
-    userSequence.current.push(buttonId);
-    
-    if (buttonId !== sequence[userSequence.current.length - 1]) {
+    if (buttonId === sequence[correctClicks.current]) {
+      correctClicks.current++;
+      
+      if (sequence.length == correctClicks.current) {
+        delay(1000).then(() => getSequence().then(() => correctClicks.current = 0));
+      }
+    } else {
       setSequence([]);
-      userSequence.current = [];
+      correctClicks.current = 0;
       setIsGameStarted(false);
-    } else if (sequence.length == userSequence.current.length) {
-      delay(1000).then(() => getSequence().then(() => userSequence.current = []));
     }
   }
 
