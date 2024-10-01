@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 
 function delay(ms: number) {
@@ -8,7 +7,7 @@ function delay(ms: number) {
 const SequenceGame = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [litUpButtonId, setLitUpButtonId] = useState<number>();
-  const [sequence, setSequence] = useState<(number)[]>([]);
+  const [sequence, setSequence] = useState<number[]>([]);
   const isCurrentlyShowingSequence = useRef(false);
   const correctClicks = useRef(0);
 
@@ -17,7 +16,7 @@ const SequenceGame = () => {
       showSequence().then(() => setLitUpButtonId(undefined));
     }
   }, [sequence]);
-  
+
   const showSequence = async () => {
     isCurrentlyShowingSequence.current = true;
     for (const buttonId of sequence) {
@@ -27,39 +26,44 @@ const SequenceGame = () => {
       await delay(100);
     }
     isCurrentlyShowingSequence.current = false;
-  }
-  
+  };
+
   const getSequence = async () => {
     try {
-      const querySuffix = sequence.length != 0 ? `?sequence=${sequence.toString()}` : ``;
-      const response = await fetch(`http://localhost:5252/SequenceGame/getSequence${querySuffix}`);
+      const querySuffix =
+        sequence.length != 0 ? `?sequence=${sequence.toString()}` : ``;
+      const response = await fetch(
+        `http://localhost:5252/SequenceGame/getSequence${querySuffix}`,
+      );
       const newSequence = await response.json();
-      
+
       setSequence(newSequence);
       setIsGameStarted(true);
     } catch (error) {
-      console.error("Error starting game: ", error);
+      console.error('Error starting game: ', error);
     }
-  }
-  
+  };
+
   const handleClick = (buttonId: number) => {
     if (!isGameStarted || isCurrentlyShowingSequence.current) return;
-    
+
     setLitUpButtonId(buttonId);
     delay(100).then(() => setLitUpButtonId(undefined));
-    
+
     if (buttonId === sequence[correctClicks.current]) {
       correctClicks.current++;
-      
+
       if (sequence.length == correctClicks.current) {
-        delay(1000).then(() => getSequence().then(() => correctClicks.current = 0));
+        delay(1000).then(() =>
+          getSequence().then(() => (correctClicks.current = 0)),
+        );
       }
     } else {
       setSequence([]);
       correctClicks.current = 0;
       setIsGameStarted(false);
     }
-  }
+  };
 
   return (
     <div className="flex flex-col items-center h-screen pt-10 bg-amber-200">
@@ -71,7 +75,7 @@ const SequenceGame = () => {
             return (
               <div
                 className={`aspect-square w-24 h-24 cursor-pointer ${litUpButtonId === buttonId ? 'bg-amber-400' : 'bg-amber-600'}`}
-                key={"button-" + buttonId}
+                key={'button-' + buttonId}
                 onClick={() => handleClick(buttonId)}
               ></div>
             );
@@ -88,7 +92,6 @@ const SequenceGame = () => {
       </div>
     </div>
   );
-
-}
+};
 
 export default SequenceGame;
