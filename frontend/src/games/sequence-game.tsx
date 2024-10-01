@@ -30,10 +30,8 @@ const SequenceGame = () => {
 
   const getSequence = async () => {
     try {
-      const querySuffix =
-        sequence.length != 0 ? `?sequence=${sequence.toString()}` : ``;
       const response = await fetch(
-        `http://localhost:5252/SequenceGame/getSequence${querySuffix}`,
+        `http://localhost:5252/SequenceGame/getSequence?sequence=${sequence.toString()}`,
       );
       const newSequence = await response.json();
 
@@ -53,7 +51,7 @@ const SequenceGame = () => {
     if (buttonId === sequence[correctClicks.current]) {
       correctClicks.current++;
 
-      if (sequence.length == correctClicks.current) {
+      if (sequence.length === correctClicks.current) {
         delay(1000).then(() =>
           getSequence().then(() => (correctClicks.current = 0)),
         );
