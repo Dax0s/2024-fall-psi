@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -31,22 +31,22 @@ const router = createBrowserRouter([
 ]);
 
 function HomePage() {
+  const games = [
+    { path: 'games/reaction-game', name: 'Reaction Game' },
+    { path: 'games/memory-game-with-numbers', name: 'Memory Game' },
+    { path: 'games/aim-trainer-game', name: 'Aim Trainer' },
+    { path: 'games/dot-count-game', name: 'Dot Counting' },
+  ];
+
   return (
     <div className="app">
       <header className="app-header">
         <div className="games-grid">
-          <Link to={'games/reaction-game'} className="grid-item">
-            Reaction Game
-          </Link>
-          <Link to={'games/memory-game-with-numbers'} className="grid-item">
-            Memory Game
-          </Link>
-          <Link to={'games/aim-trainer-game'} className="grid-item">
-            Aim Trainer
-          </Link>
-          <Link to={'games/dot-count-game'} className="grid-item">
-            Dot Counting
-          </Link>
+          {games.map((game) => (
+            <Link key={game.path} to={game.path} className="grid-item">
+              {game.name}
+            </Link>
+          ))}
         </div>
       </header>
     </div>

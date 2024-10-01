@@ -6,15 +6,12 @@ const MemoryGameWithNumbers = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [showNumbers, setShowNumbers] = useState(true);
   const [result, setResult] = useState<string | null>(null);
-  const [victoryList, setVictoryList] = useState<number[]>([1, 2, 3, 4, 5]);
-  const [maxNumber, setMaxNumber] = useState<number>(5);
+  const [victoryList, setVictoryList] = useState<number[]>([1]);
+  const [maxNumber, setMaxNumber] = useState<number>(1);
   const TIMER = 3000;
 
   useEffect(() => {
     if (clickedNumbers.length === victoryList.length) {
-      verifySequence();
-    }
-    if (clickedNumbers.some((number) => number == null)) {
       verifySequence();
     }
   }, [clickedNumbers]);
@@ -65,15 +62,25 @@ const MemoryGameWithNumbers = () => {
 
   const verifySequence = async () => {
     try {
-      if (
-        clickedNumbers.length === victoryList.length &&
-        clickedNumbers.every((val, index) => val === victoryList[index])
-      ) {
-        setResult('Correct!');
+      const response = await fetch(
+        'http://localhost:5252/MemoryGameWithNumbers/attempt',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(clickedNumbers),
+        },
+      );
 
+      const isCorrect = await response.json();
+      if (isCorrect) {
+        setResult('Correct!');
         setMaxNumber((prevMax) => prevMax + 1);
       } else {
-        setResult('You lose. Try again! Your score: ' + victoryList.length);
+        setResult(
+          'You lose. Try again! Your score: ' + (victoryList.length - 1),
+        );
         setShowNumbers(true);
       }
     } catch (error) {
@@ -106,7 +113,9 @@ const MemoryGameWithNumbers = () => {
         </div>
       )}
       {result && (
-        <h2 className="text-2xl font-medium mt-6 text-gray-800">{result}</h2>
+        <>
+          <h2 className="text-2xl font-medium mt-6 text-gray-800">{result}</h2>
+        </>
       )}
     </div>
   );
