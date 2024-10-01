@@ -9,6 +9,7 @@ const SequenceGame = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [litUpButtonId, setLitUpButtonId] = useState<number>();
   const [sequence, setSequence] = useState<(number)[]>([]);
+  const isCurrentlyShowingSequence = useRef(false);
   const correctClicks = useRef(0);
 
   useEffect(() => {
@@ -18,12 +19,14 @@ const SequenceGame = () => {
   }, [sequence]);
   
   const showSequence = async () => {
+    isCurrentlyShowingSequence.current = true;
     for (const buttonId of sequence) {
       setLitUpButtonId(buttonId);
       await delay(200);
       setLitUpButtonId(undefined);
       await delay(100);
     }
+    isCurrentlyShowingSequence.current = false;
   }
   
   const getSequence = async () => {
@@ -40,7 +43,7 @@ const SequenceGame = () => {
   }
   
   const handleClick = (buttonId: number) => {
-    if (!isGameStarted) return;
+    if (!isGameStarted || isCurrentlyShowingSequence.current) return;
     
     setLitUpButtonId(buttonId);
     delay(100).then(() => setLitUpButtonId(undefined));
