@@ -18,9 +18,7 @@ public class DotCountCanvas
         int sideOccupiableChunkCount = (int)Math.Sqrt(occupiableChunkCount);
 
         DotRadius = maxDots < 100 ? 10 : 5;
-
-        int dotDiameter = 2 * DotRadius;
-        CanvasWidth = dotDiameter * (2 * sideOccupiableChunkCount + 1);
+        CanvasWidth = (2 * DotRadius) * (2 * sideOccupiableChunkCount + 1);
 
         FillInRandomDots(dotCount, occupiableChunkCount);
     }
@@ -58,19 +56,18 @@ public class DotCountCanvas
     // ---------
     //
     // Here '-' marks free chunks and '*' marks occupiable chunks.
-    //
     private void FillInRandomDots(int dotCount, int chunkCount)
     {
         int chunkWidth = 2 * DotRadius;
 
         var chunkTopLefts = new Dot[chunkCount];
-        var e = new DotListEnumerator(chunkTopLefts);
+        var chunkTopLeftsEnum = new DotListEnumerator(chunkTopLefts);
         for (int y = chunkWidth; y < CanvasWidth; y += 2 * chunkWidth)
         {
             for (int x = chunkWidth; x < CanvasWidth; x += 2 * chunkWidth)
             {
-                e.Current = new Dot(x, y);
-                e.MoveNext();
+                chunkTopLeftsEnum.Current = new Dot(x, y);
+                chunkTopLeftsEnum.MoveNext();
             }
         }
 
