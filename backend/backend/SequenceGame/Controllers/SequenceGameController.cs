@@ -8,16 +8,20 @@ namespace backend.SequenceGame.Controllers
     [Route("[controller]")]
     public class SequenceGameController : ControllerBase
     {
+        private List<int> NextSequence { get; set; } = new List<int>();
+
         [HttpGet("getSequence")]
         public ActionResult<List<int>> GetSequence([FromQuery] string sequence = "")
         {
-            Debug.WriteLine(string.Equals(sequence, ""));
-
             Random random = new Random();
-            List<int> newSequence = string.IsNullOrEmpty(sequence) ? new List<int>() : sequence.Split(',').Select(int.Parse).ToList();
-            newSequence.Add(random.Next(1, 10));
 
-            return Ok(newSequence);
+            if (!string.IsNullOrEmpty(sequence))
+            {
+                NextSequence = sequence.Split(',').Select(int.Parse).ToList();
+            }
+            NextSequence.Add(random.Next(minValue:1, maxValue:10));
+
+            return Ok(NextSequence);
         }
     }
 }
