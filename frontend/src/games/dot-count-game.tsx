@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useState } from 'react';
 
 export type Dot = {
   x: number;
@@ -11,6 +11,8 @@ export type DotCanvasInfo = {
   dots: Dot[];
   dotRadius: number;
 };
+
+const noLastDotCountValue = 0;
 
 const defaultCanvasColor = 'aliceblue';
 const defaultCanvasDotColor = 'hotpink';
@@ -29,7 +31,7 @@ function delay(ms: number) {
 }
 
 const DotCountGame = () => {
-  const lastDotCount = useRef(0);
+  const [lastDotCount, setLastDotCount] = useState(noLastDotCountValue);
 
   const clearCanvas = () => {
     const canvas = document.getElementById('dotCanvas') as HTMLCanvasElement;
@@ -85,11 +87,17 @@ const DotCountGame = () => {
     if (!maxDots || !duration) return;
 
     const canvasInfo = (await fetchInfo(maxDots)) as DotCanvasInfo;
-    lastDotCount.current = canvasInfo.dots.length;
 
+    setLastDotCount(noLastDotCountValue);
     displayDots(canvasInfo);
     await delay(duration);
     clearCanvas();
+
+    setLastDotCount(canvasInfo.dots.length);
+    const resultLabel = document.getElementById(
+      'resultLabel',
+    ) as HTMLLabelElement;
+    resultLabel.textContent = '';
   };
 
   const handleAnswer = () => {
@@ -100,11 +108,15 @@ const DotCountGame = () => {
       'resultLabel',
     ) as HTMLLabelElement;
 
-    resultLabel.textContent = '';
     const answer = parseInt(answerElement.value);
-    if (!answer || lastDotCount.current === 0) return;
+    if (
+      !answer ||
+      lastDotCount === noLastDotCountValue ||
+      resultLabel.textContent !== ''
+    )
+      return;
 
-    const correctAnswer = lastDotCount.current;
+    const correctAnswer = lastDotCount;
     const absDifference = Math.abs(answer - correctAnswer);
 
     const accuracy =
@@ -136,60 +148,94 @@ const DotCountGame = () => {
         Math.floor(accuracy) +
         '% accuracy)';
     }
-
-    lastDotCount.current = 0;
   };
 
   return (
-    <>
-      <div className="grid grid-cols-9 gap-5 gap-y-10 place-items-center-h-screen">
-        <label className="col-start-3 col-span-1">Max. # of dots:</label>
-        <input
-          id="maxDotsInput"
-          className="col-start-4 col-span-1"
-          type="number"
-          min={minDotCount}
-          max={maxDotCount}
-          step={dotCountStep}
-        />
-        <label className="col-start-5 col-span-1">Duration (ms):</label>
-        <input
-          id="durationInput"
-          className="col-start-6 col-span-1"
-          type="number"
-          min={minDuration}
-          max={maxDuration}
-          step={durationStep}
-        />
-        <button className="col-start-7 col-span-1" onClick={handleClick}>
-          GO
-        </button>
+    <div className="flex flex-col items-center justify-center h-screen">
+      <h1 className="text-3xl font-bold mb-4">GUESS THE DOT COUNT</h1>
+
+      <div className="flex flex-col space-y-4">
+        <div className="flex items-center">
+          <label htmlFor="maxDotsInput" className="text-lg font-medium mr-2">
+            Max. number of dots:
+          </label>
+          <input
+            id="maxDotsInput"
+            className="border rounded px-4 py-2"
+            type="number"
+            min={minDotCount}
+            max={maxDotCount}
+            step={dotCountStep}
+          />
+        </div>
+
+        <div className="flex items-center">
+          <label htmlFor="durationInput" className="text-lg font-medium mr-2">
+            Dot show duration (ms):
+          </label>
+          <input
+            id="durationInput"
+            className="border rounded px-4 py-2"
+            type="number"
+            min={minDuration}
+            max={maxDuration}
+            step={durationStep}
+          />
+        </div>
       </div>
-      <div>
-        <canvas
-          id="dotCanvas"
-          className="m-auto rounded"
-          color={defaultCanvasColor}
-        />
+
+      <button
+        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
+        onClick={handleClick}
+      >
+        GO
+      </button>
+
+      <canvas
+        id="dotCanvas"
+        className={
+          lastDotCount !== noLastDotCountValue
+            ? 'invisible h-10'
+            : 'border rounded mt-4'
+        }
+        color={defaultCanvasColor}
+      />
+
+      <div
+        className={
+          lastDotCount !== noLastDotCountValue
+            ? 'flex flex-col space-y-4'
+            : 'invisible'
+        }
+      >
+        <div className="flex items-center">
+          <label htmlFor="answerInput" className="text-lg font-medium mr-2">
+            How many dots did you see?
+          </label>
+          <input
+            type="number"
+            id="answerInput"
+            className="border rounded px-4 py-2"
+            min={minDotCount}
+            max={maxDotCount}
+            step={dotCountStep}
+          />
+          <button
+            id="submitButton"
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ml-4"
+            onClick={handleAnswer}
+          >
+            CHECK
+          </button>
+        </div>
+
+        <div className="flex justify-center">
+          <label className="text-lg font-medium" id="resultLabel">
+            THer label
+          </label>
+        </div>
       </div>
-      <div className="grid grid-cols-5 gap-5 gap-y-10 place-items-center-h-screen">
-        <label className="col-start-2 col-end-4">
-          How many dots did you see?
-        </label>
-        <input
-          id="answerInput"
-          className="col-start-2 col-span-2"
-          type="number"
-          min={minDotCount}
-          max={maxDotCount}
-          step={dotCountStep}
-        />
-        <button className="col-start-4 col-span-1" onClick={handleAnswer}>
-          CHECK
-        </button>
-        <label id="resultLabel" className="col-start-2 col-end-4"></label>
-      </div>
-    </>
+    </div>
   );
 };
 
