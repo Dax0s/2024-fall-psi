@@ -1,5 +1,5 @@
 
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.SequenceGame.Controllers
@@ -11,6 +11,8 @@ namespace backend.SequenceGame.Controllers
         [HttpGet("getSequence")]
         public ActionResult<List<int>> GetSequence([FromQuery] string sequence = "")
         {
+            Debug.WriteLine(string.Equals(sequence, ""));
+
             Random random = new Random();
             List<int> newSequence = string.IsNullOrEmpty(sequence) ? new List<int>() : sequence.Split(',').Select(int.Parse).ToList();
             newSequence.Add(random.Next(1, 10));
