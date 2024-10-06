@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import Difficulty from '../components/aim-trainer-game/Difficulty';
-import DifficultyPicker from '../components/aim-trainer-game/DifficultyPicker';
-import StartGameButton from '../components/aim-trainer-game/StartGameButton';
+import Difficulty from 'src/components/aim-trainer-game/Difficulty';
+import DifficultyPicker from 'src/components/aim-trainer-game/DifficultyPicker';
+import StartGameButton from 'src/components/aim-trainer-game/StartGameButton';
+import { delay } from 'src/utils/timing';
 
 type GameStartRequest = {
   difficulty: Difficulty;
@@ -27,10 +28,6 @@ type GameStartResponse = {
 
 const SIZE_OF_BALL = 96;
 const BORDER = 100;
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 async function fetchGameStartInfo(
   difficulty: Difficulty,

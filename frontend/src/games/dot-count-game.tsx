@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { delay } from 'src/utils/timing';
 
 export type Dot = {
   x: number;
@@ -25,10 +26,6 @@ const dotCountStep = 1;
 const minDuration = 50;
 const maxDuration = 10000;
 const durationStep = 50;
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 const DotCountGame = () => {
   const [lastDotCount, setLastDotCount] = useState(noLastDotCountValue);

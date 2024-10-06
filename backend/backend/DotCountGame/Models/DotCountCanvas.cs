@@ -13,11 +13,16 @@ public class DotCountCanvas
         int dotCount = Random.Shared.Next(minDots, maxDots + 1);
         Dots = new List<Dot>(dotCount);
 
+        // In pixels
+        const int defaultRadius = 10;
+        const int smallRadius = 10;
+        const int dotCountLimitForDefaultRadius = 100;
+
+        DotRadius = maxDots < dotCountLimitForDefaultRadius ? defaultRadius : smallRadius;
+
         // See comment above FillInRandomDots() for more info
         int occupiableChunkCount = NextPerfectSquare(maxDots);
         int sideOccupiableChunkCount = (int)Math.Sqrt(occupiableChunkCount);
-
-        DotRadius = maxDots < 100 ? 10 : 5;
         CanvasWidth = (2 * DotRadius) * (2 * sideOccupiableChunkCount + 1);
 
         FillInRandomDots(dotCount, occupiableChunkCount);

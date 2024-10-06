@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+import { delay } from 'src/utils/timing';
 
 const SequenceGame = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);

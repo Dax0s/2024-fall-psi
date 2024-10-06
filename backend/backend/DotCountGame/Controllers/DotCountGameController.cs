@@ -11,7 +11,8 @@ public class DotCountGameController : ControllerBase
     public ActionResult<DotCountCanvas> Get([FromQuery] int maxDots)
     {
         const int minDots = 1;
-        if (minDots > maxDots || maxDots > 1000)
+        const int maxDotsLimit = 1000;
+        if (minDots > maxDots || maxDots > maxDotsLimit)
         {
             return NoContent();
         }
