@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\backend",
+    "\\backend\\backend\\AimTrainerGame",
+    "\\backend\\backend\\AimTrainerGame\\Controllers",
+    "\\backend\\backend\\AimTrainerGame\\Models",
+    "\\backend\\backend\\MemoryGameWithNumbers",
+    "\\backend\\backend\\MemoryGameWithNumbers\\Controllers",
+    "\\backend\\backend\\ReactionTimeGame",
+    "\\backend\\backend\\ReactionTimeGame\\Controllers"
+  ],
+  "SelectedNode": "\\frontend\\src\\games\\memory-game-with-numbers.tsx",
+  "PreviewInSolutionExplorer": false
+}
