@@ -8,55 +8,50 @@ namespace backend.AimTrainerGame.Controllers;
 [Route("[controller]")]
 public class AimTrainerGameController : ControllerBase
 {
-    private readonly IConfiguration Configuration;
-
-    private readonly int DEFAULT_DOTS = 15;
-    private readonly int DEFAULT_TIME_TO_LIVE = 1250;
-    private readonly int DEFAULT_SPAWN_TIME_MIN = 250;
-    private readonly int DEFAULT_SPAWN_TIME_MAX = 1250;
+    private readonly IConfiguration _configuration;
 
     public AimTrainerGameController(IConfiguration configuration)
     {
-        Configuration = configuration;
+        _configuration = configuration;
     }
 
     [HttpPost("StartGame")]
     public ActionResult<GameStartResponse> StartGame([FromBody] GameStartRequest gameInfo)
     {
-        int amountOfDots = gameInfo.difficulty switch
+        var amountOfDots = gameInfo.difficulty switch
         {
-            Difficulty.EASY => ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:AmountOfDots:easy", DEFAULT_DOTS),
-            Difficulty.MEDIUM => ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:AmountOfDots:medium", DEFAULT_DOTS),
-            Difficulty.HARD => ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:AmountOfDots:hard", DEFAULT_DOTS),
-            _ => DEFAULT_DOTS
+            Difficulty.EASY => ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:AmountOfDots:easy", Constants.DefaultDots),
+            Difficulty.MEDIUM => ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:AmountOfDots:medium", Constants.DefaultDots),
+            Difficulty.HARD => ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:AmountOfDots:hard", Constants.DefaultDots),
+            _ => Constants.DefaultDots
         };
 
-        int timeToLive = gameInfo.difficulty switch
+        var timeToLive = gameInfo.difficulty switch
         {
-            Difficulty.EASY => ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:TimeToLive:easy", DEFAULT_TIME_TO_LIVE),
-            Difficulty.MEDIUM => ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:TimeToLive:medium", DEFAULT_TIME_TO_LIVE),
-            Difficulty.HARD => ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:TimeToLive:hard", DEFAULT_TIME_TO_LIVE),
-            _ => DEFAULT_TIME_TO_LIVE
+            Difficulty.EASY => ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:TimeToLive:easy", Constants.DefaultTimeToLive),
+            Difficulty.MEDIUM => ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:TimeToLive:medium", Constants.DefaultTimeToLive),
+            Difficulty.HARD => ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:TimeToLive:hard", Constants.DefaultTimeToLive),
+            _ => Constants.DefaultTimeToLive
         };
 
         var random = new Random();
         var dots = new List<DotInfo>(amountOfDots);
         for (var i = 0; i < amountOfDots; i++)
         {
-            Vector2 tmp = new Vector2(random.Next(gameInfo.screenSize.X), random.Next(gameInfo.screenSize.Y));
+            var tmp = new Vector2(random.Next(gameInfo.screenSize.X), random.Next(gameInfo.screenSize.Y));
 
-            int spawnTime = gameInfo.difficulty switch
+            var spawnTime = gameInfo.difficulty switch
             {
                 Difficulty.EASY => random.Next(
-                    ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:SpawnTime:easy:min", DEFAULT_SPAWN_TIME_MIN),
-                    ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:SpawnTime:easy:max", DEFAULT_SPAWN_TIME_MAX)),
+                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:easy:min", Constants.DefaultSpawnTimeMin),
+                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:easy:max", Constants.DefaultSpawnTimeMax)),
                 Difficulty.MEDIUM => random.Next(
-                    ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:SpawnTime:medium:min", DEFAULT_SPAWN_TIME_MIN),
-                    ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:SpawnTime:medium:max", DEFAULT_SPAWN_TIME_MAX)),
+                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:medium:min", Constants.DefaultSpawnTimeMin),
+                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:medium:max", Constants.DefaultSpawnTimeMax)),
                 Difficulty.HARD => random.Next(
-                    ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:SpawnTime:hard:min", DEFAULT_SPAWN_TIME_MIN),
-                    ConfigValuesParser.GetConfigIntValue(Configuration, "AimTrainerGame:SpawnTime:hard:max", DEFAULT_SPAWN_TIME_MAX)),
-                _ => random.Next(DEFAULT_SPAWN_TIME_MIN, DEFAULT_SPAWN_TIME_MAX)
+                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:hard:min", Constants.DefaultSpawnTimeMin),
+                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:hard:max", Constants.DefaultSpawnTimeMax)),
+                _ => random.Next(Constants.DefaultSpawnTimeMin, Constants.DefaultSpawnTimeMax)
             };
 
             dots.Add(new DotInfo(tmp, spawnTime));
