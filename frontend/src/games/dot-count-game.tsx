@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { delay } from 'src/utils/timing';
+import { delay } from '@/utils/timing';
 
 export type Dot = {
   x: number;

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { delay } from 'src/utils/timing';
+import { delay } from '@/utils/timing';
 
 async function fetchWaitTime() {
   const tmp = await fetch('http://localhost:5252/reactiontime');

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { delay } from 'src/utils/timing';
+import { delay } from '@/utils/timing';
 
 const SequenceGame = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import Difficulty from 'src/components/aim-trainer-game/Difficulty';
-import DifficultyPicker from 'src/components/aim-trainer-game/DifficultyPicker';
-import StartGameButton from 'src/components/aim-trainer-game/StartGameButton';
-import { delay } from 'src/utils/timing';
+import Difficulty from '@/components/aim-trainer-game/Difficulty';
+import DifficultyPicker from '@/components/aim-trainer-game/DifficultyPicker';
+import StartGameButton from '@/components/aim-trainer-game/StartGameButton';
+import { delay } from '@/utils/timing';
 
 type GameStartRequest = {
   difficulty: Difficulty;
