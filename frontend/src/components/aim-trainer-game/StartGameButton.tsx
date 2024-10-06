@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 type props = {
   className?: string;
   onClick: () => void;

@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -35,6 +35,7 @@ function HomePage() {
     { path: 'games/reaction-game', name: 'Reaction Game' },
     { path: 'games/memory-game-with-numbers', name: 'Memory Game' },
     { path: 'games/aim-trainer-game', name: 'Aim Trainer' },
+    { path: 'games/dot-count-game', name: 'Dot Counting' },
     { path: 'games/sequence-game', name: 'Sequence Game' },
   ];
 
