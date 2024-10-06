@@ -6,14 +6,9 @@ namespace backend.AimTrainerGame.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AimTrainerGameController : ControllerBase
+public class AimTrainerGameController(in IConfiguration configuration) : ControllerBase
 {
-    private readonly IConfiguration _configuration;
-
-    public AimTrainerGameController(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
+    private readonly IConfiguration _configuration = configuration;
 
     [HttpPost("StartGame")]
     public ActionResult<GameStartResponse> StartGame([FromBody] GameStartRequest gameInfo)
