@@ -60,7 +60,6 @@ function styleElement(
 ) {
   element.className = 'w-24 h-24 bg-sky-500 rounded-full';
   element.style.position = 'absolute';
-  console.log(`x: ${x}, y: ${y}`);
   element.style.top = `${y + BORDER / 2}px`;
   element.style.left = `${x + BORDER / 2}px`;
 }
