@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { delay } from '@/utils/timing';
+import { BACKEND_URL } from '@/utils/consts';
 
 export type Dot = {
   x: number;
@@ -42,7 +43,7 @@ const DotCountGame = () => {
   const fetchInfo = async (maxDots: number) => {
     try {
       const response = await fetch(
-        `http://localhost:5252/DotCountGame?maxDots=${maxDots}`,
+        `${BACKEND_URL}/DotCountGame?maxDots=${maxDots}`,
       );
       const canvasInfo = (await response.json()) as DotCanvasInfo;
       console.log(canvasInfo);

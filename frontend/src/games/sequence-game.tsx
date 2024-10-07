@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { delay } from '@/utils/timing';
+import { BACKEND_URL } from '@/utils/consts';
 
 const SequenceGame = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);
@@ -28,7 +29,7 @@ const SequenceGame = () => {
   const getSequence = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5252/SequenceGame/getSequence?sequence=${sequence.toString()}`,
+        `${BACKEND_URL}/SequenceGame/getSequence?sequence=${sequence.toString()}`,
       );
       const newSequence = await response.json();
 

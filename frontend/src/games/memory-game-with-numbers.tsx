@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BACKEND_URL } from '@/utils/consts';
 
 const MemoryGameWithNumbers = () => {
   const [grid, setGrid] = useState<(number | null)[]>([]);
@@ -28,7 +29,7 @@ const MemoryGameWithNumbers = () => {
   const startGame = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5252/MemoryGameWithNumbers/start?maxNumber=${maxNumber}`,
+        `${BACKEND_URL}/MemoryGameWithNumbers/start?maxNumber=${maxNumber}`,
       );
       const data = await response.json();
 
@@ -63,7 +64,7 @@ const MemoryGameWithNumbers = () => {
   const verifySequence = async () => {
     try {
       const response = await fetch(
-        'http://localhost:5252/MemoryGameWithNumbers/attempt',
+        `${BACKEND_URL}/MemoryGameWithNumbers/attempt`,
         {
           method: 'POST',
           headers: {

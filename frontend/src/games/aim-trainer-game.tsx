@@ -3,6 +3,7 @@ import Difficulty from '@/components/aim-trainer-game/Difficulty';
 import DifficultyPicker from '@/components/aim-trainer-game/DifficultyPicker';
 import StartGameButton from '@/components/aim-trainer-game/StartGameButton';
 import { delay } from '@/utils/timing';
+import { BACKEND_URL } from '@/utils/consts';
 
 type GameStartRequest = {
   difficulty: Difficulty;
@@ -35,7 +36,7 @@ async function fetchGameStartInfo(
   height: number,
 ) {
   try {
-    const tmp = await fetch('http://localhost:5252/aimtrainergame/startgame', {
+    const tmp = await fetch(`${BACKEND_URL}/aimtrainergame/startgame`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -50,6 +51,7 @@ async function fetchGameStartInfo(
     });
     return (await tmp.json()) as GameStartResponse;
   } catch (e) {
+    console.log(e);
     return undefined;
   }
 }
