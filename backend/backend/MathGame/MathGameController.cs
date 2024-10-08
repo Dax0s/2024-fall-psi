@@ -42,34 +42,29 @@ public class MathGameController : ControllerBase
     {
         try
         {
-            if (System.IO.File.Exists(puzzleFilePath))
-            {
-
-                using (FileStream fileStream = new FileStream(puzzleFilePath, FileMode.Open, FileAccess.Read))
-                {
-                    using (StreamReader reader = new StreamReader(fileStream))
-                    {
-                        string line;
-                        puzzles.Clear();
-
-                        while ((line = reader.ReadLine()) != null)
-                        {
-                            if (!string.IsNullOrWhiteSpace(line))
-                            {
-                                puzzles.Add(line.Trim());
-                            }
-                        }
-                    }
-                }
-
-                if (puzzles.Count == 0)
-                {
-                    Console.WriteLine("The puzzle file is empty.");
-                }
-            }
-            else
+            if (!System.IO.File.Exists(puzzleFilePath))
             {
                 Console.WriteLine($"Puzzle file not found at {puzzleFilePath}");
+            }
+
+            using (FileStream fileStream = new FileStream(puzzleFilePath, FileMode.Open, FileAccess.Read))
+            using (StreamReader reader = new StreamReader(fileStream))
+            {
+                string line;
+                puzzles.Clear();
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        puzzles.Add(line.Trim());
+                    }
+                }
+            }
+
+            if (puzzles.Count == 0)
+            {
+                Console.WriteLine("The puzzle file is empty.");
             }
         }
         catch (Exception ex)
