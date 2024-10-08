@@ -8,6 +8,7 @@ const MemoryGameWithNumbers = () => {
   const [showNumbers, setShowNumbers] = useState(true);
   const [result, setResult] = useState<string | null>(null);
   const [victoryList, setVictoryList] = useState<number[]>([1]);
+  const [lost, setLost] = useState(false);
   const [maxNumber, setMaxNumber] = useState<number>(1);
   const TIMER = 3000;
 
@@ -46,6 +47,17 @@ const MemoryGameWithNumbers = () => {
       console.error('Error starting game:', error);
     }
   };
+  const restartGame = () => {
+    setGrid([]);
+    setLost(false);
+    setClickedNumbers([]);
+    setIsGameStarted(true);
+    setShowNumbers(true);
+    setResult(null);
+    setVictoryList([1]);
+    setMaxNumber(1);
+    startGame();
+  };
 
   const handleClick = (num: number | null) => {
     if (num !== null && !clickedNumbers.includes(num)) {
@@ -82,6 +94,7 @@ const MemoryGameWithNumbers = () => {
         setResult(
           'You lose. Try again! Your score: ' + (victoryList.length - 1),
         );
+        setLost(true);
         setShowNumbers(true);
       }
     } catch (error) {
@@ -117,6 +130,14 @@ const MemoryGameWithNumbers = () => {
         <>
           <h2 className="text-2xl font-medium mt-6 text-gray-800">{result}</h2>
         </>
+      )}
+      {lost && (
+        <button
+          className="mt-6 bg-red-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-red-600 transition duration-300"
+          onClick={restartGame}
+        >
+          Restart Game
+        </button>
       )}
     </div>
   );

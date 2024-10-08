@@ -37,6 +37,7 @@ function HomePage() {
     { path: 'games/aim-trainer-game', name: 'Aim Trainer' },
     { path: 'games/dot-count-game', name: 'Dot Counting' },
     { path: 'games/sequence-game', name: 'Sequence Game' },
+    { path: 'games/math-game', name: 'Math Game' },
   ];
 
   return (
