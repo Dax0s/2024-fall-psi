@@ -1,22 +1,21 @@
 import { useState } from 'react';
 import { delay } from 'src/utils/timing';
+import { Vec2 } from 'src/utils/vec2';
 
-export type Dot = {
-  x: number;
-  y: number;
+type Dot = {
+  center: Vec2;
+  radius: number;
 };
 
-export type DotCanvasInfo = {
-  canvasWidth: number;
-  numberOfDots: number;
+type DotCanvasInfo = {
+  sideLength: number;
   dots: Dot[];
-  dotRadius: number;
 };
 
 const noLastDotCountValue = 0;
 
 const defaultCanvasColor = 'aliceblue';
-const defaultCanvasDotColor = 'hotpink';
+const defaultDotColor = 'hotpink';
 
 const minDotCount = 1;
 const maxDotCount = 1000;
@@ -45,7 +44,6 @@ const DotCountGame = () => {
         `http://localhost:5252/DotCountGame?maxDots=${maxDots}`,
       );
       const canvasInfo = (await response.json()) as DotCanvasInfo;
-      console.log(canvasInfo);
       return canvasInfo;
     } catch (error) {
       console.error('Error starting game:', error);
@@ -54,8 +52,8 @@ const DotCountGame = () => {
 
   const displayDots = (canvasInfo: DotCanvasInfo) => {
     const canvas = document.getElementById('dotCanvas') as HTMLCanvasElement;
-    canvas.width = canvasInfo.canvasWidth;
-    canvas.height = canvasInfo.canvasWidth;
+    canvas.width = canvasInfo.sideLength;
+    canvas.height = canvasInfo.sideLength;
     clearCanvas();
 
     const context = canvas.getContext('2d');
@@ -63,11 +61,11 @@ const DotCountGame = () => {
 
     context.beginPath();
     canvasInfo.dots.forEach((dot) => {
-      context.moveTo(dot.x, dot.y);
-      context.arc(dot.x, dot.y, canvasInfo.dotRadius, 0, 2 * Math.PI);
+      context.moveTo(dot.center.x, dot.center.y);
+      context.arc(dot.center.x, dot.center.y, dot.radius, 0, 2 * Math.PI);
     });
 
-    context.fillStyle = defaultCanvasDotColor;
+    context.fillStyle = defaultDotColor;
     context.fill();
   };
 
