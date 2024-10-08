@@ -8,7 +8,13 @@ public class DotCountCanvas
     public List<Dot> Dots { get; set; }
 
     // TODO: constants out somewhere else
-    private const float MIN_RADIUS_PERCENTAGE = 0.75f; // What part of max. radius should min. radius be
+    // In pixels
+    private const int defaultRadius = 10;
+    private const int smallRadius = 5;
+    private const int dotCountLimitForDefaultRadius = 100;
+
+    // TODO: constants out somewhere else
+    private const float MinRadiusPercentage = 0.8f; // What part of max. radius should min. radius be
     private readonly int _maxRadius;
     private readonly int _minRadius;
 
@@ -17,14 +23,8 @@ public class DotCountCanvas
         var dotCount = Random.Shared.Next(minDots, maxDots + 1);
         Dots = new List<Dot>();
 
-        // TODO: constants out somewhere else
-        // In pixels
-        const int defaultRadius = 10;
-        const int smallRadius = 5;
-        const int dotCountLimitForDefaultRadius = 100;
-
         _maxRadius = maxDots < dotCountLimitForDefaultRadius ? defaultRadius : smallRadius;
-        _minRadius = Math.Max(1, (int)(_maxRadius * MIN_RADIUS_PERCENTAGE)); // Max function is so that _minRadius won't be 0
+        _minRadius = Math.Max(1, (int)(_maxRadius * MinRadiusPercentage)); // Max function is so that _minRadius won't be 0
 
         // See comment above FillInRandomDots() for more info
         var (occupiableChunkSideCount, occupiableChunkCount) = NextPerfectSquare(maxDots);

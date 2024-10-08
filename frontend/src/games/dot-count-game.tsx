@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { delay } from 'src/utils/timing';
-
-type Vec2 = {
-  x: number;
-  y: number;
-};
+import { Vec2 } from 'src/utils/vec2';
 
 type Dot = {
   center: Vec2;
