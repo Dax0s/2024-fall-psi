@@ -1,37 +1,42 @@
+using backend.Utils;
 namespace backend.DotCountGame.Models;
 
 public class DotCountCanvas
 {
-    public int CanvasWidth { get; set; }
+    public int SideLength { get; set; }
 
     public List<Dot> Dots { get; set; }
 
-    public int DotRadius { get; set; }
+    // TODO: constants out somewhere else
+    private const float MIN_RADIUS_PERCENTAGE = 0.75f; // What part of max. radius should min. radius be
+    private readonly int _maxRadius;
+    private readonly int _minRadius;
 
     public DotCountCanvas(int minDots, int maxDots)
     {
-        int dotCount = Random.Shared.Next(minDots, maxDots + 1);
-        Dots = new List<Dot>(dotCount);
+        var dotCount = Random.Shared.Next(minDots, maxDots + 1);
+        Dots = new List<Dot>();
 
+        // TODO: constants out somewhere else
         // In pixels
         const int defaultRadius = 10;
-        const int smallRadius = 10;
+        const int smallRadius = 5;
         const int dotCountLimitForDefaultRadius = 100;
 
-        DotRadius = maxDots < dotCountLimitForDefaultRadius ? defaultRadius : smallRadius;
+        _maxRadius = maxDots < dotCountLimitForDefaultRadius ? defaultRadius : smallRadius;
+        _minRadius = Math.Max(1, (int)(_maxRadius * MIN_RADIUS_PERCENTAGE)); // Max function is so that _minRadius won't be 0
 
         // See comment above FillInRandomDots() for more info
-        int occupiableChunkCount = NextPerfectSquare(maxDots);
-        int sideOccupiableChunkCount = (int)Math.Sqrt(occupiableChunkCount);
-        CanvasWidth = (2 * DotRadius) * (2 * sideOccupiableChunkCount + 1);
+        var (occupiableChunkSideCount, occupiableChunkCount) = NextPerfectSquare(maxDots);
+        SideLength = (2 * _maxRadius) * (2 * occupiableChunkSideCount + 1);
 
         FillInRandomDots(dotCount, occupiableChunkCount);
     }
 
-    private static int NextPerfectSquare(int number)
+    private static (int, int) NextPerfectSquare(int number)
     {
-        int nextSquareRoot = (int)Math.Ceiling(Math.Sqrt((double)number));
-        return nextSquareRoot * nextSquareRoot;
+        var nextSquareRoot = (int)Math.Ceiling(Math.Sqrt((double)number));
+        return (nextSquareRoot, nextSquareRoot * nextSquareRoot);
     }
 
     // Fill algorithm
@@ -63,33 +68,42 @@ public class DotCountCanvas
     // Here '-' marks free chunks and '*' marks occupiable chunks.
     private void FillInRandomDots(int dotCount, int chunkCount)
     {
-        int chunkWidth = 2 * DotRadius;
+        int chunkSideLength = 2 * _maxRadius;
 
-        var chunkTopLefts = new Dot[chunkCount];
-        var chunkTopLeftsEnum = new DotListEnumerator(chunkTopLefts);
-        for (int y = chunkWidth; y < CanvasWidth; y += 2 * chunkWidth)
+        ComputeChunkTopLeftPositions(chunkCount, chunkSideLength);
+        ChooseDots(dotCount);
+        GiveRandomOffsetsAndRadii(chunkSideLength);
+    }
+
+    private void ComputeChunkTopLeftPositions(int chunkCount, int chunkSideLength)
+    {
+        Dots = new List<Dot>(chunkCount);
+        for (int y = chunkSideLength; y < SideLength; y += 2 * chunkSideLength)
         {
-            for (int x = chunkWidth; x < CanvasWidth; x += 2 * chunkWidth)
+            for (int x = chunkSideLength; x < SideLength; x += 2 * chunkSideLength)
             {
-                chunkTopLeftsEnum.Current = new Dot(x, y);
-                chunkTopLeftsEnum.MoveNext();
+                Dots.Add(new Dot(x, y));
             }
         }
+    }
 
-        Random.Shared.Shuffle(chunkTopLefts);
+    private void ChooseDots(int dotCount)
+    {
+        var rng = new Random();
+        Dots = Dots.OrderBy(_ => rng.Next()).Take(dotCount).ToList();
+    }
 
-        foreach (Dot topLeftDot in chunkTopLefts)
+    private void GiveRandomOffsetsAndRadii(int chunkSideLength)
+    {
+        foreach (var dot in Dots)
         {
-            if (Dots.Count >= dotCount)
-            {
-                return;
-            }
+            var randomOffset = new Vector2(
+                x: Random.Shared.Next(0, chunkSideLength),
+                y: Random.Shared.Next(0, chunkSideLength)
+            );
 
-            Dot newDot = topLeftDot;
-            newDot.X += Random.Shared.Next(0, chunkWidth);
-            newDot.Y += Random.Shared.Next(0, chunkWidth);
-
-            Dots.Add(newDot);
+            dot.Center += randomOffset;
+            dot.Radius = Random.Shared.Next(_minRadius, _maxRadius + 1);
         }
     }
 }
