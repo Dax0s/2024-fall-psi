@@ -18,7 +18,7 @@ public class AimTrainerGameController : ControllerBase
     [HttpPost("StartGame")]
     public ActionResult<GameStartResponse> StartGame([FromBody] GameStartRequest gameInfo)
     {
-        if ((int) gameInfo.difficulty is (< 0 or > 2))
+        if ((int) gameInfo.difficulty is < 0 or > 2)
         {
             return BadRequest();
         }
