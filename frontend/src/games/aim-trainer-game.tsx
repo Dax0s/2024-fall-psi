@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import Difficulty from '@/components/aim-trainer-game/Difficulty';
 import DifficultyPicker from '@/components/aim-trainer-game/DifficultyPicker';
 import StartGameButton from '@/components/aim-trainer-game/StartGameButton';
@@ -29,6 +29,8 @@ type GameStartResponse = {
 
 const SIZE_OF_BALL = 96;
 const BORDER = 100;
+
+const GAME_URL = 'aim-trainer-game';
 
 async function fetchGameStartInfo(
   difficulty: Difficulty,
@@ -67,15 +69,23 @@ function styleElement(
 }
 
 const AimTrainerGame = () => {
-  const [gameIsStarted, dotsAreSpawning] = useState(false);
+  const [gameIsStarted, setGameIsStarted] = useState(false);
   const [difficulty, setDifficulty] = useState(Difficulty.EASY);
   const [isLoading, setIsLoading] = useState(false);
   const [dotsLeft, setDotsLeft] = useState(0);
   const [score, setScore] = useState(0);
 
+  const dots: MutableRefObject<Array<HTMLDivElement>> = useRef([])
+
   function removeElement(element: HTMLDivElement) {
     element.remove();
     setDotsLeft((prevDots) => prevDots - 1);
+  }
+
+  function removeAllDots() {
+    dots.current.forEach(removeElement);
+
+    dots.current = [];
   }
 
   async function spawnDots(gameData: GameStartResponse) {
@@ -86,9 +96,14 @@ const AimTrainerGame = () => {
     for (const dotInfo of gameData.dotInfos) {
       await delay(dotInfo.spawnTime);
 
+      if (!window.location.href.includes(GAME_URL)) {
+        return;
+      }
+
       const element = document.createElement('div');
       styleElement(element, dotInfo);
       parentElement.appendChild(element);
+      dots.current.push(element);
 
       const elementTimeout = setTimeout(() => {
         removeElement(element);
@@ -105,10 +120,6 @@ const AimTrainerGame = () => {
   async function startGame() {
     const { innerWidth: width, innerHeight: height } = window;
 
-    console.log('------------');
-    console.log(`width: ${width}, height: ${height}`);
-    console.log('------------');
-
     setIsLoading(true);
     const gameData = await fetchGameStartInfo(difficulty, width, height);
 
@@ -123,10 +134,16 @@ const AimTrainerGame = () => {
     setScore(0);
     setIsLoading(false);
 
-    dotsAreSpawning(true);
+    setGameIsStarted(true);
     await spawnDots(gameData);
-    dotsAreSpawning(false);
+    setGameIsStarted(false);
   }
+
+  useEffect(() => {
+    return () => {
+      removeAllDots();
+    }
+  }, [])
 
   return (
     <>
