@@ -5,7 +5,7 @@ namespace backend.ReactionTimeGame.Controllers;
 using Models;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ReactionTimeController : ControllerBase
 {
     [HttpGet]

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BACKEND_URL } from '@/utils/consts';
 
 const PuzzleRush = () => {
   const [puzzle, setPuzzle] = useState('');
@@ -14,7 +15,7 @@ const PuzzleRush = () => {
 
   const fetchNextPuzzle = async () => {
     try {
-      const response = await fetch('http://localhost:5252/api/MathGame/next');
+      const response = await fetch(`${BACKEND_URL}/MathGame/next`);
 
       if (!response.ok) {
         throw new Error('No more puzzles available');
@@ -33,7 +34,7 @@ const PuzzleRush = () => {
   const submitAnswer = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5252/api/MathGame/solve', {
+      const response = await fetch(`${BACKEND_URL}/MathGame/solve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

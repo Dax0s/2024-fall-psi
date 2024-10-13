@@ -28,6 +28,8 @@ public class Program
 
         var app = builder.Build();
 
+        app.UseHttpsRedirection();
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
@@ -39,10 +41,6 @@ public class Program
         app.UseRouting();
 
         app.UseAuthorization();
-
-        app.MapControllers();
-
-        app.UseHttpsRedirection();
 
         app.MapControllers();
 

@@ -3,7 +3,7 @@ import { delay } from '@/utils/timing';
 import { BACKEND_URL } from '@/utils/consts';
 
 async function fetchWaitTime() {
-  const tmp = await fetch(`${BACKEND_URL}/localhost:5252/reactiontime`);
+  const tmp = await fetch(`${BACKEND_URL}/reactiontime`);
   const json = await tmp.json();
   return json.millisecondsToWait;
 }

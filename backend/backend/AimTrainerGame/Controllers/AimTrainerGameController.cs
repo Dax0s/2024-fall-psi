@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.AimTrainerGame.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AimTrainerGameController : ControllerBase
 {
     private readonly IAimTrainerGameService _service;

@@ -75,7 +75,7 @@ const AimTrainerGame = () => {
   const [dotsLeft, setDotsLeft] = useState(0);
   const [score, setScore] = useState(0);
 
-  const dots: MutableRefObject<Array<HTMLDivElement>> = useRef([])
+  const dots: MutableRefObject<Array<HTMLDivElement>> = useRef([]);
 
   function removeElement(element: HTMLDivElement) {
     element.remove();
@@ -142,8 +142,8 @@ const AimTrainerGame = () => {
   useEffect(() => {
     return () => {
       removeAllDots();
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <>

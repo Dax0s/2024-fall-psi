@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace backend.MathGame.Controllers;
+namespace backend.MathGame;
 
 [Route("api/[controller]")]
 [ApiController]
