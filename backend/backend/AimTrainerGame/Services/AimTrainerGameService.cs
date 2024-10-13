@@ -12,6 +12,23 @@ public class AimTrainerGameService : IAimTrainerGameService
         _configuration = configuration;
     }
 
+    private int GetRandomSpawnTime(Difficulty difficulty, Random random)
+    {
+        return difficulty switch
+        {
+            Difficulty.EASY => random.Next(
+                ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:easy:min", Constants.DefaultSpawnTimeMin),
+                ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:easy:max", Constants.DefaultSpawnTimeMax)),
+            Difficulty.MEDIUM => random.Next(
+                ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:medium:min", Constants.DefaultSpawnTimeMin),
+                ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:medium:max", Constants.DefaultSpawnTimeMax)),
+            Difficulty.HARD => random.Next(
+                ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:hard:min", Constants.DefaultSpawnTimeMin),
+                ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:hard:max", Constants.DefaultSpawnTimeMax)),
+            _ => random.Next(Constants.DefaultSpawnTimeMin, Constants.DefaultSpawnTimeMax)
+        };
+    }
+
     public List<DotInfo> StartGame(GameStartRequest gameInfo, out int amountOfDots, out int timeToLive)
     {
         amountOfDots = gameInfo.difficulty switch
@@ -31,28 +48,10 @@ public class AimTrainerGameService : IAimTrainerGameService
         };
 
         var random = new Random();
-        var dots = new List<DotInfo>(amountOfDots);
-        for (var i = 0; i < amountOfDots; i++)
-        {
-            var tmp = new Vector2(random.Next(gameInfo.screenSize.X), random.Next(gameInfo.screenSize.Y));
-
-            var spawnTime = gameInfo.difficulty switch
-            {
-                Difficulty.EASY => random.Next(
-                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:easy:min", Constants.DefaultSpawnTimeMin),
-                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:easy:max", Constants.DefaultSpawnTimeMax)),
-                Difficulty.MEDIUM => random.Next(
-                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:medium:min", Constants.DefaultSpawnTimeMin),
-                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:medium:max", Constants.DefaultSpawnTimeMax)),
-                Difficulty.HARD => random.Next(
-                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:hard:min", Constants.DefaultSpawnTimeMin),
-                    ConfigValuesParser.GetConfigIntValue(_configuration, "AimTrainerGame:SpawnTime:hard:max", Constants.DefaultSpawnTimeMax)),
-                _ => random.Next(Constants.DefaultSpawnTimeMin, Constants.DefaultSpawnTimeMax)
-            };
-
-            dots.Add(new DotInfo(tmp, spawnTime));
-        }
-
-        return dots;
+        return Enumerable.Range(0, amountOfDots)
+            .Select(_ => new DotInfo(
+                new Vector2(random.Next(gameInfo.screenSize.X), random.Next(gameInfo.screenSize.Y)),
+                GetRandomSpawnTime(gameInfo.difficulty, random)))
+            .ToList();
     }
 }
