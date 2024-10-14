@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { delay } from '@/utils/timing';
-import { BACKEND_URL } from '@/utils/contants';
+import { BACKEND_URL } from '@/utils/constants';
 
 const SequenceGame = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);

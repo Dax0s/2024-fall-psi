@@ -3,7 +3,7 @@ import Difficulty from '@/components/aim-trainer-game/Difficulty';
 import DifficultyPicker from '@/components/aim-trainer-game/DifficultyPicker';
 import StartGameButton from '@/components/aim-trainer-game/StartGameButton';
 import { delay } from '@/utils/timing';
-import { BACKEND_URL } from '@/utils/contants';
+import { BACKEND_URL } from '@/utils/constants';
 
 type GameStartRequest = {
   difficulty: Difficulty;

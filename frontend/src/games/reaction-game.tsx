@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { delay } from '@/utils/timing';
-import { BACKEND_URL } from '@/utils/contants';
+import { BACKEND_URL } from '@/utils/constants';
 
 async function fetchWaitTime() {
   const tmp = await fetch(`${BACKEND_URL}/reactiontime`);
