@@ -1,4 +1,4 @@
-using backend.Utils;
+using backend.Properties;
 
 namespace backend.ReactionTimeGame.Models;
 
@@ -7,8 +7,5 @@ public class ReactionGameWaitDuration
     public int MillisecondsToWait { get; set; }
 
     public ReactionGameWaitDuration()
-        => MillisecondsToWait = Random.Shared.Next(
-                Constants.ReactionTimeGame.Wait.Min,
-                Constants.ReactionTimeGame.Wait.Max + 1
-            );
+        => MillisecondsToWait = Settings.ReactionTimeGame.Wait.Random();
 }

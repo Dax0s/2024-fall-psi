@@ -17,6 +17,16 @@ public struct Vector2(int x = 0, int y = 0)
     {
     }
 
+    public static Vector2 RandomOffset(Vector2 offset)
+    {
+        var random = new Random();
+        return new Vector2(
+                x: random.Next(offset.X),
+                y: random.Next(offset.Y)
+            );
+
+    }
+
     public static Vector2 operator +(Vector2 a, Vector2 b)
     {
         return new Vector2(x: a.X + b.X, y: a.Y + b.Y);

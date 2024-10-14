@@ -1,4 +1,6 @@
+using backend.Properties;
 using backend.Utils;
+
 namespace backend.DotCountGame.Models;
 
 public class DotCountCanvas
@@ -7,36 +9,29 @@ public class DotCountCanvas
 
     public List<Dot> Dots { get; set; }
 
-    // TODO: constants out somewhere else
-    // In pixels
-    private const int defaultRadius = 10;
-    private const int smallRadius = 5;
-    private const int dotCountLimitForDefaultRadius = 100;
+    private IntBounds _radiusBounds;
 
-    // TODO: constants out somewhere else
-    private const float MinRadiusPercentage = 0.8f; // What part of max. radius should min. radius be
-    private readonly int _maxRadius;
-    private readonly int _minRadius;
-
-    public DotCountCanvas(int minDots, int maxDots)
+    public DotCountCanvas(IntBounds dotCountBounds)
     {
-        var dotCount = Random.Shared.Next(minDots, maxDots + 1);
         Dots = new List<Dot>();
+        SideLength = 0;
+        _radiusBounds = new IntBounds(0, 0);
 
-        _maxRadius = maxDots < dotCountLimitForDefaultRadius ? defaultRadius : smallRadius;
-        _minRadius = Math.Max(1, (int)(_maxRadius * MinRadiusPercentage)); // Max function is so that _minRadius won't be 0
-
-        // See comment above FillInRandomDots() for more info
-        var (occupiableChunkSideCount, occupiableChunkCount) = NextPerfectSquare(maxDots);
-        SideLength = (2 * _maxRadius) * (2 * occupiableChunkSideCount + 1);
-
-        FillInRandomDots(dotCount, occupiableChunkCount);
+        var dotCount = dotCountBounds.Random();
+        CalculateRadiusBounds(dotCountBounds.UpperLimit);
+        FillInRandomDots(dotCount, dotCountBounds.UpperLimit);
     }
 
-    private static (int, int) NextPerfectSquare(int number)
+    private void CalculateRadiusBounds(int maxDots)
     {
-        var nextSquareRoot = (int)Math.Ceiling(Math.Sqrt((double)number));
-        return (nextSquareRoot, nextSquareRoot * nextSquareRoot);
+        var maxRadius = maxDots < Settings.DotCountGame.DotCountLimitForDefaultRadius
+                ? Settings.DotCountGame.DefaultRadius
+                : Settings.DotCountGame.SmallRadius;
+
+        var minRadius = (int)(maxRadius * Settings.DotCountGame.MinRadiusPercentage);
+        minRadius = Math.Max(1, minRadius); // So that _minRadius > 0
+
+        _radiusBounds = new IntBounds(minRadius, maxRadius);
     }
 
     // Fill algorithm
@@ -66,11 +61,14 @@ public class DotCountCanvas
     // ---------
     //
     // Here '-' marks free chunks and '*' marks occupiable chunks.
-    private void FillInRandomDots(int dotCount, int chunkCount)
+    private void FillInRandomDots(int dotCount, int maxDots)
     {
-        int chunkSideLength = 2 * _maxRadius;
+        var (occupiableChunkSideCount, occupiableChunkCount) = Numbers.NextPerfectSquare(maxDots);
+        SideLength = (2 * _radiusBounds.UpperLimit) * (2 * occupiableChunkSideCount + 1);
 
-        ComputeChunkTopLeftPositions(chunkCount, chunkSideLength);
+        int chunkSideLength = 2 * _radiusBounds.UpperLimit;
+
+        ComputeChunkTopLeftPositions(occupiableChunkCount, chunkSideLength);
         ChooseDots(dotCount);
         GiveRandomOffsetsAndRadii(chunkSideLength);
     }
@@ -95,15 +93,11 @@ public class DotCountCanvas
 
     private void GiveRandomOffsetsAndRadii(int chunkSideLength)
     {
+        var offsetBounds = new Vector2(chunkSideLength, chunkSideLength);
         foreach (var dot in Dots)
         {
-            var randomOffset = new Vector2(
-                x: Random.Shared.Next(0, chunkSideLength),
-                y: Random.Shared.Next(0, chunkSideLength)
-            );
-
-            dot.Center += randomOffset;
-            dot.Radius = Random.Shared.Next(_minRadius, _maxRadius + 1);
+            dot.Center += Vector2.RandomOffset(offsetBounds);
+            dot.Radius = _radiusBounds.Random();
         }
     }
 }

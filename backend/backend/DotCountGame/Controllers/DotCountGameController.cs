@@ -1,4 +1,6 @@
 using backend.DotCountGame.Models;
+using backend.Properties;
+using backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.DotCountGame.Controllers;
@@ -7,23 +9,15 @@ namespace backend.DotCountGame.Controllers;
 [Route("api/[controller]")]
 public class DotCountGameController : ControllerBase
 {
-    // TODO: extract constants somewhere global
-    private const int MinDotCount = 1;
-    private const int DotCountUpperLimit = 1000; // Inclusive
-
-    private static bool InputIsValid(int maxDots)
-    {
-        return MinDotCount <= maxDots && maxDots <= DotCountUpperLimit;
-    }
-
     [HttpGet]
     public ActionResult<DotCountCanvas> Get([FromQuery] int maxDots)
     {
-        if (!InputIsValid(maxDots))
+        if (!Settings.DotCountGame.DotCount.WithinBounds(maxDots))
         {
             return NoContent();
         }
 
-        return new DotCountCanvas(MinDotCount, maxDots);
+        var dotCountBounds = new IntBounds(Settings.DotCountGame.DotCount.LowerLimit, maxDots);
+        return new DotCountCanvas(dotCountBounds);
     }
 }
