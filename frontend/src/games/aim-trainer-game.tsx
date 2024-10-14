@@ -3,7 +3,7 @@ import Difficulty from '@/components/aim-trainer-game/Difficulty';
 import DifficultyPicker from '@/components/aim-trainer-game/DifficultyPicker';
 import StartGameButton from '@/components/aim-trainer-game/StartGameButton';
 import { delay } from '@/utils/timing';
-import { BACKEND_URL } from '@/utils/consts';
+import { BACKEND_URL } from '@/utils/contants';
 
 type GameStartRequest = {
   difficulty: Difficulty;
@@ -53,7 +53,7 @@ async function fetchGameStartInfo(
     });
     return (await tmp.json()) as GameStartResponse;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return undefined;
   }
 }
@@ -84,7 +84,6 @@ const AimTrainerGame = () => {
 
   function removeAllDots() {
     dots.current.forEach(removeElement);
-
     dots.current = [];
   }
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { delay } from '@/utils/timing';
-import { BACKEND_URL } from '@/utils/consts';
+import { BACKEND_URL } from '@/utils/contants';
 import { Vec2 } from 'src/utils/vec2';
 
 type Dot = {

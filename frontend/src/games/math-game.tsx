@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BACKEND_URL } from '@/utils/consts';
+import { BACKEND_URL } from '@/utils/contants';
 
 const PuzzleRush = () => {
   const [puzzle, setPuzzle] = useState('');

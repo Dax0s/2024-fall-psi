@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BACKEND_URL } from '@/utils/consts';
+import { BACKEND_URL } from '@/utils/contants';
 
 const MemoryGameWithNumbers = () => {
   const [grid, setGrid] = useState<(number | null)[]>([]);
