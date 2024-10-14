@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import Difficulty from 'src/components/aim-trainer-game/Difficulty';
-import DifficultyPicker from 'src/components/aim-trainer-game/DifficultyPicker';
-import StartGameButton from 'src/components/aim-trainer-game/StartGameButton';
-import { delay } from 'src/utils/timing';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import Difficulty from '@/components/aim-trainer-game/Difficulty';
+import DifficultyPicker from '@/components/aim-trainer-game/DifficultyPicker';
+import StartGameButton from '@/components/aim-trainer-game/StartGameButton';
+import { delay } from '@/utils/timing';
+import { BACKEND_URL } from '@/utils/constants';
 
 type GameStartRequest = {
   difficulty: Difficulty;
@@ -29,13 +30,15 @@ type GameStartResponse = {
 const SIZE_OF_BALL = 96;
 const BORDER = 100;
 
+const GAME_URL = 'aim-trainer-game';
+
 async function fetchGameStartInfo(
   difficulty: Difficulty,
   width: number,
   height: number,
 ) {
   try {
-    const tmp = await fetch('http://localhost:5252/aimtrainergame/startgame', {
+    const tmp = await fetch(`${BACKEND_URL}/aimtrainergame/startgame`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -50,6 +53,7 @@ async function fetchGameStartInfo(
     });
     return (await tmp.json()) as GameStartResponse;
   } catch (e) {
+    console.error(e);
     return undefined;
   }
 }
@@ -60,21 +64,27 @@ function styleElement(
 ) {
   element.className = 'w-24 h-24 bg-sky-500 rounded-full';
   element.style.position = 'absolute';
-  console.log(`x: ${x}, y: ${y}`);
   element.style.top = `${y + BORDER / 2}px`;
   element.style.left = `${x + BORDER / 2}px`;
 }
 
 const AimTrainerGame = () => {
-  const [gameIsStarted, dotsAreSpawning] = useState(false);
+  const [gameIsStarted, setGameIsStarted] = useState(false);
   const [difficulty, setDifficulty] = useState(Difficulty.EASY);
   const [isLoading, setIsLoading] = useState(false);
   const [dotsLeft, setDotsLeft] = useState(0);
   const [score, setScore] = useState(0);
 
+  const dots: MutableRefObject<Array<HTMLDivElement>> = useRef([]);
+
   function removeElement(element: HTMLDivElement) {
     element.remove();
     setDotsLeft((prevDots) => prevDots - 1);
+  }
+
+  function removeAllDots() {
+    dots.current.forEach(removeElement);
+    dots.current = [];
   }
 
   async function spawnDots(gameData: GameStartResponse) {
@@ -85,9 +95,14 @@ const AimTrainerGame = () => {
     for (const dotInfo of gameData.dotInfos) {
       await delay(dotInfo.spawnTime);
 
+      if (!window.location.href.includes(GAME_URL)) {
+        return;
+      }
+
       const element = document.createElement('div');
       styleElement(element, dotInfo);
       parentElement.appendChild(element);
+      dots.current.push(element);
 
       const elementTimeout = setTimeout(() => {
         removeElement(element);
@@ -104,10 +119,6 @@ const AimTrainerGame = () => {
   async function startGame() {
     const { innerWidth: width, innerHeight: height } = window;
 
-    console.log('------------');
-    console.log(`width: ${width}, height: ${height}`);
-    console.log('------------');
-
     setIsLoading(true);
     const gameData = await fetchGameStartInfo(difficulty, width, height);
 
@@ -122,10 +133,16 @@ const AimTrainerGame = () => {
     setScore(0);
     setIsLoading(false);
 
-    dotsAreSpawning(true);
+    setGameIsStarted(true);
     await spawnDots(gameData);
-    dotsAreSpawning(false);
+    setGameIsStarted(false);
   }
+
+  useEffect(() => {
+    return () => {
+      removeAllDots();
+    };
+  }, []);
 
   return (
     <>

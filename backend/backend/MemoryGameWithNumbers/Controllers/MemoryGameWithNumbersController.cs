@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.MemoryGameWithNumbers.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class MemoryGameWithNumbersController : ControllerBase
 {
     private static List<int?>? _correctSequence;

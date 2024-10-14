@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
-import { delay } from 'src/utils/timing';
+import { delay } from '@/utils/timing';
+import { BACKEND_URL } from '@/utils/constants';
 
 async function fetchWaitTime() {
-  const tmp = await fetch('http://localhost:5252/reactiontime');
+  const tmp = await fetch(`${BACKEND_URL}/reactiontime`);
   const json = await tmp.json();
   return json.millisecondsToWait;
 }

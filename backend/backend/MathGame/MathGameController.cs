@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace backend.MathGame.Controllers;
+namespace backend.MathGame;
 
 [Route("api/[controller]")]
 [ApiController]
 public class MathGameController : ControllerBase
 {
     private static readonly string puzzleFilePath = Path.Combine("data", "puzzles.txt");
-    private static List<string> puzzles = new List<string>();
+    private static readonly List<string> puzzles = new List<string>();
     private static int puzzleIndex;
     static MathGameController()
     {

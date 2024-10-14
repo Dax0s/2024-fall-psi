@@ -10,7 +10,7 @@ import './App.css';
 const Loader = () => {
   const { gameName } = useParams();
 
-  const GamePage = lazy(() => import(`./games/${gameName}`));
+  const GamePage = lazy(() => import(`./games/${gameName}.tsx`));
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

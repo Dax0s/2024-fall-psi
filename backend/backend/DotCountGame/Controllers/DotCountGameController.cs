@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.DotCountGame.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class DotCountGameController : ControllerBase
 {
     // TODO: extract constants somewhere global
