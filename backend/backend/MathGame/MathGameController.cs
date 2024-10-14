@@ -7,7 +7,7 @@ namespace backend.MathGame;
 public class MathGameController : ControllerBase
 {
     private static readonly string puzzleFilePath = Path.Combine("data", "puzzles.txt");
-    private static List<string> puzzles = new List<string>();
+    private static readonly List<string> puzzles = new List<string>();
     private static int puzzleIndex;
     static MathGameController()
     {

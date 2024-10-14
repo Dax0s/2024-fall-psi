@@ -1,10 +1,5 @@
 using backend.AimTrainerGame.Controllers;
-using backend.AimTrainerGame.Models;
-using backend.Utils;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Xunit;
 
 namespace backend.Tests.AimTrainerGame.Controllers;
 
