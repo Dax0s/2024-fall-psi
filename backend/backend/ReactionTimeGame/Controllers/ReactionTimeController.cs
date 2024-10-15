@@ -9,8 +9,8 @@ using Models;
 public class ReactionTimeController : ControllerBase
 {
     [HttpGet]
-    public ActionResult<ReactionTime> Get()
+    public ActionResult<ReactionGameWaitDuration> Get()
     {
-        return new ReactionTime();
+        return new ReactionGameWaitDuration();
     }
 }

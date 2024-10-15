@@ -1,51 +1,54 @@
 using backend.AimTrainerGame.Models;
-using backend.AimTrainerGame.Utils;
+using backend.Properties;
 using backend.Utils;
 
 namespace backend.AimTrainerGame.Services;
 
-public class AimTrainerGameService(IConfiguration configuration) : IAimTrainerGameService
+public class AimTrainerGameService() : IAimTrainerGameService
 {
-    private int GetRandomSpawnTime(Difficulty difficulty, Random random)
+    private static int GetRandomSpawnTime(Settings.AimTrainerGame.Difficulty difficulty)
     {
         return difficulty switch
         {
-            Difficulty.Easy => random.Next(
-                ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:SpawnTime:easy:min", Constants.DefaultSpawnTimeMin),
-                ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:SpawnTime:easy:max", Constants.DefaultSpawnTimeMax)),
-            Difficulty.Medium => random.Next(
-                ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:SpawnTime:medium:min", Constants.DefaultSpawnTimeMin),
-                ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:SpawnTime:medium:max", Constants.DefaultSpawnTimeMax)),
-            Difficulty.Hard => random.Next(
-                ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:SpawnTime:hard:min", Constants.DefaultSpawnTimeMin),
-                ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:SpawnTime:hard:max", Constants.DefaultSpawnTimeMax)),
-            _ => random.Next(Constants.DefaultSpawnTimeMin, Constants.DefaultSpawnTimeMax)
+            Settings.AimTrainerGame.Difficulty.Easy => Settings.AimTrainerGame.Easy.SpawnTime.Random(),
+            Settings.AimTrainerGame.Difficulty.Medium => Settings.AimTrainerGame.Medium.SpawnTime.Random(),
+            Settings.AimTrainerGame.Difficulty.Hard => Settings.AimTrainerGame.Hard.SpawnTime.Random(),
+            _ => Settings.AimTrainerGame.Defaults.SpawnTime.Random(),
+        };
+    }
+
+    private static int GetAmountOfDots(Settings.AimTrainerGame.Difficulty difficulty)
+    {
+        return difficulty switch
+        {
+            Settings.AimTrainerGame.Difficulty.Easy => Settings.AimTrainerGame.Easy.Dots,
+            Settings.AimTrainerGame.Difficulty.Medium => Settings.AimTrainerGame.Medium.Dots,
+            Settings.AimTrainerGame.Difficulty.Hard => Settings.AimTrainerGame.Hard.Dots,
+            _ => Settings.AimTrainerGame.Defaults.Dots,
+        };
+    }
+
+    private static int GetTimeToLive(Settings.AimTrainerGame.Difficulty difficulty)
+    {
+        return difficulty switch
+        {
+            Settings.AimTrainerGame.Difficulty.Easy => Settings.AimTrainerGame.Easy.TimeToLive,
+            Settings.AimTrainerGame.Difficulty.Medium => Settings.AimTrainerGame.Medium.TimeToLive,
+            Settings.AimTrainerGame.Difficulty.Hard => Settings.AimTrainerGame.Hard.TimeToLive,
+            _ => Settings.AimTrainerGame.Defaults.TimeToLive
         };
     }
 
     public List<DotInfo> StartGame(GameStartRequest gameInfo, out int amountOfDots, out int timeToLive)
     {
-        amountOfDots = gameInfo.difficulty switch
-        {
-            Difficulty.Easy => ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:AmountOfDots:easy", Constants.DefaultDots),
-            Difficulty.Medium => ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:AmountOfDots:medium", Constants.DefaultDots),
-            Difficulty.Hard => ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:AmountOfDots:hard", Constants.DefaultDots),
-            _ => Constants.DefaultDots
-        };
-
-        timeToLive = gameInfo.difficulty switch
-        {
-            Difficulty.Easy => ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:TimeToLive:easy", Constants.DefaultTimeToLive),
-            Difficulty.Medium => ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:TimeToLive:medium", Constants.DefaultTimeToLive),
-            Difficulty.Hard => ConfigValuesParser.GetConfigIntValue(configuration, "AimTrainerGame:TimeToLive:hard", Constants.DefaultTimeToLive),
-            _ => Constants.DefaultTimeToLive
-        };
+        amountOfDots = GetAmountOfDots(gameInfo.difficulty);
+        timeToLive = GetTimeToLive(gameInfo.difficulty);
 
         var random = new Random();
         return Enumerable.Range(0, amountOfDots)
             .Select(_ => new DotInfo(
-                random.NextVector2FromScreenSize(gameInfo.screenSize),
-                GetRandomSpawnTime(gameInfo.difficulty, random)))
+                random.NextOffset(gameInfo.screenSize),
+                GetRandomSpawnTime(gameInfo.difficulty)))
             .ToList();
     }
 }
