@@ -17,23 +17,32 @@ public class AimTrainerGameService() : IAimTrainerGameService
         };
     }
 
-    public List<DotInfo> StartGame(GameStartRequest gameInfo, out int amountOfDots, out int timeToLive)
+    private static int GetAmountOfDots(Settings.AimTrainerGame.Difficulty difficulty)
     {
-        amountOfDots = gameInfo.difficulty switch
+        return difficulty switch
         {
             Settings.AimTrainerGame.Difficulty.Easy => Settings.AimTrainerGame.Easy.Dots,
             Settings.AimTrainerGame.Difficulty.Medium => Settings.AimTrainerGame.Medium.Dots,
             Settings.AimTrainerGame.Difficulty.Hard => Settings.AimTrainerGame.Hard.Dots,
             _ => Settings.AimTrainerGame.Defaults.Dots,
         };
+    }
 
-        timeToLive = gameInfo.difficulty switch
+    private static int GetTimeToLive(Settings.AimTrainerGame.Difficulty difficulty)
+    {
+        return difficulty switch
         {
             Settings.AimTrainerGame.Difficulty.Easy => Settings.AimTrainerGame.Easy.TimeToLive,
             Settings.AimTrainerGame.Difficulty.Medium => Settings.AimTrainerGame.Medium.TimeToLive,
             Settings.AimTrainerGame.Difficulty.Hard => Settings.AimTrainerGame.Hard.TimeToLive,
             _ => Settings.AimTrainerGame.Defaults.TimeToLive
         };
+    }
+
+    public List<DotInfo> StartGame(GameStartRequest gameInfo, out int amountOfDots, out int timeToLive)
+    {
+        amountOfDots = GetAmountOfDots(gameInfo.difficulty);
+        timeToLive = GetTimeToLive(gameInfo.difficulty);
 
         var random = new Random();
         return Enumerable.Range(0, amountOfDots)
