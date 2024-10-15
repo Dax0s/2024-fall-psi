@@ -12,7 +12,7 @@ public static class Settings
         {
             public const int Dots = 15;
             public const int TimeToLive = 1250;
-            public static readonly IntBounds SpawnTime = new IntBounds(250, 1250);
+            public static readonly IntBounds SpawnTime = new(250, 1250);
         }
 
         public enum Difficulty
@@ -26,27 +26,27 @@ public static class Settings
         {
             public const int Dots = 10;
             public const int TimeToLive = 1500;
-            public static readonly IntBounds SpawnTime = new IntBounds(500, 1500);
+            public static readonly IntBounds SpawnTime = new(500, 1500);
         }
 
         public struct Medium
         {
             public const int Dots = 15;
             public const int TimeToLive = 1250;
-            public static readonly IntBounds SpawnTime = new IntBounds(250, 1250);
+            public static readonly IntBounds SpawnTime = new(250, 1250);
         }
 
         public struct Hard
         {
             public const int Dots = 20;
             public const int TimeToLive = 1000;
-            public static readonly IntBounds SpawnTime = new IntBounds(0, 1000);
+            public static readonly IntBounds SpawnTime = new(0, 1000);
         }
     }
 
     public struct DotCountGame
     {
-        public static readonly IntBounds DotCount = new IntBounds(1, 1000);
+        public static readonly IntBounds DotCount = new(1, 1000);
 
         // In pixels
         public const int DefaultRadius = 10;
@@ -59,6 +59,6 @@ public static class Settings
 
     public struct ReactionTimeGame
     {
-        public static readonly IntBounds Wait = new IntBounds(2000, 5000);
+        public static readonly IntBounds Wait = new(2000, 5000);
     }
 }
