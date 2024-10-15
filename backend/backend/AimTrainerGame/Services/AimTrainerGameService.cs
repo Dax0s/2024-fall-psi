@@ -35,9 +35,10 @@ public class AimTrainerGameService() : IAimTrainerGameService
             _ => Settings.AimTrainerGame.Defaults.TimeToLive
         };
 
+        var random = new Random();
         return Enumerable.Range(0, amountOfDots)
             .Select(_ => new DotInfo(
-                Vector2.RandomOffset(gameInfo.screenSize),
+                random.NextOffset(gameInfo.screenSize),
                 GetRandomSpawnTime(gameInfo.difficulty)))
             .ToList();
     }
