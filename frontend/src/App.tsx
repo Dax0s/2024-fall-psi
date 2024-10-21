@@ -1,9 +1,5 @@
 import { Suspense, lazy } from 'react';
-import {
-  createBrowserRouter,
-  RouterProvider,
-  useParams,
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import './App.css';
 

@@ -75,25 +75,20 @@ const MemoryGameWithNumbers = () => {
 
   const verifySequence = async () => {
     try {
-      const response = await fetch(
-        `${BACKEND_URL}/MemoryGameWithNumbers/attempt`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(clickedNumbers),
+      const response = await fetch(`${BACKEND_URL}/MemoryGameWithNumbers/attempt`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify(clickedNumbers),
+      });
 
       const isCorrect = await response.json();
       if (isCorrect) {
         setResult('Correct!');
         setMaxNumber((prevMax) => prevMax + 1);
       } else {
-        setResult(
-          'You lose. Try again! Your score: ' + (victoryList.length - 1),
-        );
+        setResult('You lose. Try again! Your score: ' + (victoryList.length - 1));
         setLost(true);
         setShowNumbers(true);
       }

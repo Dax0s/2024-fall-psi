@@ -32,11 +32,7 @@ const BORDER = 100;
 
 const GAME_URL = 'aim-trainer-game';
 
-async function fetchGameStartInfo(
-  difficulty: Difficulty,
-  width: number,
-  height: number,
-) {
+async function fetchGameStartInfo(difficulty: Difficulty, width: number, height: number) {
   try {
     const tmp = await fetch(`${BACKEND_URL}/aimtrainergame/startgame`, {
       method: 'POST',
@@ -51,20 +47,14 @@ async function fetchGameStartInfo(
         },
       } as GameStartRequest),
     });
-    //return (await tmp.json()) as GameStartResponse;
-    const data = (await tmp.json()) as GameStartResponse;
-    console.log(data);
-    return data;
+    return (await tmp.json()) as GameStartResponse;
   } catch (e) {
     console.error(e);
     return undefined;
   }
 }
 
-function styleElement(
-  element: HTMLDivElement,
-  { pos: { x, y } }: PointSpawnElement,
-) {
+function styleElement(element: HTMLDivElement, { pos: { x, y } }: PointSpawnElement) {
   element.className = 'w-24 h-24 bg-sky-500 rounded-full';
   element.style.position = 'absolute';
   element.style.top = `${y + BORDER / 2}px`;
@@ -93,7 +83,9 @@ const AimTrainerGame = () => {
   async function spawnDots(gameData: GameStartResponse) {
     const parentElement = document.querySelector('body');
 
-    if (!parentElement) return;
+    if (!parentElement) {
+      return;
+    }
 
     for (const dotInfo of gameData.dotInfos) {
       await delay(dotInfo.spawnTime);
@@ -161,15 +153,8 @@ const AimTrainerGame = () => {
       ) : null}
       {!gameIsStarted && dotsLeft === 0 ? (
         <div className="flex flex-col-reverse items-center justify-center h-screen">
-          <StartGameButton
-            className={'my-4'}
-            onClick={startGame}
-            isLoading={isLoading}
-          />
-          <DifficultyPicker
-            defaultDifficulty={difficulty}
-            setParentDifficulty={setDifficulty}
-          />
+          <StartGameButton className={'my-4'} onClick={startGame} isLoading={isLoading} />
+          <DifficultyPicker defaultDifficulty={difficulty} setParentDifficulty={setDifficulty} />
         </div>
       ) : null}
     </>

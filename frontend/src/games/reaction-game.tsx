@@ -23,9 +23,7 @@ function ReactionButton() {
   const latestStartTime = useRef(0);
   const reactionState = useRef(ReactionState.BASE);
 
-  const [reactionTimeLabel, setReactionTimeLabel] = useState(
-    'TEST YOUR REACTION TIME',
-  );
+  const [reactionTimeLabel, setReactionTimeLabel] = useState('TEST YOUR REACTION TIME');
 
   const [buttonLabel, setButtonLabel] = useState('PRESS ME TO START');
   const [buttonClass, setButtonClass] = useState('bg-white text-black');
@@ -62,10 +60,7 @@ function ReactionButton() {
 
     await delay(msToWait);
 
-    if (
-      reactionState.current === ReactionState.WAIT &&
-      latestStartTime.current === startTime
-    ) {
+    if (reactionState.current === ReactionState.WAIT && latestStartTime.current === startTime) {
       reactionState.current = ReactionState.GO;
       setButtonLabel('PRESS NOW');
       setButtonClass('bg-green-500 text-white');

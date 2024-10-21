@@ -6,10 +6,7 @@ type props = {
   setParentDifficulty: (difficulty: Difficulty) => void;
 };
 
-const DifficultyPicker = ({
-  defaultDifficulty,
-  setParentDifficulty,
-}: props) => {
+const DifficultyPicker = ({ defaultDifficulty, setParentDifficulty }: props) => {
   const [difficulty, setDifficulty] = useState(defaultDifficulty);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,10 +26,7 @@ const DifficultyPicker = ({
 
   return (
     <div className="relative inline-block text-left">
-      <label
-        htmlFor="difficulty-picker"
-        className="block text-xs font-medium text-gray-700 mb-1"
-      >
+      <label htmlFor="difficulty-picker" className="block text-xs font-medium text-gray-700 mb-1">
         Difficulty:
       </label>
       <button
@@ -40,9 +34,7 @@ const DifficultyPicker = ({
         className={`inline-flex justify-center items-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none transition-colors duration-200 ease-in-out ${isOpen ? 'rounded-b-none' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span
-          className={`${selectedDifficulty?.color} w-3 h-3 rounded-full mr-2`}
-        ></span>
+        <span className={`${selectedDifficulty?.color} w-3 h-3 rounded-full mr-2`}></span>
         {selectedDifficulty?.label}
         <svg
           className={`ml-2 h-5 w-5 transition-transform duration-200 ease-in-out ${isOpen ? 'transform rotate-180' : ''}`}
@@ -68,9 +60,7 @@ const DifficultyPicker = ({
                 onClick={() => handleSelect(diff.value)}
                 className={`flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 ${difficulty === diff.value ? 'bg-gray-100' : ''}`}
               >
-                <span
-                  className={`${diff.color} w-3 h-3 rounded-full mr-2`}
-                ></span>
+                <span className={`${diff.color} w-3 h-3 rounded-full mr-2`}></span>
                 {diff.label}
               </button>
             ))}
