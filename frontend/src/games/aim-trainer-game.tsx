@@ -23,7 +23,7 @@ type PointSpawnElement = {
 
 type GameStartResponse = {
   dotInfos: PointSpawnElement[];
-  amountOfDots: number;
+  dotCount: number;
   timeToLive: number;
 };
 
@@ -51,7 +51,10 @@ async function fetchGameStartInfo(
         },
       } as GameStartRequest),
     });
-    return (await tmp.json()) as GameStartResponse;
+    //return (await tmp.json()) as GameStartResponse;
+    const data = (await tmp.json()) as GameStartResponse;
+    console.log(data);
+    return data;
   } catch (e) {
     console.error(e);
     return undefined;
@@ -129,7 +132,7 @@ const AimTrainerGame = () => {
       return;
     }
 
-    setDotsLeft(gameData.amountOfDots);
+    setDotsLeft(gameData.dotCount);
     setScore(0);
     setIsLoading(false);
 
