@@ -47,10 +47,7 @@ async function fetchGameStartInfo(difficulty: Difficulty, width: number, height:
         },
       } as GameStartRequest),
     });
-    //return (await tmp.json()) as GameStartResponse;
-    const data = (await tmp.json()) as GameStartResponse;
-    console.log(data);
-    return data;
+    return (await tmp.json()) as GameStartResponse;
   } catch (e) {
     console.error(e);
     return undefined;
