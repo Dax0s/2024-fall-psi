@@ -33,7 +33,9 @@ const DotCountGame = () => {
   const clearCanvas = () => {
     const canvas = document.getElementById('dotCanvas') as HTMLCanvasElement;
     const context = canvas.getContext('2d');
-    if (!context) return;
+    if (!context) {
+      return;
+    }
 
     context.fillStyle = defaultCanvasColor;
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -41,11 +43,8 @@ const DotCountGame = () => {
 
   const fetchInfo = async (maxDots: number) => {
     try {
-      const response = await fetch(
-        `${BACKEND_URL}/DotCountGame?maxDots=${maxDots}`,
-      );
-      const canvasInfo = (await response.json()) as DotCanvasInfo;
-      return canvasInfo;
+      const response = await fetch(`${BACKEND_URL}/DotCountGame?maxDots=${maxDots}`);
+      return (await response.json()) as DotCanvasInfo;
     } catch (error) {
       console.error('Error starting game:', error);
     }
@@ -58,7 +57,9 @@ const DotCountGame = () => {
     clearCanvas();
 
     const context = canvas.getContext('2d');
-    if (!context) return;
+    if (!context) {
+      return;
+    }
 
     context.beginPath();
     canvasInfo.dots.forEach((dot) => {
@@ -71,16 +72,14 @@ const DotCountGame = () => {
   };
 
   const handleClick = async () => {
-    const maxDotsElement = document.getElementById(
-      'maxDotsInput',
-    ) as HTMLInputElement;
-    const durationElement = document.getElementById(
-      'durationInput',
-    ) as HTMLInputElement;
+    const maxDotsElement = document.getElementById('maxDotsInput') as HTMLInputElement;
+    const durationElement = document.getElementById('durationInput') as HTMLInputElement;
 
     const maxDots = parseInt(maxDotsElement.value);
     const duration = parseInt(durationElement.value);
-    if (!maxDots || !duration) return;
+    if (!maxDots || !duration) {
+      return;
+    }
 
     const canvasInfo = (await fetchInfo(maxDots)) as DotCanvasInfo;
 
@@ -90,35 +89,23 @@ const DotCountGame = () => {
     clearCanvas();
 
     setLastDotCount(canvasInfo.dots.length);
-    const resultLabel = document.getElementById(
-      'resultLabel',
-    ) as HTMLLabelElement;
+    const resultLabel = document.getElementById('resultLabel') as HTMLLabelElement;
     resultLabel.textContent = '';
   };
 
   const handleAnswer = () => {
-    const answerElement = document.getElementById(
-      'answerInput',
-    ) as HTMLInputElement;
-    const resultLabel = document.getElementById(
-      'resultLabel',
-    ) as HTMLLabelElement;
+    const answerElement = document.getElementById('answerInput') as HTMLInputElement;
+    const resultLabel = document.getElementById('resultLabel') as HTMLLabelElement;
 
     const answer = parseInt(answerElement.value);
-    if (
-      !answer ||
-      lastDotCount === noLastDotCountValue ||
-      resultLabel.textContent !== ''
-    )
+    if (!answer || lastDotCount === noLastDotCountValue || resultLabel.textContent !== '') {
       return;
+    }
 
     const correctAnswer = lastDotCount;
     const absDifference = Math.abs(answer - correctAnswer);
 
-    const accuracy =
-      absDifference > correctAnswer
-        ? 0
-        : 100 * (1 - absDifference / correctAnswer);
+    const accuracy = absDifference > correctAnswer ? 0 : 100 * (1 - absDifference / correctAnswer);
 
     if (accuracy === 100) {
       resultLabel.textContent = 'Congratulations! You got it right!';
@@ -189,20 +176,12 @@ const DotCountGame = () => {
 
       <canvas
         id="dotCanvas"
-        className={
-          lastDotCount !== noLastDotCountValue
-            ? 'invisible h-10'
-            : 'border rounded mt-4'
-        }
+        className={lastDotCount !== noLastDotCountValue ? 'invisible h-10' : 'border rounded mt-4'}
         color={defaultCanvasColor}
       />
 
       <div
-        className={
-          lastDotCount !== noLastDotCountValue
-            ? 'flex flex-col space-y-4'
-            : 'invisible'
-        }
+        className={lastDotCount !== noLastDotCountValue ? 'flex flex-col space-y-4' : 'invisible'}
       >
         <div className="flex items-center">
           <label htmlFor="answerInput" className="text-lg font-medium mr-2">

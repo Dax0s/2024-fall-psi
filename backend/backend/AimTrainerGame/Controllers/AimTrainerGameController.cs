@@ -23,8 +23,8 @@ public class AimTrainerGameController : ControllerBase
             return BadRequest();
         }
 
-        var dots = _service.StartGame(gameInfo, out var amountOfDots, out var timeToLive);
+        var (dots, difficultySettings) = _service.StartGame(gameInfo);
 
-        return Ok(new GameStartResponse(dots, amountOfDots, timeToLive));
+        return Ok(new GameStartResponse(dots, difficultySettings.dotCount, difficultySettings.timeToLive));
     }
 }

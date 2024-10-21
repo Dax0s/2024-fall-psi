@@ -1,8 +1,9 @@
 using backend.AimTrainerGame.Models;
+using backend.AimTrainerGame.Settings;
 
 namespace backend.AimTrainerGame.Services;
 
 public interface IAimTrainerGameService
 {
-    public List<DotInfo> StartGame(GameStartRequest gameInfo, out int amountOfDots, out int timeToLive);
+    public (List<DotInfo>, DifficultySettings) StartGame(GameStartRequest gameInfo);
 }

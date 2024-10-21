@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BACKEND_URL } from '@/utils/constants';
 
 const PuzzleRush = () => {
@@ -73,9 +73,7 @@ const PuzzleRush = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-          Math Game
-        </h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">Math Game</h1>
         <div className="puzzle">
           <h2 className="text-xl text-gray-700 font-semibold text-center mb-4">
             {puzzle || 'Loading next puzzle...'}
@@ -104,9 +102,7 @@ const PuzzleRush = () => {
             onClick={submitAnswer}
             disabled={loading || !answer}
             className={`${
-              loading || !answer
-                ? 'bg-gray-400'
-                : 'bg-indigo-600 hover:bg-indigo-700'
+              loading || !answer ? 'bg-gray-400' : 'bg-indigo-600 hover:bg-indigo-700'
             } text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500`}
           >
             {loading ? 'Submitting...' : 'Submit Answer'}

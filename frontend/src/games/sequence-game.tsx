@@ -41,7 +41,9 @@ const SequenceGame = () => {
   };
 
   const handleClick = (buttonId: number) => {
-    if (!isGameStarted || isCurrentlyShowingSequence.current) return;
+    if (!isGameStarted || isCurrentlyShowingSequence.current) {
+      return;
+    }
 
     setLitUpButtonId(buttonId);
     delay(100).then(() => setLitUpButtonId(undefined));
@@ -50,9 +52,7 @@ const SequenceGame = () => {
       correctClicks.current++;
 
       if (sequence.length === correctClicks.current) {
-        delay(1000).then(() =>
-          getSequence().then(() => (correctClicks.current = 0)),
-        );
+        delay(1000).then(() => getSequence().then(() => (correctClicks.current = 0)));
       }
     } else {
       setSequence([]);
