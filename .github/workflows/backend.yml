@@ -28,7 +28,7 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Formatting check
-      run: dotnet format --verify-no-change
+      run: dotnet format --verify-no-changes
 
   Tests:
 
