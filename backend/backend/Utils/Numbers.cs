@@ -7,11 +7,7 @@ public class Numbers
     //  * b is the smallest perfect square >= 'number'
     public static (int, int) NextPerfectSquare(int number)
     {
-        if (number < 0)
-        {
-            return (0, 0);
-        }
-        var nextSquareRoot = (int)Math.Ceiling(Math.Sqrt((double)number));
+        var nextSquareRoot = number > 0 ? (int)Math.Ceiling(Math.Sqrt((double)number)) : 0;
         return (nextSquareRoot, nextSquareRoot * nextSquareRoot);
     }
 }
