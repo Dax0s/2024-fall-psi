@@ -46,18 +46,6 @@ public class MemoryGameWithNumbersController : ControllerBase
                 return Ok(false);
             }
 
-            // Explicit Boxing: Convert value types into objects
-            object boxedValueCorrect = _correctSequence[i];
-            object boxedValueUserAttempt = userAttempt[i];
-
-            // Explicit Unboxing: Convert the boxed objects back to value types
-            int unboxedCorrectValue = (int)boxedValueCorrect;  // Unboxing from object to int
-            int unboxedUserAttempt = (int)boxedValueUserAttempt;  // Unboxing from object to int
-
-            if (unboxedCorrectValue != unboxedUserAttempt)
-            {
-                return Ok(false);
-            }
         }
 
         return Ok(true);
