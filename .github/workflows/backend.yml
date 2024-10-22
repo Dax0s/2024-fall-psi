@@ -11,7 +11,6 @@ on:
 
 env:
   DOTNET_VERSION: 8.0.x
-  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 
 defaults:
   run:
@@ -30,7 +29,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-        cache: true
 
     - name: Formatting check
       run: dotnet format --verify-no-changes
@@ -46,7 +44,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-        cache: true
 
     - name: Restore dependencies
       run: dotnet restore --locked-mode
