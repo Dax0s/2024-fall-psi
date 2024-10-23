@@ -1,7 +1,7 @@
 using backend.AimTrainerGame.Controllers;
 using JetBrains.Annotations;
 
-namespace backend.Tests.AimTrainerGame.Controllers;
+namespace testing.AimTrainerGame.Controllers;
 
 [TestSubject(typeof(AimTrainerGameController))]
 public class AimTrainerGameControllerTest
