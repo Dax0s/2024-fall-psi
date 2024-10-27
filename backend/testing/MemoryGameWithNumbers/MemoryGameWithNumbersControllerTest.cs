@@ -1,11 +1,8 @@
-using System;
+using backend.MemoryGameWithNumbers.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using Xunit;
-using backend.MemoryGameWithNumbers.Controllers;
-
-namespace testing.MemoryGameWithNumbers;
 
 public class MemoryGameWithNumbersControllerTests
 {
@@ -13,6 +10,11 @@ public class MemoryGameWithNumbersControllerTests
 
     public MemoryGameWithNumbersControllerTests()
     {
+        // Reset the static field to ensure each test runs with a fresh state.
+        typeof(MemoryGameWithNumbersController)
+            .GetField("_correctSequence", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
+            ?.SetValue(null, null);
+
         _controller = new MemoryGameWithNumbersController();
     }
 
@@ -20,7 +22,6 @@ public class MemoryGameWithNumbersControllerTests
     public void StartGame_ShouldReturnGridWithCorrectNumbersAndNulls()
     {
         var maxNumber = 5;
-
         var result = _controller.StartGame(maxNumber);
 
         if (result.Result is OkObjectResult okResult && okResult.Value is List<int?> gridNumbers)
@@ -70,7 +71,7 @@ public class MemoryGameWithNumbersControllerTests
     public void CheckAttempt_ShouldReturnTrue_WhenAttemptMatchesCorrectSequence()
     {
         var maxNumber = 5;
-        _controller.StartGame(maxNumber); 
+        _controller.StartGame(maxNumber);
         var correctAttempt = Enumerable.Range(1, maxNumber).Select(n => (int?)n).ToList();
 
         var result = _controller.CheckAttempt(correctAttempt);
@@ -86,8 +87,8 @@ public class MemoryGameWithNumbersControllerTests
     public void CheckAttempt_ShouldReturnFalse_WhenAttemptIsShorterThanCorrectSequence()
     {
         var maxNumber = 5;
-        _controller.StartGame(maxNumber); 
-        var shortAttempt = new List<int?> { 1, 2, 3 }; 
+        _controller.StartGame(maxNumber);
+        var shortAttempt = new List<int?> { 1, 2, 3 };
 
         var result = _controller.CheckAttempt(shortAttempt);
 
@@ -102,8 +103,8 @@ public class MemoryGameWithNumbersControllerTests
     public void CheckAttempt_ShouldReturnFalse_WhenAttemptContainsNullValues()
     {
         var maxNumber = 5;
-        _controller.StartGame(maxNumber); 
-        var attemptWithNulls = new List<int?> { 1, 2, null, 4, 5 }; 
+        _controller.StartGame(maxNumber);
+        var attemptWithNulls = new List<int?> { 1, 2, null, 4, 5 };
 
         var result = _controller.CheckAttempt(attemptWithNulls);
 
