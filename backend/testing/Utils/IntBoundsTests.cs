@@ -14,34 +14,25 @@ public class IntBoundsTests
     }
 
     [Theory]
-    [InlineData(0, 0)]
-    [InlineData(10, 15)]
-    [InlineData(-15, -10)]
-    [InlineData(-10, 10)]
-    [InlineData(int.MinValue, int.MinValue)]
-    [InlineData(int.MaxValue, int.MaxValue)]
-    [InlineData(1, 0)]
-    public void WithinBounds(int lowerLimit, int upperLimit)
+    [InlineData(0, 0, new int[] { 0 }, new int[] { -1, 1 })]
+    [InlineData(10, 15, new int[] { 10, 11, 12, 13, 14, 15 }, new int[] { 8, 9, 16, 17 })]
+    [InlineData(-15, -10, new int[] { -15, -14, -13, -12, -11, -10 }, new int[] { -17, -16, -9, -8 })]
+    [InlineData(-2, 2, new int[] { -2, -1, 0, 1, 2 }, new int[] { -3, 3 })]
+    [InlineData(int.MinValue, int.MinValue, new int[] { int.MinValue }, new int[] { int.MinValue + 1 })]
+    [InlineData(int.MaxValue, int.MaxValue, new int[] { int.MaxValue }, new int[] { int.MaxValue - 1 })]
+    [InlineData(1, -1, new int[] { }, new int[] { -2, -1, 0, 1, 2 })]
+    public void WithinBounds(int lowerLimit, int upperLimit, int[] inRangeValues, int[] outOfRangleValues)
     {
         var bounds = new IntBounds(lowerLimit, upperLimit);
 
-        for (int valueWithin = lowerLimit; valueWithin <= upperLimit; ++valueWithin)
+        foreach (var inRangeValue in inRangeValues)
         {
-            Assert.True(bounds.WithinBounds(valueWithin));
-
-            if (valueWithin == int.MaxValue)
-            {
-                break;
-            }
+            Assert.True(bounds.WithinBounds(inRangeValue));
         }
 
-        if (int.MaxValue < lowerLimit)
+        foreach (var outOfRangeValue in outOfRangleValues)
         {
-            Assert.False(bounds.WithinBounds(lowerLimit - 1));
-        }
-        if (upperLimit < int.MaxValue)
-        {
-            Assert.False(bounds.WithinBounds(upperLimit + 1));
+            Assert.False(bounds.WithinBounds(outOfRangeValue));
         }
     }
 
