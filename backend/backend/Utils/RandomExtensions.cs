@@ -4,11 +4,6 @@ namespace backend.Utils;
 
 public static class RandomExtensions
 {
-    public static int NextWithinBounds(this Random random, IntBounds bounds)
-        => bounds.LowerLimit > bounds.UpperLimit
-            ? 0
-            : random.Next(bounds.LowerLimit, bounds.UpperLimit + 1);
-
     public static int NextWithinIntBounds(this Random random, Bounds<int> bounds)
         => bounds.LowerLimit > bounds.UpperLimit
             ? 0
