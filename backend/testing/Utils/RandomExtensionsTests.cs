@@ -9,14 +9,14 @@ public class RandomExtensionsTests
 {
     [Theory]
     [InlineData(-100, 100, 10)]
-    public void NextWithinBounds(int lowerBound, int upperBound, int checkCount)
+    public void NextWithinIntBounds(int lowerBound, int upperBound, int checkCount)
     {
         var random = new Random();
-        var bounds = new IntBounds(lowerBound, upperBound);
+        var bounds = new Bounds<int>(lowerBound, upperBound);
 
         for (int checkIndex = 0; checkIndex < checkCount; ++checkIndex)
         {
-            var randomInt = random.NextWithinBounds(bounds);
+            var randomInt = random.NextWithinIntBounds(bounds);
             Assert.True(bounds.WithinBounds(randomInt));
         }
     }
@@ -27,8 +27,8 @@ public class RandomExtensionsTests
     {
         var random = new Random();
         var maxOffset = new Vector2(maxOffsetX, maxOffsetY);
-        var xBounds = new IntBounds(0, maxOffsetX);
-        var yBounds = new IntBounds(0, maxOffsetY);
+        var xBounds = new Bounds<int>(0, maxOffsetX);
+        var yBounds = new Bounds<int>(0, maxOffsetY);
 
         for (int checkIndex = 0; checkIndex < checkCount; ++checkIndex)
         {

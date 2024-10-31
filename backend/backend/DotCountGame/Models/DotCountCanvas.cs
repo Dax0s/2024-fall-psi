@@ -9,13 +9,13 @@ public class DotCountCanvas
 
     public List<Dot> Dots { get; set; }
 
-    private IntBounds _radiusBounds;
+    private Bounds<int> _radiusBounds;
 
-    public DotCountCanvas(IntBounds dotCountBounds)
+    public DotCountCanvas(Bounds<int> dotCountBounds)
     {
-        (Dots, SideLength, _radiusBounds) = (new List<Dot>(), 0, new IntBounds());
+        (Dots, SideLength, _radiusBounds) = (new List<Dot>(), 0, new Bounds<int>());
 
-        var dotCount = (new Random()).NextWithinBounds(dotCountBounds);
+        var dotCount = (new Random()).NextWithinIntBounds(dotCountBounds);
         CalculateRadiusBounds(dotCountBounds.UpperLimit);
         FillInRandomDots(dotCount, dotCountBounds.UpperLimit);
     }
@@ -29,7 +29,7 @@ public class DotCountCanvas
         var minRadius = (int)(maxRadius * GameSettings.MinRadiusPercentage);
         minRadius = Math.Max(1, minRadius); // So that _minRadius > 0
 
-        _radiusBounds = new IntBounds(minRadius, maxRadius);
+        _radiusBounds = new Bounds<int>(minRadius, maxRadius);
     }
 
     // For more info take a look at DotGenerationAlgorithm.md (it's placed in root directory of this game)
@@ -70,7 +70,7 @@ public class DotCountCanvas
         foreach (var dot in Dots)
         {
             dot.Center += random.NextOffset(offsetBounds);
-            dot.Radius = random.NextWithinBounds(_radiusBounds);
+            dot.Radius = random.NextWithinIntBounds(_radiusBounds);
         }
     }
 }
