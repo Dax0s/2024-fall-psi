@@ -66,7 +66,7 @@ public class DotCountCanvas
     private void GiveRandomOffsetsAndRadii(int chunkSideLength)
     {
         var random = new Random();
-        var offsetBounds = new Vector2(chunkSideLength, chunkSideLength);
+        var offsetBounds = new Vec2<int>(chunkSideLength, chunkSideLength);
         foreach (var dot in Dots)
         {
             dot.Center += random.NextOffset(offsetBounds);

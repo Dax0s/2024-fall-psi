@@ -26,7 +26,7 @@ public class RandomExtensionsTests
     public void NextOffset(int maxOffsetX, int maxOffsetY, int checkCount)
     {
         var random = new Random();
-        var maxOffset = new Vector2(maxOffsetX, maxOffsetY);
+        var maxOffset = new Vec2<int>(maxOffsetX, maxOffsetY);
         var xBounds = new Bounds<int>(0, maxOffsetX);
         var yBounds = new Bounds<int>(0, maxOffsetY);
 
