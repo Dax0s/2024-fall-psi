@@ -11,3 +11,11 @@ where T :
     public bool WithinBounds(T value)
         => LowerLimit.CompareTo(value) <= 0 && UpperLimit.CompareTo(value) >= 0;
 }
+
+public static partial class RandomExtentions
+{
+    public static int NextWithinBounds(this Random random, Bounds<int> bounds)
+        => bounds.LowerLimit > bounds.UpperLimit
+            ? 0
+            : random.Next(bounds.LowerLimit, bounds.UpperLimit + 1);
+}

@@ -16,7 +16,7 @@ public class RandomExtensionsTests
 
         for (int checkIndex = 0; checkIndex < checkCount; ++checkIndex)
         {
-            var randomInt = random.NextWithinIntBounds(bounds);
+            var randomInt = random.NextWithinBounds(bounds);
             Assert.True(bounds.WithinBounds(randomInt));
         }
     }

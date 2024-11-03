@@ -15,7 +15,7 @@ public class DotCountCanvas
     {
         (Dots, SideLength, _radiusBounds) = (new List<Dot>(), 0, new Bounds<int>());
 
-        var dotCount = (new Random()).NextWithinIntBounds(dotCountBounds);
+        var dotCount = (new Random()).NextWithinBounds(dotCountBounds);
         CalculateRadiusBounds(dotCountBounds.UpperLimit);
         FillInRandomDots(dotCount, dotCountBounds.UpperLimit);
     }
@@ -70,7 +70,7 @@ public class DotCountCanvas
         foreach (var dot in Dots)
         {
             dot.Center += random.NextOffset(offsetBounds);
-            dot.Radius = random.NextWithinIntBounds(_radiusBounds);
+            dot.Radius = random.NextWithinBounds(_radiusBounds);
         }
     }
 }

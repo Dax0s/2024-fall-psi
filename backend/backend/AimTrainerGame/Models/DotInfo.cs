@@ -17,3 +17,9 @@ public struct DotInfo
         SpawnTime = spawnTime;
     }
 }
+
+public static partial class RandomExtensions
+{
+    public static DotInfo NextDotInfo(this Random random, Vec2<int> screenSize, Bounds<int> spawnTime)
+        => new DotInfo(random.NextOffset(screenSize), random.NextWithinBounds(spawnTime));
+}

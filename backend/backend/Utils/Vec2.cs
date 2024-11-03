@@ -58,3 +58,11 @@ where T :
         return new Vec2<T>(x: vector.X / denominator, y: vector.Y / denominator);
     }
 }
+
+public static partial class RandomExtensions
+{
+    public static Vec2<int> NextOffset(this Random random, Vec2<int> maxOffset)
+        => maxOffset.X < 0 || maxOffset.Y < 0
+            ? new Vec2<int>(0, 0)
+            : new Vec2<int>(random.Next(maxOffset.X), random.Next(maxOffset.Y));
+}

@@ -8,5 +8,5 @@ public class ReactionGameWaitDuration
     public int MillisecondsToWait { get; init; }
 
     public ReactionGameWaitDuration()
-        => MillisecondsToWait = (new Random()).NextWithinIntBounds(GameSettings.WaitBounds);
+        => MillisecondsToWait = (new Random()).NextWithinBounds(GameSettings.WaitBounds);
 }
