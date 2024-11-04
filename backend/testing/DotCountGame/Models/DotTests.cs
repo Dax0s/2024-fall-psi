@@ -9,7 +9,7 @@ public class DotTests
     [Fact]
     public void Construction()
     {
-        var (x, y, radius) = (10, 20, 30);
+        (int x, int y, int radius) = (10, 20, 30);
         var center = new Vector2(x, y);
 
         var dot1 = new Dot(center, radius);
