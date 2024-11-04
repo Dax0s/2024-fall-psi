@@ -6,6 +6,8 @@ using Xunit;
 
 public class MemoryGameWithNumbersControllerTests
 {
+
+    private const int SuccessStatusCode = 200;
     private readonly MemoryGameWithNumbersController _controller;
 
     public MemoryGameWithNumbersControllerTests()
@@ -26,7 +28,7 @@ public class MemoryGameWithNumbersControllerTests
 
         if (result.Result is OkObjectResult okResult && okResult.Value is List<int?> gridNumbers)
         {
-            Assert.Equal(200, okResult.StatusCode);
+            Assert.Equal(SuccessStatusCode, okResult.StatusCode);
             Assert.NotNull(gridNumbers);
             Assert.Equal(16, gridNumbers.Count);
             Assert.Equal(maxNumber, gridNumbers.Count(n => n != null));
@@ -78,7 +80,7 @@ public class MemoryGameWithNumbersControllerTests
 
         if (result.Result is OkObjectResult okResult)
         {
-            Assert.Equal(200, okResult.StatusCode);
+            Assert.Equal(SuccessStatusCode, okResult.StatusCode);
             Assert.True((bool)okResult.Value);
         }
     }
@@ -92,11 +94,7 @@ public class MemoryGameWithNumbersControllerTests
 
         var result = _controller.CheckAttempt(shortAttempt);
 
-        if (result.Result is OkObjectResult okResult)
-        {
-            Assert.Equal(200, okResult.StatusCode);
-            Assert.False((bool)okResult.Value);
-        }
+        AssertResultIsOkAndFalse(result.Result);
     }
 
     [Fact]
@@ -108,10 +106,16 @@ public class MemoryGameWithNumbersControllerTests
 
         var result = _controller.CheckAttempt(attemptWithNulls);
 
-        if (result.Result is OkObjectResult okResult)
+        AssertResultIsOkAndFalse(result.Result);
+    }
+
+    private static void AssertResultIsOkAndFalse(IActionResult result)
+    {
+        if (result is OkObjectResult okResult)
         {
-            Assert.Equal(200, okResult.StatusCode);
+            Assert.Equal(SuccessStatusCode, okResult.StatusCode);
             Assert.False((bool)okResult.Value);
         }
     }
+
 }
