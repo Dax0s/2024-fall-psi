@@ -17,6 +17,6 @@ public class DotCountGameController : ControllerBase
             return NoContent();
         }
 
-        return new DotCountCanvas(new IntBounds(GameSettings.DotCount.LowerLimit, maxDots));
+        return Ok(new DotCountCanvas(new IntBounds(GameSettings.DotCount.LowerLimit, maxDots)));
     }
 }

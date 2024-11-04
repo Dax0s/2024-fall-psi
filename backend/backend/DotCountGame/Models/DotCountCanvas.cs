@@ -13,9 +13,7 @@ public class DotCountCanvas
 
     public DotCountCanvas(IntBounds dotCountBounds)
     {
-        Dots = new List<Dot>();
-        SideLength = 0;
-        _radiusBounds = new IntBounds(0, 0);
+        (Dots, SideLength, _radiusBounds) = (new List<Dot>(), 0, new IntBounds());
 
         var dotCount = (new Random()).NextWithinBounds(dotCountBounds);
         CalculateRadiusBounds(dotCountBounds.UpperLimit);
