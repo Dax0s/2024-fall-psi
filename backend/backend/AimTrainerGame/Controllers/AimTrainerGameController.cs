@@ -2,6 +2,7 @@ using backend.AimTrainerGame.Data;
 using backend.AimTrainerGame.Models;
 using backend.AimTrainerGame.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.AimTrainerGame.Controllers;
 
@@ -10,10 +11,12 @@ namespace backend.AimTrainerGame.Controllers;
 public class AimTrainerGameController : ControllerBase
 {
     private readonly IAimTrainerGameService _service;
+    private readonly AimTrainerGameHighscoreContext _db;
 
-    public AimTrainerGameController(IAimTrainerGameService service)
+    public AimTrainerGameController(IAimTrainerGameService service, AimTrainerGameHighscoreContext db)
     {
         _service = service;
+        _db = db;
     }
 
     [HttpPost("StartGame")]
