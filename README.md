@@ -16,7 +16,7 @@
 
 ## Format code
 
-- To format backend: in `2024-fall-psi/backend` run `dotnet format` (this will format both the main project and test directory)
+- To format backend: in `2024-fall-psi/backend` run `dotnet format --exclude backend/Migrations` (this will format both the main project and test directory)
 - To format frontend: in `2024-fall-psi/frontend` run `npm run format`
 
 ## Add more games
