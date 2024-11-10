@@ -1,4 +1,4 @@
-using backend.AimTrainerGame.Models;
+using backend.AimTrainerGame.Data;
 using backend.AimTrainerGame.Settings;
 
 namespace backend.AimTrainerGame.Services;

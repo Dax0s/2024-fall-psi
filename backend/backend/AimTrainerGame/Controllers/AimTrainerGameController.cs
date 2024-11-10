@@ -1,7 +1,7 @@
 using backend.AimTrainerGame.Models;
+using backend.AimTrainerGame.Data;
 using backend.AimTrainerGame.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace backend.AimTrainerGame.Controllers;
 
@@ -35,7 +35,7 @@ public class AimTrainerGameController : ControllerBase
     public ActionResult<IEnumerable<Highscore>> GetHighscores([FromQuery] int amount = 10)
     {
         Console.WriteLine(amount);
-        var highscores = _db.Highscores
+        var highscores = _db.AimTrainerGameHighscores
             .OrderByDescending(h => h.Score)
             .ThenBy(h => h.Date)
             .Take(amount);

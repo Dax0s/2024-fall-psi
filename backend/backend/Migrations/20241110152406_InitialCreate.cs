@@ -12,7 +12,7 @@ namespace backend.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Highscores",
+                name: "AimTrainerGameHighscores",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -22,7 +22,7 @@ namespace backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Highscores", x => x.Id);
+                    table.PrimaryKey("PK_AimTrainerGameHighscores", x => x.Id);
                 });
         }
 
@@ -30,7 +30,7 @@ namespace backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Highscores");
+                name: "AimTrainerGameHighscores");
         }
     }
 }

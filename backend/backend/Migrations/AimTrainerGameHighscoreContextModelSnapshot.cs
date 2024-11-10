@@ -40,7 +40,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Highscores");
+                    b.ToTable("AimTrainerGameHighscores");
                 });
 #pragma warning restore 612, 618
         }
