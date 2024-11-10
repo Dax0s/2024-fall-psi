@@ -1,4 +1,3 @@
-using backend.AimTrainerGame.Models;
 using backend.AimTrainerGame.Services;
 using Microsoft.EntityFrameworkCore;
 

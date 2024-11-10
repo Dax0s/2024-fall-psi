@@ -12,9 +12,9 @@ namespace backend.AimTrainerGame.Controllers;
 public class AimTrainerGameController : ControllerBase
 {
     private readonly IAimTrainerGameService _service;
-    private readonly AimTrainerGameHighscoreContext _db;
+    private readonly GamesDbContext _db;
 
-    public AimTrainerGameController(IAimTrainerGameService service, AimTrainerGameHighscoreContext db)
+    public AimTrainerGameController(IAimTrainerGameService service, GamesDbContext db)
     {
         _service = service;
         _db = db;
