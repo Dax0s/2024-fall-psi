@@ -35,7 +35,15 @@ public class AimTrainerGameController : ControllerBase
     [HttpGet("Highscores")]
     public ActionResult<IEnumerable<Highscore>> GetHighscores([FromQuery] int amount = 10)
     {
+<<<<<<< HEAD
         amount = Math.Min(amount, 100);
+=======
+        Console.WriteLine(amount);
+        var highscores = _db.Highscores
+            .OrderByDescending(h => h.Score)
+            .ThenBy(h => h.Date)
+            .Take(amount);
+>>>>>>> ee624db (Add highscores and username to frontend)
 
         return Ok(_service.GetHighscores(amount));
     }
