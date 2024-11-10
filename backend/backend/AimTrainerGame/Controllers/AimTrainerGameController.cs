@@ -1,5 +1,5 @@
-using backend.AimTrainerGame.Models;
 using backend.AimTrainerGame.Data;
+using backend.AimTrainerGame.Models;
 using backend.AimTrainerGame.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,7 +48,10 @@ public class AimTrainerGameController : ControllerBase
     {
         var hs = new Highscore
         {
-            Id = Guid.NewGuid(), Username = gameInfo.Username, Score = gameInfo.Score, Date = DateTime.UtcNow
+            Id = Guid.NewGuid(),
+            Username = gameInfo.Username,
+            Score = gameInfo.Score,
+            Date = DateTime.UtcNow
         };
         _db.Add(hs);
         _db.SaveChanges();
