@@ -1,6 +1,7 @@
 using backend.AimTrainerGame.Data;
 using backend.AimTrainerGame.Models;
 using backend.AimTrainerGame.Data;
+using backend.AimTrainerGame.Models;
 using backend.AimTrainerGame.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,15 +36,7 @@ public class AimTrainerGameController : ControllerBase
     [HttpGet("Highscores")]
     public ActionResult<IEnumerable<Highscore>> GetHighscores([FromQuery] int amount = 10)
     {
-<<<<<<< HEAD
         amount = Math.Min(amount, 100);
-=======
-        Console.WriteLine(amount);
-        var highscores = _db.AimTrainerGameHighscores
-            .OrderByDescending(h => h.Score)
-            .ThenBy(h => h.Date)
-            .Take(amount);
->>>>>>> ee624db (Add highscores and username to frontend)
 
         return Ok(_service.GetHighscores(amount));
     }
