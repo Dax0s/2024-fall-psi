@@ -36,7 +36,8 @@ public class AimTrainerGameController : ControllerBase
     {
         Console.WriteLine(amount);
         var highscores = _db.Highscores
-            .OrderBy(h => h.Score)
+            .OrderByDescending(h => h.Score)
+            .ThenBy(h => h.Date)
             .Take(amount);
 
         return Ok(highscores);
