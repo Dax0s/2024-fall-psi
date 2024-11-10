@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <Folder Include="MemoryGameWithNumbers\Models\" />
+      <Folder Include="Migrations\" />
     </ItemGroup>
 
 </Project>

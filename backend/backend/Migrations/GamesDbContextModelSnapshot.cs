@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using backend.AimTrainerGame.Models;
+using backend;
 
 #nullable disable
 
 namespace backend.Migrations
 {
-    [DbContext(typeof(AimTrainerGameHighscoreContext))]
-    partial class AimTrainerGameHighscoreContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(GamesDbContext))]
+    partial class GamesDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

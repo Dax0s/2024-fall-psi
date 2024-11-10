@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using backend.AimTrainerGame.Models;
+using backend;
 
 #nullable disable
 
 namespace backend.Migrations
 {
-    [DbContext(typeof(AimTrainerGameHighscoreContext))]
-    [Migration("20241110152406_InitialCreate")]
+    [DbContext(typeof(GamesDbContext))]
+    [Migration("20241110161557_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
