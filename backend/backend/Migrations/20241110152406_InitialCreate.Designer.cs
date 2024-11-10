@@ -12,7 +12,7 @@ using backend.AimTrainerGame.Models;
 namespace backend.Migrations
 {
     [DbContext(typeof(AimTrainerGameHighscoreContext))]
-    [Migration("20241110123450_InitialCreate")]
+    [Migration("20241110152406_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -43,7 +43,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Highscores");
+                    b.ToTable("AimTrainerGameHighscores");
                 });
 #pragma warning restore 612, 618
         }
