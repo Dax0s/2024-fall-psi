@@ -15,7 +15,7 @@ public class DotCountCanvasTests
     [InlineData(1000, 5)]
     public void Generation(int maxDotCount, int maxRadius)
     {
-        var dotCanvas = new DotCountCanvas(new IntBounds(GameSettings.DotCount.LowerLimit, maxDotCount));
+        var dotCanvas = new DotCountCanvas(new Bounds<int>(GameSettings.DotCount.LowerLimit, maxDotCount));
 
         Assert.True(dotCanvas.Dots.Count <= maxDotCount);
 

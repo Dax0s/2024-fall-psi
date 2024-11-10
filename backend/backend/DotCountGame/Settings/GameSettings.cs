@@ -4,7 +4,7 @@ namespace backend.DotCountGame.Settings;
 
 public static class GameSettings
 {
-    public static readonly IntBounds DotCount = new(1, 1000);
+    public static readonly Bounds<int> DotCount = new(1, 1000);
 
     // In pixels
     public static readonly int DefaultRadius = 10;

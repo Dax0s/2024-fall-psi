@@ -1,6 +1,5 @@
 using backend.AimTrainerGame.Models;
 using backend.AimTrainerGame.Settings;
-using backend.Utils;
 
 namespace backend.AimTrainerGame.Services;
 

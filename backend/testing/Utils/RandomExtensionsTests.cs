@@ -9,10 +9,10 @@ public class RandomExtensionsTests
 {
     [Theory]
     [InlineData(-100, 100, 10)]
-    public void NextWithinBounds(int lowerBound, int upperBound, int checkCount)
+    public void NextWithinIntBounds(int lowerBound, int upperBound, int checkCount)
     {
         var random = new Random();
-        var bounds = new IntBounds(lowerBound, upperBound);
+        var bounds = new Bounds<int>(lowerBound, upperBound);
 
         for (int checkIndex = 0; checkIndex < checkCount; ++checkIndex)
         {
@@ -26,9 +26,9 @@ public class RandomExtensionsTests
     public void NextOffset(int maxOffsetX, int maxOffsetY, int checkCount)
     {
         var random = new Random();
-        var maxOffset = new Vector2(maxOffsetX, maxOffsetY);
-        var xBounds = new IntBounds(0, maxOffsetX);
-        var yBounds = new IntBounds(0, maxOffsetY);
+        var maxOffset = new Vec2<int>(maxOffsetX, maxOffsetY);
+        var xBounds = new Bounds<int>(0, maxOffsetX);
+        var yBounds = new Bounds<int>(0, maxOffsetY);
 
         for (int checkIndex = 0; checkIndex < checkCount; ++checkIndex)
         {

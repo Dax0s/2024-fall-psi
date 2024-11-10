@@ -3,13 +3,13 @@ using Xunit;
 
 namespace testing.Tests.Utils;
 
-public class IntBoundsTests
+public class BoundsTests
 {
     [Fact]
     public void Construction()
     {
         var (lowerLimit, upperLimit) = (10, 20);
-        var bounds = new IntBounds(lowerLimit, upperLimit);
+        var bounds = new Bounds<int>(lowerLimit, upperLimit);
         Assert.Equal((lowerLimit, upperLimit), (bounds.LowerLimit, bounds.UpperLimit));
     }
 
@@ -21,16 +21,16 @@ public class IntBoundsTests
     [InlineData(int.MinValue, int.MinValue, new int[] { int.MinValue }, new int[] { int.MinValue + 1 })]
     [InlineData(int.MaxValue, int.MaxValue, new int[] { int.MaxValue }, new int[] { int.MaxValue - 1 })]
     [InlineData(1, -1, new int[] { }, new int[] { -2, -1, 0, 1, 2 })]
-    public void WithinBounds(int lowerLimit, int upperLimit, int[] inRangeValues, int[] outOfRangeValues)
+    public void WithinBounds(int lowerLimit, int upperLimit, int[] inRangeValues, int[] outOfRangleValues)
     {
-        var bounds = new IntBounds(lowerLimit, upperLimit);
+        var bounds = new Bounds<int>(lowerLimit, upperLimit);
 
         foreach (var inRangeValue in inRangeValues)
         {
             Assert.True(bounds.WithinBounds(inRangeValue));
         }
 
-        foreach (var outOfRangeValue in outOfRangeValues)
+        foreach (var outOfRangeValue in outOfRangleValues)
         {
             Assert.False(bounds.WithinBounds(outOfRangeValue));
         }
