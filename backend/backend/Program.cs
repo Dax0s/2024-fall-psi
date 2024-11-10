@@ -1,4 +1,6 @@
+using backend.AimTrainerGame.Models;
 using backend.AimTrainerGame.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend;
 
@@ -15,6 +17,9 @@ public class Program
                                   .AllowAnyHeader()
                                   .AllowAnyMethod());
         });
+
+        builder.Services.AddDbContextPool<AimTrainerGameHighscoreContext>(opt =>
+            opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         // Add services to the container.
 
