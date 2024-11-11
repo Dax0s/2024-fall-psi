@@ -32,10 +32,7 @@ public class AimTrainerGameController : ControllerBase
     [HttpGet("Highscores")]
     public ActionResult<IEnumerable<Highscore>> GetHighscores([FromQuery] int amount = 10)
     {
-        if (amount > 100)
-        {
-            amount = 100;
-        }
+        amount = Math.Min(amount, 100);
 
         return Ok(_service.GetHighscores(amount));
     }
