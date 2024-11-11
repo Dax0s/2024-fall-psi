@@ -12,12 +12,10 @@ namespace backend.AimTrainerGame.Controllers;
 public class AimTrainerGameController : ControllerBase
 {
     private readonly IAimTrainerGameService _service;
-    private readonly GamesDbContext _db;
 
-    public AimTrainerGameController(IAimTrainerGameService service, GamesDbContext db)
+    public AimTrainerGameController(IAimTrainerGameService service)
     {
         _service = service;
-        _db = db;
     }
 
     [HttpPost("StartGame")]
