@@ -113,17 +113,16 @@ const AimTrainerGame = () => {
       return;
     }
 
-    let i = 0;
-    for (const dotInfo of gameData.dotInfos) {
-      await delay(dotInfo.spawnTime);
+    for (let i = 0; i < gameData.dotInfos.length; i++) {
+      await delay(gameData.dotInfos[i].spawnTime);
 
       if (!window.location.href.includes(GAME_URL)) {
         return;
       }
 
       const element = document.createElement('div');
-      styleElement(element, dotInfo);
-      element.id = `${i++}`;
+      styleElement(element, gameData.dotInfos[i]);
+      element.id = `${i}`;
       parentElement.appendChild(element);
       dots.current.push(element);
 
@@ -175,7 +174,7 @@ const AimTrainerGame = () => {
   async function endGame() {
     if (!username) return;
 
-    if (scoreRef.current !== 0) {
+    if (scoreRef.current > 0) {
       await fetch(`${BACKEND_URL}/aimtrainergame/highscores`, {
         method: 'POST',
         headers: {

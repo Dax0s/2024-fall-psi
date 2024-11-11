@@ -10,12 +10,10 @@ namespace backend.AimTrainerGame.Controllers;
 public class AimTrainerGameController : ControllerBase
 {
     private readonly IAimTrainerGameService _service;
-    private readonly GamesDbContext _db;
 
-    public AimTrainerGameController(IAimTrainerGameService service, GamesDbContext db)
+    public AimTrainerGameController(IAimTrainerGameService service)
     {
         _service = service;
-        _db = db;
     }
 
     [HttpPost("StartGame")]
@@ -34,28 +32,27 @@ public class AimTrainerGameController : ControllerBase
     [HttpGet("Highscores")]
     public ActionResult<IEnumerable<Highscore>> GetHighscores([FromQuery] int amount = 10)
     {
-        Console.WriteLine(amount);
-        var highscores = _db.AimTrainerGameHighscores
-            .OrderByDescending(h => h.Score)
-            .ThenBy(h => h.Date)
-            .Take(amount);
+        if (amount > 100)
+        {
+            amount = 100;
+        }
 
-        return Ok(highscores);
+        return Ok(_service.GetHighscores(amount));
     }
 
     [HttpPost("Highscores")]
     public ActionResult<Highscore> EndGame([FromBody] GameEndRequest gameInfo)
     {
-        var hs = new Highscore
+        if (gameInfo.Username.Trim().Length == 0)
         {
-            Id = Guid.NewGuid(),
-            Username = gameInfo.Username,
-            Score = gameInfo.Score,
-            Date = DateTime.UtcNow
-        };
-        _db.Add(hs);
-        _db.SaveChanges();
+            return BadRequest();
+        }
 
-        return Ok(hs);
+        if (gameInfo.Score <= 0)
+        {
+            return BadRequest();
+        }
+
+        return Ok(_service.EndGame(gameInfo));
     }
 }

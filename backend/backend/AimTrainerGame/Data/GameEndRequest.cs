@@ -1,6 +1,3 @@
 namespace backend.AimTrainerGame.Data;
 
-public record GameEndRequest(string Username, int Score)
-{
-
-}
+public record GameEndRequest(string Username, int Score);

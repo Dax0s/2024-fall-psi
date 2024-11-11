@@ -28,7 +28,7 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         // Add custom services for DI
-        builder.Services.AddSingleton<IAimTrainerGameService, AimTrainerGameService>();
+        builder.Services.AddScoped<IAimTrainerGameService, AimTrainerGameService>();
 
         var app = builder.Build();
 
