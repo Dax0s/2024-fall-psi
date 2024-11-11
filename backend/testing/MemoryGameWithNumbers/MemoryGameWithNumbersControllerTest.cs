@@ -1,23 +1,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using backend.MemoryGameWithNumbers.Controllers;
+using backend.MemoryGameWithNumbers.Services;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
 public class MemoryGameWithNumbersControllerTests
 {
-
     private const int SuccessStatusCode = 200;
     private readonly MemoryGameWithNumbersController _controller;
+    private readonly MemoryGameService _memoryGameService;
 
     public MemoryGameWithNumbersControllerTests()
     {
-        // Reset the static field to ensure each test runs with a fresh state.
-        typeof(MemoryGameWithNumbersController)
-            .GetField("_correctSequence", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
-            ?.SetValue(null, null);
-
-        _controller = new MemoryGameWithNumbersController();
+        // Instantiate a new service for each test to avoid shared state.
+        _memoryGameService = new MemoryGameService();
+        _controller = new MemoryGameWithNumbersController(_memoryGameService);
     }
 
     [Fact]
@@ -53,7 +51,7 @@ public class MemoryGameWithNumbersControllerTests
             var gridNumbers1 = Assert.IsType<List<int?>>(okResult1.Value);
             var gridNumbers2 = Assert.IsType<List<int?>>(okResult2.Value);
 
-            Assert.NotEqual(gridNumbers1, gridNumbers2);
+            Assert.NotEqual(gridNumbers1, gridNumbers2); // Grid should be randomized
         }
     }
 
@@ -117,5 +115,4 @@ public class MemoryGameWithNumbersControllerTests
             Assert.False((bool)okResult.Value);
         }
     }
-
 }

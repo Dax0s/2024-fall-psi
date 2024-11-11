@@ -1,3 +1,4 @@
+using backend.MemoryGameWithNumbers.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.MemoryGameWithNumbers.Controllers;
@@ -6,48 +7,30 @@ namespace backend.MemoryGameWithNumbers.Controllers;
 [Route("api/[controller]")]
 public class MemoryGameWithNumbersController : ControllerBase
 {
-    private static List<int?>? _correctSequence;
+    private readonly MemoryGameService _memoryGameService;
+
+    public MemoryGameWithNumbersController(MemoryGameService memoryGameService)
+    {
+        _memoryGameService = memoryGameService;
+    }
 
     [HttpGet("start")]
     public ActionResult<List<int?>> StartGame([FromQuery] int maxNumber)
     {
-        Random rand = new Random();
-
-        List<int?> correctSequence = Enumerable.Range(1, maxNumber)
-                                               .Select(n => (int?)n) // Boxing happens here when converting int to int?
-                                               .ToList();
-
-        _correctSequence = new List<int?>(correctSequence);
-
-        List<int?> gridNumbers = new List<int?>(correctSequence.OrderBy(x => rand.Next()));
-
-        while (gridNumbers.Count < 16)
-        {
-            gridNumbers.Add(null);
-        }
-
-        gridNumbers = gridNumbers.OrderBy(x => rand.Next()).ToList();
-
+        var gridNumbers = _memoryGameService.StartGame(maxNumber);
         return Ok(gridNumbers);
     }
 
     [HttpPost("attempt")]
     public ActionResult<bool> CheckAttempt([FromBody] List<int?> userAttempt)
     {
-        if (_correctSequence == null)
+        if (_memoryGameService.IsGameStarted() == false)
         {
             return BadRequest("Game not started.");
         }
 
-        for (int i = 0; i < _correctSequence.Count; i++)
-        {
-            if (i >= userAttempt.Count || _correctSequence[i] == null || userAttempt[i] == null)
-            {
-                return Ok(false);
-            }
-
-        }
-
-        return Ok(true);
+        var result = _memoryGameService.CheckAttempt(userAttempt);
+        return Ok(result);
     }
+
 }

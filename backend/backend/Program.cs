@@ -1,4 +1,6 @@
 using backend.AimTrainerGame.Services;
+using backend.MathGame;
+using backend.MemoryGameWithNumbers.Services;
 
 namespace backend;
 
@@ -25,6 +27,8 @@ public class Program
 
         // Add custom services for DI
         builder.Services.AddSingleton<IAimTrainerGameService, AimTrainerGameService>();
+        builder.Services.AddSingleton<MathGameService>();
+        builder.Services.AddSingleton<MemoryGameService>();
 
         var app = builder.Build();
 
