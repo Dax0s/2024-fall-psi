@@ -1,4 +1,3 @@
-using backend.DotCountGame.Models;
 using backend.Utils;
 using Xunit;
 

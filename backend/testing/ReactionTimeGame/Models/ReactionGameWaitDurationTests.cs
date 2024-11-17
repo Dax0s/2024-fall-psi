@@ -1,4 +1,3 @@
-using backend.ReactionTimeGame.Models;
 using backend.ReactionTimeGame.Settings;
 using Xunit;
 

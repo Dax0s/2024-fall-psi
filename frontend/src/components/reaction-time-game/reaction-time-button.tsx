@@ -1,12 +1,7 @@
+import { GAME_URL, TRY_COUNT_PER_GAME } from './constants';
+import { average } from '@/utils/math';
+import { delay, Timer } from '@/utils/timing';
 import { useRef, useState } from 'react';
-import { delay } from '@/utils/timing';
-import { BACKEND_URL } from '@/utils/constants';
-
-async function fetchWaitTime() {
-  const tmp = await fetch(`${BACKEND_URL}/reactiontime`);
-  const json = await tmp.json();
-  return json.millisecondsToWait;
-}
 
 enum ReactionState {
   BASE,
@@ -14,11 +9,24 @@ enum ReactionState {
   GO,
 }
 
-function ReactionButton() {
-  const goTime = useRef(0);
+async function fetchWaitTime(): Promise<number | undefined> {
+  try {
+    const response = await fetch(`${GAME_URL}/start`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return (await response.json()).millisecondsToWait as number;
+  } catch (err) {
+    console.error(err);
+    return undefined;
+  }
+}
 
-  const tries = useRef(0);
-  const reactionTimeSum = useRef(0);
+export function ReactionTimeButton(props: {
+  tries: number[];
+  setTries: (newTries: number[]) => void;
+}) {
+  const reactionTimer = useRef(new Timer());
 
   const latestStartTime = useRef(0);
   const reactionState = useRef(ReactionState.BASE);
@@ -35,21 +43,29 @@ function ReactionButton() {
       case ReactionState.BASE:
         await clickOnBaseState();
         break;
+
       case ReactionState.WAIT:
         reactionState.current = ReactionState.BASE;
         setButtonLabel('TOO SOON, TRY AGAIN');
         setButtonClass('bg-orange-500 text-white hover:brightness-80');
         break;
+
       case ReactionState.GO:
         clickOnGoState();
         break;
+
       default:
+        console.error('Unknown game state encountered');
         break;
     }
   }
 
   const clickOnBaseState = async () => {
     const msToWait = await fetchWaitTime();
+    if (!msToWait) {
+      alert('Something went wrong. Try again.');
+      return;
+    }
 
     reactionState.current = ReactionState.WAIT;
     setButtonLabel('WAIT');
@@ -66,33 +82,29 @@ function ReactionButton() {
       setButtonClass('bg-green-500 text-white');
     }
 
-    goTime.current = performance.now();
+    reactionTimer.current.start();
   };
 
   const clickOnGoState = () => {
-    const stopTime = performance.now();
+    reactionTimer.current.stop();
     const pageDelay = 100;
-    const reactionTime = stopTime - goTime.current - pageDelay;
+    const reactionTime = reactionTimer.current.getTime() - pageDelay;
 
-    tries.current = tries.current + 1;
-    reactionTimeSum.current = reactionTimeSum.current + reactionTime;
-    const averageReactionTime = reactionTimeSum.current / tries.current;
+    if (props.tries.length === TRY_COUNT_PER_GAME) {
+      props.setTries([]);
+    }
+
+    const updatedTries = [...props.tries, reactionTime];
+    const averageReactionTime = average(updatedTries);
 
     reactionState.current = ReactionState.BASE;
     setButtonLabel('TRY AGAIN');
     setButtonClass('bg-white text-black');
 
     setReactionTimeLabel('REACTION TIME: ' + Math.floor(reactionTime) + ' ms');
-    setAverageLabel(
-      'AVERAGE REACTION TIME: ' +
-        Math.floor(averageReactionTime) +
-        ' ms' +
-        ' (' +
-        tries.current +
-        ' ' +
-        (tries.current > 1 ? 'tries' : 'try') +
-        ')',
-    );
+    setAverageLabel('AVERAGE REACTION TIME: ' + Math.floor(averageReactionTime) + ' ms');
+
+    props.setTries(updatedTries);
   };
 
   return (
@@ -109,15 +121,3 @@ function ReactionButton() {
     </>
   );
 }
-
-function Game() {
-  return (
-    <div className="app">
-      <header className="app-header">
-        <ReactionButton />
-      </header>
-    </div>
-  );
-}
-
-export default Game;

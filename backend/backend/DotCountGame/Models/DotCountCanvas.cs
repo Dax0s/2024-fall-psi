@@ -1,3 +1,4 @@
+using backend.DotCountGame.Data;
 using backend.DotCountGame.Settings;
 using backend.Utils;
 
@@ -38,7 +39,7 @@ public class DotCountCanvas
         var (occupiableChunkSideCount, occupiableChunkCount) = Numbers.NextPerfectSquare(maxDots);
         SideLength = (2 * _radiusBounds.UpperLimit) * (2 * occupiableChunkSideCount + 1);
 
-        int chunkSideLength = 2 * _radiusBounds.UpperLimit;
+        var chunkSideLength = 2 * _radiusBounds.UpperLimit;
 
         ComputeChunkTopLeftPositions(occupiableChunkCount, chunkSideLength);
         ChooseDots(dotCount);
@@ -59,17 +60,19 @@ public class DotCountCanvas
 
     private void ChooseDots(int dotCount)
     {
-        var rng = new Random();
-        Dots = Dots.OrderBy(_ => rng.Next()).Take(dotCount).ToList();
+        var random = new Random();
+        Dots = Dots.OrderBy(_ => random.Next()).Take(dotCount).ToList();
     }
 
     private void GiveRandomOffsetsAndRadii(int chunkSideLength)
     {
         var random = new Random();
-        var offsetBounds = new Vec2<int>(chunkSideLength, chunkSideLength);
         foreach (var dot in Dots)
         {
-            dot.Center += random.NextOffset(offsetBounds);
+            dot.Center = new Vec2<int>(
+                random.Next(chunkSideLength + 1),
+                random.Next(chunkSideLength + 1)
+            );
             dot.Radius = random.NextWithinBounds(_radiusBounds);
         }
     }

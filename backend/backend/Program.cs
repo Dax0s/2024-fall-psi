@@ -1,4 +1,6 @@
 using backend.AimTrainerGame.Services;
+using backend.DotCountGame.Services;
+using backend.ReactionTimeGame.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend;
@@ -29,6 +31,8 @@ public class Program
 
         // Add custom services for DI
         builder.Services.AddScoped<IAimTrainerGameService, AimTrainerGameService>();
+        builder.Services.AddTransient<IWaitDurationGenerator, DefaultWaitDurationGenerator>();
+        builder.Services.AddTransient<IDotCountGameInfoGenerator, DefaultDotCanvasGenerator>();
 
         var app = builder.Build();
 
