@@ -36,7 +36,7 @@ public class DefaultDotCountGameService : IDotCountGameService
             }
         }
 
-        _dbContext.DotCountGameScores.Add(newScore);
+        _dbContext.Add(newScore);
         _dbContext.SaveChanges();
     }
 }

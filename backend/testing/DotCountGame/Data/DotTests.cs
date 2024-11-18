@@ -1,7 +1,8 @@
+using backend.DotCountGame.Data;
 using backend.Utils;
 using Xunit;
 
-namespace testing.DotCountGame.Models;
+namespace testing.DotCountGame.Data;
 
 public class DotTests
 {

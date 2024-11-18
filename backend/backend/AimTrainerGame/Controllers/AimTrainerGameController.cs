@@ -1,7 +1,5 @@
 using backend.AimTrainerGame.Data;
 using backend.AimTrainerGame.Models;
-using backend.AimTrainerGame.Data;
-using backend.AimTrainerGame.Models;
 using backend.AimTrainerGame.Services;
 using Microsoft.AspNetCore.Mvc;
 

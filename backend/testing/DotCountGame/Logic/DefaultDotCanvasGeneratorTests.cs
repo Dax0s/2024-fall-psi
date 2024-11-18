@@ -1,10 +1,11 @@
+using backend.DotCountGame.Logic;
 using backend.DotCountGame.Settings;
 using backend.Utils;
 using Xunit;
 
-namespace testing.DotCountGame.Models;
+namespace testing.DotCountGame.Logic;
 
-public class DotCountCanvasTests
+public class DefaultDotCanvasGeneratorTests
 {
     [Theory]
     [InlineData(1, 10)]
@@ -14,7 +15,8 @@ public class DotCountCanvasTests
     [InlineData(1000, 5)]
     public void Generation(int maxDotCount, int maxRadius)
     {
-        var dotCanvas = new DotCountCanvas(new Bounds<int>(GameSettings.DotCount.LowerLimit, maxDotCount));
+        var dotCountBounds = new Bounds<int>(GameSettings.DotCount.LowerLimit, maxDotCount);
+        var dotCanvas = new DefaultDotCanvasGenerator().GenerateNextCanvas(dotCountBounds);
 
         Assert.True(dotCanvas.Dots.Count <= maxDotCount);
 

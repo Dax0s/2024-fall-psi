@@ -20,7 +20,7 @@ public class BoundsTests
     [InlineData(-2, 2, new int[] { -2, -1, 0, 1, 2 }, new int[] { -3, 3 })]
     [InlineData(int.MinValue, int.MinValue, new int[] { int.MinValue }, new int[] { int.MinValue + 1 })]
     [InlineData(int.MaxValue, int.MaxValue, new int[] { int.MaxValue }, new int[] { int.MaxValue - 1 })]
-    [InlineData(1, -1, new int[] { }, new int[] { -2, -1, 0, 1, 2 })]
+    [InlineData(1, -1, new int[] { -1, 0, 1 }, new int[] { -2, 2 })]
     public void WithinBounds(int lowerLimit, int upperLimit, int[] inRangeValues, int[] outOfRangleValues)
     {
         var bounds = new Bounds<int>(lowerLimit, upperLimit);
