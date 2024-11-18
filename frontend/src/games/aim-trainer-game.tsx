@@ -27,10 +27,18 @@ type GameStartResponse = {
   timeToLive: number;
 };
 
+type Highscore = {
+  id: string;
+  username: string;
+  score: number;
+  date: Date;
+};
+
 const SIZE_OF_BALL = 96;
 const BORDER = 100;
 
 const GAME_URL = 'aim-trainer-game';
+const NUMBER_OF_HIGHSCORES = 10;
 
 async function fetchGameStartInfo(difficulty: Difficulty, width: number, height: number) {
   try {
@@ -66,13 +74,31 @@ const AimTrainerGame = () => {
   const [difficulty, setDifficulty] = useState(Difficulty.EASY);
   const [isLoading, setIsLoading] = useState(false);
   const [dotsLeft, setDotsLeft] = useState(0);
+  const dotsLeftRef = useRef(0);
   const [score, setScore] = useState(0);
+  const scoreRef = useRef(0);
+  const [username, setUsername] = useState('');
+  const [highscores, setHighscores] = useState([] as Highscore[]);
+  const [loadingHighscores, setLoadingHighscores] = useState(false);
 
   const dots: MutableRefObject<Array<HTMLDivElement>> = useRef([]);
 
+  async function fetchHighscores() {
+    setLoadingHighscores(true);
+    const tmp = await fetch(`${BACKEND_URL}/aimtrainergame/highscores?=${NUMBER_OF_HIGHSCORES}`);
+    const highscores = (await tmp.json()) as Highscore[];
+    setHighscores(highscores);
+    setLoadingHighscores(false);
+  }
+
   function removeElement(element: HTMLDivElement) {
+    dots.current = dots.current.filter((el) => el.id !== element.id);
     element.remove();
-    setDotsLeft((prevDots) => prevDots - 1);
+
+    setDotsLeft((prevDots) => {
+      dotsLeftRef.current = prevDots - 1;
+      return prevDots - 1;
+    });
   }
 
   function removeAllDots() {
@@ -87,15 +113,16 @@ const AimTrainerGame = () => {
       return;
     }
 
-    for (const dotInfo of gameData.dotInfos) {
-      await delay(dotInfo.spawnTime);
+    for (let i = 0; i < gameData.dotInfos.length; i++) {
+      await delay(gameData.dotInfos[i].spawnTime);
 
       if (!window.location.href.includes(GAME_URL)) {
         return;
       }
 
       const element = document.createElement('div');
-      styleElement(element, dotInfo);
+      styleElement(element, gameData.dotInfos[i]);
+      element.id = `${i}`;
       parentElement.appendChild(element);
       dots.current.push(element);
 
@@ -105,7 +132,10 @@ const AimTrainerGame = () => {
 
       element.addEventListener('click', () => {
         clearTimeout(elementTimeout);
-        setScore((prevScore) => prevScore + 1);
+        setScore((prevScore) => {
+          scoreRef.current = prevScore + 1;
+          return prevScore + 1;
+        });
         removeElement(element);
       });
     }
@@ -130,10 +160,38 @@ const AimTrainerGame = () => {
 
     setGameIsStarted(true);
     await spawnDots(gameData);
-    setGameIsStarted(false);
   }
 
   useEffect(() => {
+    // if dots array has dots, game is not started or there are dots left
+    if (dots.current.length > 0 || !gameIsStarted || dotsLeftRef.current) return;
+
+    setGameIsStarted(false);
+
+    void endGame();
+  }, [dots.current]);
+
+  async function endGame() {
+    if (!username) return;
+
+    if (scoreRef.current > 0) {
+      await fetch(`${BACKEND_URL}/aimtrainergame/highscores`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          score: scoreRef.current,
+        }),
+      });
+    }
+
+    void fetchHighscores();
+  }
+
+  useEffect(() => {
+    void fetchHighscores();
     return () => {
       removeAllDots();
     };
@@ -141,6 +199,17 @@ const AimTrainerGame = () => {
 
   return (
     <>
+      {!gameIsStarted ? (
+        <div className="m-4 absolute flex flex-col">
+          <p>Highscores: </p>
+          {loadingHighscores && 'Loading...'}
+          {highscores.map((h, i) => (
+            <p key={h.id}>
+              {i + 1}. {h.username} scored {h.score} on {new Date(h.date).toLocaleString('lt-LT')}
+            </p>
+          ))}
+        </div>
+      ) : null}
       {gameIsStarted || dotsLeft > 0 ? (
         <div className="m-4 absolute flex flex-col">
           <p>Left: {dotsLeft}</p>
@@ -152,9 +221,21 @@ const AimTrainerGame = () => {
         </div>
       ) : null}
       {!gameIsStarted && dotsLeft === 0 ? (
-        <div className="flex flex-col-reverse items-center justify-center h-screen">
-          <StartGameButton className={'my-4'} onClick={startGame} isLoading={isLoading} />
-          <DifficultyPicker defaultDifficulty={difficulty} setParentDifficulty={setDifficulty} />
+        <div className="flex flex-col items-center justify-center h-screen">
+          <DifficultyPicker
+            className={'my-4'}
+            defaultDifficulty={difficulty}
+            setParentDifficulty={setDifficulty}
+          />
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter username"
+            className="mb-4 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+            maxLength={20}
+          />
+          <StartGameButton onClick={startGame} isLoading={isLoading} />
         </div>
       ) : null}
     </>

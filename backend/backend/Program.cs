@@ -1,4 +1,5 @@
 using backend.AimTrainerGame.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend;
 
@@ -16,6 +17,9 @@ public class Program
                                   .AllowAnyMethod());
         });
 
+        builder.Services.AddDbContextPool<GamesDbContext>(opt =>
+            opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
         // Add services to the container.
 
         builder.Services.AddControllers();
@@ -24,7 +28,7 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         // Add custom services for DI
-        builder.Services.AddSingleton<IAimTrainerGameService, AimTrainerGameService>();
+        builder.Services.AddScoped<IAimTrainerGameService, AimTrainerGameService>();
 
         var app = builder.Build();
 

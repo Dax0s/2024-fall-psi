@@ -31,7 +31,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Formatting check
-        run: dotnet format --verify-no-changes
+        run: dotnet format --exclude backend/Migrations --verify-no-changes
 
   Tests:
     runs-on: ubuntu-latest
