@@ -1,4 +1,7 @@
+import { BACKEND_URL } from '@/utils/constants';
 import { GameSettings } from './game-settings';
+
+export const GAME_URL = BACKEND_URL + '/DotCountGame';
 
 export const noLastDotCountValue = 0;
 

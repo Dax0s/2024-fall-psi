@@ -1,9 +1,9 @@
 using backend.DotCountGame.Data;
 using backend.Utils;
 
-namespace backend.DotCountGame.Services;
+namespace backend.DotCountGame.Logic;
 
-public interface IDotCountGameInfoGenerator
+public interface IDotCanvasGenerator
 {
     public DotCountCanvas GenerateNextCanvas(Bounds<int> dotCountBounds);
 }

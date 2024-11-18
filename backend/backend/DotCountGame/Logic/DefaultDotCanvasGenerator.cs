@@ -5,9 +5,9 @@ using backend.DotCountGame.Data;
 using backend.DotCountGame.Settings;
 using backend.Utils;
 
-namespace backend.DotCountGame.Services;
+namespace backend.DotCountGame.Logic;
 
-public class DefaultDotCanvasGenerator : IDotCountGameInfoGenerator
+public class DefaultDotCanvasGenerator : IDotCanvasGenerator
 {
     private int _sideLength;
     private List<Dot> _dots;
@@ -17,6 +17,7 @@ public class DefaultDotCanvasGenerator : IDotCountGameInfoGenerator
 
     public DotCountCanvas GenerateNextCanvas(Bounds<int> dotCountBounds)
     {
+        (_sideLength, _dots) = (0, new List<Dot>());
         FillInRandomDots(dotCountBounds);
         return new DotCountCanvas(_sideLength, _dots);
     }

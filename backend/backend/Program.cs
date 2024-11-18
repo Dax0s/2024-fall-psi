@@ -31,8 +31,8 @@ public class Program
 
         // Add custom services for DI
         builder.Services.AddScoped<IAimTrainerGameService, AimTrainerGameService>();
-        builder.Services.AddTransient<IWaitDurationGenerator, DefaultWaitDurationGenerator>();
-        builder.Services.AddTransient<IDotCountGameInfoGenerator, DefaultDotCanvasGenerator>();
+        builder.Services.AddScoped<IReactionTimeGameService, DefaultReactionTimeGameService>();
+        builder.Services.AddScoped<IDotCountGameService, DefaultDotCountGameService>();
 
         var app = builder.Build();
 

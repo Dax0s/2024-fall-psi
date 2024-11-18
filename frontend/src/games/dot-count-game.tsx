@@ -3,6 +3,7 @@ import { GameStartPage } from '@/components/dot-count-game/game-start-page';
 import { GameSettings } from '@/components/dot-count-game/game-settings';
 import { Result } from '@/components/dot-count-game/result';
 import {
+  GAME_URL,
   maxDotCount,
   maxShowDurationMs,
   minDotCount,
@@ -11,7 +12,7 @@ import {
 import DotsPage from '@/components/dot-count-game/dots-page';
 import LatestResultPage from '@/components/dot-count-game/latest-result-page';
 import { inRange } from '@/utils/math';
-import { ResultsPage } from '@/components/reaction-time-game/results-page';
+import { ResultsPage } from '@/components/global/results-page';
 
 function validGameSettings(gameSettings: GameSettings): boolean {
   return (
@@ -25,10 +26,9 @@ function calculateScore(results: Result[], maxDotCount: number): number {
     (accumulator, result) => accumulator + Math.abs(result.guess - result.correctAnswer),
     0,
   );
-  const multiplier = 1000;
-  const score = multiplier * (1.0 - totalError / maxDotCount);
+  const scoreCoefficient = Math.max(0.0, 1.0 - totalError / maxDotCount);
 
-  return Math.floor(score);
+  return Math.floor(maxDotCount * scoreCoefficient);
 }
 
 function DotCountGame() {
@@ -65,7 +65,7 @@ function DotCountGame() {
   return (
     <div className="app">
       <header className="app-header">
-        <ResultsPage score={calculateScore(results, gameSettings.maxDotCount)} />
+        <ResultsPage gameUrl={GAME_URL} score={calculateScore(results, gameSettings.maxDotCount)} />
       </header>
     </div>
   );

@@ -36,7 +36,7 @@ public class AimTrainerGameService : IAimTrainerGameService
             Score = gameInfo.Score,
             Date = DateTime.UtcNow
         };
-        _db.Add(hs);
+        _db.AimTrainerGameHighscores.Add(hs);
         _db.SaveChanges();
 
         return hs;

@@ -5,6 +5,7 @@ import {
   defaultCanvasColor,
   defaultDotColor,
   dotCountStep,
+  GAME_URL,
   maxDotCount,
   minDotCount,
 } from './constants';
@@ -15,7 +16,11 @@ import { Result } from './result';
 
 async function fetchCanvasInfo(maxDots: number): Promise<DotCanvasInfo | undefined> {
   try {
-    const response = await fetch(`${BACKEND_URL}/DotCountGame?maxDots=${maxDots}`);
+    const response = await fetch(`${GAME_URL}/getcanvas`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(maxDots),
+    });
     return (await response.json()) as DotCanvasInfo;
   } catch (error) {
     console.error('Error starting game:', error);
@@ -62,7 +67,7 @@ function generateCanvas(canvasRef: React.RefObject<HTMLCanvasElement>, canvasInf
   context.fill();
 }
 
-function MainPage(props: {
+function DotsPage(props: {
   gameSettings: GameSettings;
   setLatestResult: (resultToSet: Result) => void;
 }) {
@@ -125,4 +130,4 @@ function MainPage(props: {
   );
 }
 
-export default MainPage;
+export default DotsPage;

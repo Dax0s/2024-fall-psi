@@ -1,4 +1,6 @@
 using backend.DotCountGame.Data;
+using backend.DotCountGame.Logic;
+using backend.DotCountGame.Models;
 using backend.DotCountGame.Services;
 using backend.DotCountGame.Settings;
 using backend.Utils;
@@ -10,22 +12,36 @@ namespace backend.DotCountGame.Controllers;
 [Route("api/[controller]")]
 public class DotCountGameController : ControllerBase
 {
-    private readonly IDotCountGameInfoGenerator _canvasGenerator;
+    private readonly IDotCountGameService _gameService;
 
-    public DotCountGameController(IDotCountGameInfoGenerator canvasGenerator)
-    {
-        _canvasGenerator = canvasGenerator;
-    }
+    public DotCountGameController(IDotCountGameService gameService)
+        => _gameService = gameService;
 
-    [HttpGet]
-    public ActionResult<DotCountCanvas> Get([FromQuery] int maxDots)
+    [HttpPost("getcanvas")]
+    public ActionResult<DotCountCanvas> GetCanvas([FromBody] int maxDotCount)
     {
-        if (!GameSettings.DotCount.WithinBounds(maxDots))
+        if (!GameSettings.DotCount.WithinBounds(maxDotCount))
         {
             return BadRequest();
         }
 
-        var dotCountBounds = new Bounds<int>(GameSettings.DotCount.LowerLimit, maxDots);
-        return Ok(_canvasGenerator.GenerateNextCanvas(dotCountBounds));
+        return Ok(_gameService.GenerateNextCanvas(new DefaultDotCanvasGenerator(), maxDotCount));
+    }
+
+    [HttpGet("leaderboard")]
+    public ActionResult<List<DotCountGameScore>> GetLeaderboard([FromQuery] ushort numberOfScores = 10)
+        => Ok(_gameService.GetLeaderboard(numberOfScores));
+
+    [HttpPost("score")]
+    public ActionResult AddScore([FromBody] ScoreCreationInfo newScoreCreationInfo)
+    {
+        _gameService.AddScore(new DotCountGameScore
+        {
+            Id = Guid.NewGuid(),
+            Username = newScoreCreationInfo.Username,
+            Value = newScoreCreationInfo.Value,
+            Date = DateTime.UtcNow,
+        });
+        return Ok();
     }
 }
