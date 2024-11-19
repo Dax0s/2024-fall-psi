@@ -39,6 +39,8 @@ public class Program
         builder.Services.AddScoped<MathGameService>();
         builder.Services.AddScoped<MemoryGameService>();
 
+        builder.Services.AddMemoryCache();
+
         var app = builder.Build();
 
         app.UseHttpsRedirection();

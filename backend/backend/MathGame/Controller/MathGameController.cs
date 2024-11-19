@@ -20,7 +20,7 @@ public class MathGameController : ControllerBase
         var puzzle = _mathGameService.GetNextPuzzle();
         if (puzzle == null)
         {
-            return NotFound("No puzzles available. Please check the puzzle file.");
+            return NotFound("No puzzles available. Please check the database.");
         }
 
         return puzzle;
