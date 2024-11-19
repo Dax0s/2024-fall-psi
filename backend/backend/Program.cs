@@ -32,6 +32,7 @@ public class Program
         // Add custom services for DI
 
         builder.Services.AddScoped<IAimTrainerGameService, AimTrainerGameService>();
+        builder.Services.AddMemoryCache();
         builder.Services.AddScoped<MathGameService>();
         builder.Services.AddScoped<MemoryGameService>();
 

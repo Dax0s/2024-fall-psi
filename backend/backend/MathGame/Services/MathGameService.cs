@@ -1,102 +1,141 @@
 using System.Globalization;
+using backend.MathGame.Exceptions;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace backend.MathGame;
 
 public class MathGameService
 {
-    private readonly List<string> _puzzles = new List<string>();
-    private int _puzzleIndex;
-    private readonly string _puzzleFilePath = Path.Combine("data", "puzzles.txt");
+    private readonly GamesDbContext _context;
+    private readonly IMemoryCache _cache;
+    private const string LogFilePath = "logs/MathGameService.log";
 
-    public MathGameService()
+    public MathGameService(GamesDbContext context, IMemoryCache cache)
     {
-        LoadPuzzlesFromFile();
+        _context = context;
+        _cache = cache;
+        LoadPuzzles();
+    }
+
+    private void LoadPuzzles()
+    {
+        try
+        {
+            if (!_cache.TryGetValue("Puzzles", out List<string>? puzzles) || puzzles == null)
+            {
+                puzzles = [.. _context.Puzzles.Select(p => p.Content)];
+                if (!puzzles.Any())
+                {
+                    throw new PuzzlesNotFoundException("No puzzles found in the database.");
+                }
+
+                _cache.Set("Puzzles", puzzles);
+                Console.WriteLine($"Loaded {puzzles.Count} puzzles from the database.");
+            }
+        }
+        catch (PuzzlesNotFoundException ex)
+        {
+            LogException(ex);
+            Console.WriteLine("Error: Unable to load puzzles. Please seed the database.");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            LogException(ex);
+            Console.WriteLine("An unexpected error occurred while loading puzzles.");
+            throw;
+        }
+    }
+
+    private static void LogException(Exception ex)
+    {
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(LogFilePath)!); // Ensure directory exists
+            using var writer = new StreamWriter(LogFilePath, append: true);
+            writer.WriteLine($"{DateTime.Now}: {ex.GetType().Name} - {ex.Message}");
+            writer.WriteLine($"Stack Trace: {ex.StackTrace}");
+        }
+        catch
+        {
+            Console.WriteLine("Failed to write to the log file.");
+        }
     }
 
     public string? GetNextPuzzle()
     {
-        if (_puzzles.Count == 0)
-        {
-            return null;
-        }
+        var puzzles = _cache.Get<List<string>>("Puzzles");
+        if (puzzles == null || puzzles.Count == 0) { return null; }
 
-        if (_puzzleIndex >= _puzzles.Count)
+        int puzzleIndex = _cache.GetOrCreate("PuzzleIndex", entry =>
         {
-            _puzzleIndex = 0;
-        }
+            entry.SlidingExpiration = TimeSpan.FromMinutes(30); // Optional expiration
+            return 0;
+        });
 
-        return _puzzles[_puzzleIndex++];
+        string puzzle = puzzles[puzzleIndex];
+        _cache.Set("PuzzleIndex", (puzzleIndex + 1) % puzzles.Count);
+        return puzzle;
     }
 
     public bool CheckAnswer(string puzzle, string answer)
     {
-        try
-        {
-            var tokens = puzzle.Split(' ');
-            if (tokens.Length < 3)
-            {
-                return false;
-            }
+        var tokens = puzzle.Split(' ');
+        if (tokens.Length != 3) { return false; }
 
-            if (int.TryParse(tokens[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int leftOperand) &&
-                int.TryParse(tokens[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out int rightOperand))
-            {
-                string operation = tokens[1];
+        // Initialize operands with default values
+        int rightOperand = 0;
+        int leftOperand;
+        bool isValidOperands = int.TryParse(tokens[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out leftOperand) &&
+                               int.TryParse(tokens[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out rightOperand);
 
-                int correctAnswer = operation switch
-                {
-                    "+" => leftOperand + rightOperand,
-                    "-" => leftOperand - rightOperand,
-                    "*" => leftOperand * rightOperand,
-                    "/" => rightOperand != 0 ? leftOperand / rightOperand : 0,
-                    _ => 0
-                };
-
-                return int.TryParse(answer, NumberStyles.Integer, CultureInfo.InvariantCulture, out int userAnswer) &&
-                       userAnswer == correctAnswer;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch
+        if (!isValidOperands)
         {
             return false;
         }
+
+        string operation = tokens[1];
+        int? correctAnswer;
+
+        // Safely perform the operation
+        switch (operation)
+        {
+            case "+":
+                correctAnswer = leftOperand + rightOperand;
+                break;
+            case "-":
+                correctAnswer = leftOperand - rightOperand;
+                break;
+            case "*":
+                correctAnswer = leftOperand * rightOperand;
+                break;
+            case "/":
+                correctAnswer = rightOperand != 0 ? leftOperand / rightOperand : null;
+                break;
+            default:
+                return false;
+        }
+
+        return correctAnswer.HasValue &&
+               int.TryParse(answer, NumberStyles.Integer, CultureInfo.InvariantCulture, out int userAnswer) &&
+               userAnswer == correctAnswer.Value;
     }
 
-    private void LoadPuzzlesFromFile()
-    {
-        try
-        {
-            if (!File.Exists(_puzzleFilePath))
-            {
-                Console.WriteLine($"Puzzle file not found at {_puzzleFilePath}");
-                return;
-            }
+    // public void SeedPuzzles()
+    // {
+    //     if (!_context.Puzzles.Any())
+    //     {
+    //         var seedPuzzles = new List<Puzzle>
+    //         {
+    //             new Puzzle { Id = Guid.NewGuid(), Content = "5 + 3" },
+    //             new Puzzle { Id = Guid.NewGuid(), Content = "10 - 7" },
+    //             new Puzzle { Id = Guid.NewGuid(), Content = "6 * 2" },
+    //             new Puzzle { Id = Guid.NewGuid(), Content = "8 / 2" }
+    //         };
 
-            using var fileStream = new FileStream(_puzzleFilePath, FileMode.Open, FileAccess.Read);
-            using var reader = new StreamReader(fileStream);
-            string? line;
-            _puzzles.Clear();
-
-            while ((line = reader.ReadLine()) != null)
-            {
-                if (!string.IsNullOrWhiteSpace(line))
-                {
-                    _puzzles.Add(line.Trim());
-                }
-            }
-
-            if (_puzzles.Count == 0)
-            {
-                Console.WriteLine("The puzzle file is empty.");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading puzzle file: {ex.Message}");
-        }
-    }
+    //         _context.Puzzles.AddRange(seedPuzzles);
+    //         _context.SaveChanges();
+    //         Console.WriteLine($"Seeded {seedPuzzles.Count} puzzles into the database.");
+    //     }
+    // }
 }
