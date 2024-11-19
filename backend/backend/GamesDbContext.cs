@@ -1,5 +1,7 @@
 using backend.AimTrainerGame.Models;
+using backend.DotCountGame.Models;
 using backend.MathGame.Models;
+using backend.ReactionTimeGame.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend;
@@ -9,4 +11,6 @@ public class GamesDbContext(DbContextOptions<GamesDbContext> options) : DbContex
     public DbSet<Highscore> AimTrainerGameHighscores { get; set; }
 
     public DbSet<Puzzle> Puzzles { get; set; }
+    public DbSet<ReactionTimeGameScore> ReactionTimeGameScores { get; set; }
+    public DbSet<DotCountGameScore> DotCountGameScores { get; set; }
 }

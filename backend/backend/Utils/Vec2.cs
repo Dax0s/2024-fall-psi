@@ -16,8 +16,7 @@ where T :
     IAdditionOperators<T, T, T>,
     IAdditiveIdentity<T, T>,
     ISubtractionOperators<T, T, T>,
-    IMultiplyOperators<T, T, T>,
-    IDivisionOperators<T, T, T>
+    IMultiplyOperators<T, T, T>
 
 {
     [JsonPropertyName("x")]
@@ -41,28 +40,11 @@ where T :
     }
 
     public static Vec2<T> operator +(Vec2<T> a, Vec2<T> b)
-    {
-        return new Vec2<T>(x: a.X + b.X, y: a.Y + b.Y);
-    }
+        => new Vec2<T>(x: a.X + b.X, y: a.Y + b.Y);
+
     public static Vec2<T> operator -(Vec2<T> a, Vec2<T> b)
-    {
-        return new Vec2<T>(x: a.X - b.X, y: a.Y - b.Y);
-    }
+        => new Vec2<T>(x: a.X - b.X, y: a.Y - b.Y);
 
     public static Vec2<T> operator *(T scalar, Vec2<T> vector)
-    {
-        return new Vec2<T>(x: scalar * vector.X, y: scalar * vector.Y);
-    }
-    public static Vec2<T> operator /(Vec2<T> vector, T denominator)
-    {
-        return new Vec2<T>(x: vector.X / denominator, y: vector.Y / denominator);
-    }
-}
-
-public static partial class RandomExtensions
-{
-    public static Vec2<int> NextOffset(this Random random, Vec2<int> maxOffset)
-        => maxOffset.X < 0 || maxOffset.Y < 0
-            ? new Vec2<int>(0, 0)
-            : new Vec2<int>(random.Next(maxOffset.X), random.Next(maxOffset.Y));
+        => new Vec2<T>(x: scalar * vector.X, y: scalar * vector.Y);
 }

@@ -1,6 +1,6 @@
 using backend.Utils;
 
-namespace backend.DotCountGame.Models;
+namespace backend.DotCountGame.Data;
 
 public class Dot
 {

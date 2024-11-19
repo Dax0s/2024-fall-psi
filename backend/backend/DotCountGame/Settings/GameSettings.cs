@@ -13,4 +13,18 @@ public static class GameSettings
 
     // What part of max. radius should min. radius be
     public static readonly float MinRadiusPercentage = 0.8f;
+
+    public static Bounds<int> GetRadiusBounds(int dotCount)
+    {
+        var maxRadius = dotCount < DotCountLimitForDefaultRadius
+            ? DefaultRadius
+            : SmallRadius;
+
+        var minRadius = Math.Max(
+                1,
+                (int)(MinRadiusPercentage * maxRadius)
+            ); // So that _minRadius > 0
+
+        return new Bounds<int>(minRadius, maxRadius);
+    }
 }
