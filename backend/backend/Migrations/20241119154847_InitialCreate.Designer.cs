@@ -12,8 +12,8 @@ using backend;
 namespace backend.Migrations
 {
     [DbContext(typeof(GamesDbContext))]
-    [Migration("20241119123349_AddPuzzleTable")]
-    partial class AddPuzzleTable
+    [Migration("20241119154847_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,28 @@ namespace backend.Migrations
                     b.ToTable("AimTrainerGameHighscores");
                 });
 
+            modelBuilder.Entity("backend.DotCountGame.Models.DotCountGameScore", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DotCountGameScores");
+                });
+
             modelBuilder.Entity("backend.MathGame.Models.Puzzle", b =>
                 {
                     b.Property<Guid>("Id")
@@ -54,12 +76,33 @@ namespace backend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("Puzzles");
+                });
+
+            modelBuilder.Entity("backend.ReactionTimeGame.Models.ReactionTimeGameScore", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReactionTimeGameScores");
                 });
 #pragma warning restore 612, 618
         }
