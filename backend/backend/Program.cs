@@ -31,9 +31,9 @@ public class Program
 
         // Add custom services for DI
 
-        builder.Services.AddSingleton<IAimTrainerGameService, AimTrainerGameService>();
-        builder.Services.AddSingleton<MathGameService>();
-        builder.Services.AddSingleton<MemoryGameService>();
+        builder.Services.AddScoped<IAimTrainerGameService, AimTrainerGameService>();
+        builder.Services.AddScoped<MathGameService>();
+        builder.Services.AddScoped<MemoryGameService>();
 
         var app = builder.Build();
 
