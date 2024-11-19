@@ -4,9 +4,10 @@ import Difficulty from './Difficulty';
 type props = {
   defaultDifficulty: Difficulty;
   setParentDifficulty: (difficulty: Difficulty) => void;
+  className?: string;
 };
 
-const DifficultyPicker = ({ defaultDifficulty, setParentDifficulty }: props) => {
+const DifficultyPicker = ({ defaultDifficulty, setParentDifficulty, className }: props) => {
   const [difficulty, setDifficulty] = useState(defaultDifficulty);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -25,7 +26,7 @@ const DifficultyPicker = ({ defaultDifficulty, setParentDifficulty }: props) => 
   const selectedDifficulty = difficulties.find((d) => d.value === difficulty);
 
   return (
-    <div className="relative inline-block text-left">
+    <div className={`${className} relative inline-block text-left`}>
       <label htmlFor="difficulty-picker" className="block text-xs font-medium text-gray-700 mb-1">
         Difficulty:
       </label>

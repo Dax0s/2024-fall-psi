@@ -1,3 +1,4 @@
+using backend.AimTrainerGame.Data;
 using backend.AimTrainerGame.Models;
 using backend.AimTrainerGame.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -26,5 +27,29 @@ public class AimTrainerGameController : ControllerBase
         var (dots, difficultySettings) = _service.StartGame(gameInfo);
 
         return Ok(new GameStartResponse(dots, difficultySettings.dotCount, difficultySettings.timeToLive));
+    }
+
+    [HttpGet("Highscores")]
+    public ActionResult<IEnumerable<Highscore>> GetHighscores([FromQuery] int amount = 10)
+    {
+        amount = Math.Min(amount, 100);
+
+        return Ok(_service.GetHighscores(amount));
+    }
+
+    [HttpPost("Highscores")]
+    public ActionResult<Highscore> EndGame([FromBody] GameEndRequest gameInfo)
+    {
+        if (gameInfo.Username.Trim().Length == 0)
+        {
+            return BadRequest();
+        }
+
+        if (gameInfo.Score <= 0)
+        {
+            return BadRequest();
+        }
+
+        return Ok(_service.EndGame(gameInfo));
     }
 }

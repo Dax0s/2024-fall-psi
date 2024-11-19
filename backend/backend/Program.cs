@@ -1,6 +1,7 @@
 using backend.AimTrainerGame.Services;
 using backend.MathGame;
 using backend.MemoryGameWithNumbers.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend;
 
@@ -18,6 +19,9 @@ public class Program
                                   .AllowAnyMethod());
         });
 
+        builder.Services.AddDbContextPool<GamesDbContext>(opt =>
+            opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
         // Add services to the container.
 
         builder.Services.AddControllers();
@@ -26,9 +30,11 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         // Add custom services for DI
+
         builder.Services.AddSingleton<IAimTrainerGameService, AimTrainerGameService>();
         builder.Services.AddSingleton<MathGameService>();
         builder.Services.AddSingleton<MemoryGameService>();
+
 
         var app = builder.Build();
 
