@@ -5,23 +5,21 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace backend.Migrations;
 
 /// <inheritdoc />
-public partial class InitialCreate : Migration
+public partial class AddPuzzleTable : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.CreateTable(
-            name: "AimTrainerGameHighscores",
+            name: "Puzzles",
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false),
-                Username = table.Column<string>(type: "text", nullable: false),
-                Score = table.Column<int>(type: "integer", nullable: false),
-                Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                Content = table.Column<string>(type: "text", nullable: false)
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_AimTrainerGameHighscores", x => x.Id);
+                table.PrimaryKey("PK_Puzzles", x => x.Id);
             });
     }
 
@@ -29,6 +27,6 @@ public partial class InitialCreate : Migration
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.DropTable(
-            name: "AimTrainerGameHighscores");
+            name: "Puzzles");
     }
 }
