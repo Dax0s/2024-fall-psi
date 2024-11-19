@@ -1,6 +1,8 @@
 using backend.AimTrainerGame.Services;
 using backend.DotCountGame.Services;
 using backend.ReactionTimeGame.Services;
+using backend.MathGame;
+using backend.MemoryGameWithNumbers.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend;
@@ -30,9 +32,12 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         // Add custom services for DI
+
         builder.Services.AddScoped<IAimTrainerGameService, AimTrainerGameService>();
         builder.Services.AddScoped<IReactionTimeGameService, DefaultReactionTimeGameService>();
         builder.Services.AddScoped<IDotCountGameService, DefaultDotCountGameService>();
+        builder.Services.AddScoped<MathGameService>();
+        builder.Services.AddScoped<MemoryGameService>();
 
         var app = builder.Build();
 
