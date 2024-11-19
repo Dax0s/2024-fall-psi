@@ -35,7 +35,6 @@ public class Program
         builder.Services.AddSingleton<MathGameService>();
         builder.Services.AddSingleton<MemoryGameService>();
 
-
         var app = builder.Build();
 
         app.UseHttpsRedirection();
