@@ -10,6 +10,8 @@
 	
 	
 	
+	
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestProjectMapping/=B7B60716_002D2CDF_002D4B80_002DAF62_002D9832C2D16A01/@EntryIndexedValue">5DFF8857-4F4F-4C40-A047-9383E6F88A4A</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestTemplateMapping/=xUnit/@EntryIndexedValue">33ff99d8-b1ad-4ed5-a4fd-376b97c2c841</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4063f890_002Df5f4_002D4ca2_002Dbb48_002Dfcf22b653118/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetWeatherForecastShouldReturn200" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
