@@ -1,7 +1,7 @@
 using backend.AimTrainerGame.Models;
 using backend.DotCountGame.Models;
-using backend.ReactionTimeGame.Models;
 using backend.MathGame.Models;
+using backend.ReactionTimeGame.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend;
