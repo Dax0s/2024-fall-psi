@@ -1,3 +1,4 @@
+using backend.MathGame.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.MathGame;
@@ -30,11 +31,5 @@ public class MathGameController : ControllerBase
     {
         bool isCorrect = _mathGameService.CheckAnswer(request.Puzzle, request.Answer);
         return Ok(isCorrect);
-    }
-
-    public class SolvePuzzleRequest
-    {
-        public required string Puzzle { get; set; }
-        public required string Answer { get; set; }
     }
 }

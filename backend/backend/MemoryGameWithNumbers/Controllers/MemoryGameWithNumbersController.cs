@@ -17,8 +17,7 @@ public class MemoryGameWithNumbersController : ControllerBase
     [HttpGet("start")]
     public ActionResult<List<int?>> StartGame([FromQuery] int maxNumber)
     {
-        var gridNumbers = _memoryGameService.StartGame(maxNumber);
-        return Ok(gridNumbers);
+        return Ok(_memoryGameService.StartGame(maxNumber));
     }
 
     [HttpPost("attempt")]
@@ -29,8 +28,7 @@ public class MemoryGameWithNumbersController : ControllerBase
             return BadRequest("Game not started.");
         }
 
-        var result = _memoryGameService.CheckAttempt(userAttempt);
-        return Ok(result);
+        return Ok(_memoryGameService.CheckAttempt(userAttempt));
     }
 
 }
