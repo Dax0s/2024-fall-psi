@@ -89,7 +89,6 @@ public class MathGameService
         int leftOperand;
         bool isValidOperand1 = int.TryParse(tokens[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out leftOperand);
 
-
         int rightOperand;
         bool isValidOperand2 = int.TryParse(tokens[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out rightOperand);
 
