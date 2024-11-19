@@ -32,6 +32,11 @@ public class AimTrainerGameController : ControllerBase
     [HttpGet("Highscores")]
     public ActionResult<IEnumerable<Highscore>> GetHighscores([FromQuery] int amount = 10)
     {
+        if (amount < 1)
+        {
+            return BadRequest("Amount must be greater than 0");
+        }
+
         amount = Math.Min(amount, 100);
 
         return Ok(_service.GetHighscores(amount));
