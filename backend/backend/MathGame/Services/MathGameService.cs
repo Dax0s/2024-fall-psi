@@ -65,7 +65,10 @@ public class MathGameService
     public string? GetNextPuzzle()
     {
         var puzzles = _cache.Get<List<string>>("Puzzles");
-        if (puzzles == null || puzzles.Count == 0) { return null; }
+        if (puzzles == null || puzzles.Count == 0)
+        {
+            return null;
+        }
 
         int puzzleIndex = _cache.GetOrCreate("PuzzleIndex", entry =>
         {
@@ -83,13 +86,14 @@ public class MathGameService
         var tokens = puzzle.Split(' ');
         if (tokens.Length != 3) { return false; }
 
-        // Initialize operands with default values
-        int rightOperand = 0;
         int leftOperand;
-        bool isValidOperands = int.TryParse(tokens[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out leftOperand) &&
-                               int.TryParse(tokens[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out rightOperand);
+        bool isValidOperand1 = int.TryParse(tokens[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out leftOperand);
 
-        if (!isValidOperands)
+
+        int rightOperand;
+        bool isValidOperand2 = int.TryParse(tokens[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out rightOperand);
+
+        if (!isValidOperand1 && !isValidOperand2)
         {
             return false;
         }
@@ -97,7 +101,6 @@ public class MathGameService
         string operation = tokens[1];
         int? correctAnswer;
 
-        // Safely perform the operation
         switch (operation)
         {
             case "+":
@@ -120,22 +123,4 @@ public class MathGameService
                int.TryParse(answer, NumberStyles.Integer, CultureInfo.InvariantCulture, out int userAnswer) &&
                userAnswer == correctAnswer.Value;
     }
-
-    // public void SeedPuzzles()
-    // {
-    //     if (!_context.Puzzles.Any())
-    //     {
-    //         var seedPuzzles = new List<Puzzle>
-    //         {
-    //             new Puzzle { Id = Guid.NewGuid(), Content = "5 + 3" },
-    //             new Puzzle { Id = Guid.NewGuid(), Content = "10 - 7" },
-    //             new Puzzle { Id = Guid.NewGuid(), Content = "6 * 2" },
-    //             new Puzzle { Id = Guid.NewGuid(), Content = "8 / 2" }
-    //         };
-
-    //         _context.Puzzles.AddRange(seedPuzzles);
-    //         _context.SaveChanges();
-    //         Console.WriteLine($"Seeded {seedPuzzles.Count} puzzles into the database.");
-    //     }
-    // }
 }
