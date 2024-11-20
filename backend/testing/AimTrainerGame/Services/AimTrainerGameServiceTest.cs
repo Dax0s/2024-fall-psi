@@ -58,7 +58,7 @@ public class AimTrainerGameServiceTests : IAsyncLifetime
     [InlineData(Difficulty.Easy, 10, 1500, 500, 1500)]
     [InlineData(Difficulty.Medium, 15, 1250, 250, 1250)]
     [InlineData(Difficulty.Hard, 20, 1000, 0, 1000)]
-    public void StartGame_ShouldReturnCorrectSettingsForDifficulty(
+    public async Task StartGame_ShouldReturnCorrectSettingsForDifficulty(
         Difficulty difficulty,
         int expectedDotCount,
         int expectedTimeToLive,
@@ -66,7 +66,7 @@ public class AimTrainerGameServiceTests : IAsyncLifetime
         int expectedMaxSpawnTime)
     {
         var gameInfo = new GameStartRequest(difficulty, _defaultScreenSize);
-        var (dots, settings) = _service.StartGame(gameInfo);
+        var (dots, settings) = await _service.StartGame(gameInfo).ConfigureAwait(true);
 
         Assert.Equal(expectedDotCount, settings.dotCount);
         Assert.Equal(expectedTimeToLive, settings.timeToLive);
@@ -85,7 +85,7 @@ public class AimTrainerGameServiceTests : IAsyncLifetime
     public async Task EndGame_ShouldSaveHighscore()
     {
         var gameInfo = new GameEndRequest("TestUser", 1000);
-        var result = _service.EndGame(gameInfo);
+        var result = await _service.EndGame(gameInfo).ConfigureAwait(true);
 
         Assert.NotNull(result);
         Assert.Equal(gameInfo.Username, result.Username);
@@ -114,7 +114,7 @@ public class AimTrainerGameServiceTests : IAsyncLifetime
         await _context.AimTrainerGameHighscores.AddRangeAsync(highscores).ConfigureAwait(true);
         await _context.SaveChangesAsync().ConfigureAwait(true);
 
-        var result = _service.GetHighscores(3).ToList();
+        var result = (await _service.GetHighscores(3).ConfigureAwait(true)).ToList();
 
         Assert.Equal(3, result.Count);
         Assert.Equal(highscores[1].Id, result[0].Id);
@@ -138,7 +138,7 @@ public class AimTrainerGameServiceTests : IAsyncLifetime
         await _context.AimTrainerGameHighscores.AddRangeAsync(highscores).ConfigureAwait(true);
         await _context.SaveChangesAsync().ConfigureAwait(true);
 
-        var result = _service.GetHighscores(5).ToList();
+        var result = (await _service.GetHighscores(5).ConfigureAwait(true)).ToList();
 
         Assert.Equal(5, result.Count);
         for (var i = 0; i < result.Count - 1; i++)
