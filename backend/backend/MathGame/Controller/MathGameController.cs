@@ -15,21 +15,21 @@ public class MathGameController : ControllerBase
     }
 
     [HttpGet("next")]
-    public ActionResult<string> GetNextPuzzle()
+    public async Task<ActionResult<string>> GetNextPuzzle()
     {
-        var puzzle = _mathGameService.GetNextPuzzle();
+        var puzzle = await _mathGameService.GetNextPuzzleAsync().ConfigureAwait(false);
         if (puzzle == null)
         {
             return NotFound("No puzzles available. Please check the database.");
         }
 
-        return puzzle;
+        return Ok(puzzle);
     }
 
     [HttpPost("solve")]
-    public ActionResult<bool> CheckAnswer([FromBody] SolvePuzzleRequest request)
+    public async Task<ActionResult<bool>> CheckAnswer([FromBody] SolvePuzzleRequest request)
     {
-        bool isCorrect = _mathGameService.CheckAnswer(request.Puzzle, request.Answer);
+        bool isCorrect = await _mathGameService.CheckAnswerAsync(request.Puzzle, request.Answer).ConfigureAwait(false);
         return Ok(isCorrect);
     }
 }

@@ -18,30 +18,43 @@ public class DotCountGameController : ControllerBase
         => _gameService = gameService;
 
     [HttpPost("getcanvas")]
-    public ActionResult<DotCountCanvas> GetCanvas([FromBody] int maxDotCount)
+    public async Task<ActionResult<DotCountCanvas>> GetCanvasAsync([FromBody] int maxDotCount)
     {
         if (!GameSettings.DotCount.WithinBounds(maxDotCount))
         {
             return BadRequest();
         }
 
-        return Ok(_gameService.GenerateNextCanvas(new DefaultDotCanvasGenerator(), maxDotCount));
+        var canvas = await _gameService
+            .GenerateNextCanvasAsync(new DefaultDotCanvasGenerator(), maxDotCount)
+            .ConfigureAwait(false);
+
+        return Ok(canvas);
     }
 
     [HttpGet("leaderboard")]
-    public ActionResult<List<DotCountGameScore>> GetLeaderboard([FromQuery] ushort numberOfScores = 10)
-        => Ok(_gameService.GetLeaderboard(numberOfScores));
+    public async Task<ActionResult<List<DotCountGameScore>>> GetLeaderboardAsync([FromQuery] ushort numberOfScores = 10)
+    {
+        var leaderboard = await _gameService
+            .GetLeaderboardAsync(numberOfScores)
+            .ConfigureAwait(false);
+
+        return Ok(leaderboard);
+    }
 
     [HttpPost("score")]
-    public ActionResult AddScore([FromBody] ScoreCreationInfo newScoreCreationInfo)
+    public async Task<ActionResult> AddScoreAsync([FromBody] ScoreCreationInfo newScoreCreationInfo)
     {
-        _gameService.AddScore(new DotCountGameScore
+        var newScore = new DotCountGameScore
         {
             Id = Guid.NewGuid(),
             Username = newScoreCreationInfo.Username,
             Value = newScoreCreationInfo.Value,
             Date = DateTime.UtcNow,
-        });
+        };
+
+        await _gameService.AddScoreAsync(newScore).ConfigureAwait(false);
+
         return Ok();
     }
 }

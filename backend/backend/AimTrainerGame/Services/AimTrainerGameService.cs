@@ -2,6 +2,7 @@ using backend.AimTrainerGame.Data;
 using backend.AimTrainerGame.Models;
 using backend.AimTrainerGame.Settings;
 using backend.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.AimTrainerGame.Services;
 
@@ -14,7 +15,7 @@ public class AimTrainerGameService : IAimTrainerGameService
         _db = db;
     }
 
-    public (List<DotInfo>, DifficultySettings) StartGame(GameStartRequest gameInfo)
+    public async Task<(List<DotInfo>, DifficultySettings)> StartGameAsync(GameStartRequest gameInfo)
     {
         var difficultySettings = GameSettings.GetDifficultySettings(gameInfo.difficulty);
 
@@ -24,10 +25,12 @@ public class AimTrainerGameService : IAimTrainerGameService
             .Select(_ => NextDotInfo(random, gameInfo.screenSize, difficultySettings.spawnTime))
             .ToList();
 
+        await Task.CompletedTask.ConfigureAwait(false);
+
         return (dotInfoList, difficultySettings);
     }
 
-    public Highscore EndGame(GameEndRequest gameInfo)
+    public async Task<Highscore> EndGameAsync(GameEndRequest gameInfo)
     {
         var hs = new Highscore
         {
@@ -36,18 +39,21 @@ public class AimTrainerGameService : IAimTrainerGameService
             Score = gameInfo.Score,
             Date = DateTime.UtcNow
         };
-        _db.AimTrainerGameHighscores.Add(hs);
-        _db.SaveChanges();
+
+        await _db.AimTrainerGameHighscores.AddAsync(hs).ConfigureAwait(false);
+        await _db.SaveChangesAsync().ConfigureAwait(false);
 
         return hs;
     }
 
-    public IEnumerable<Highscore> GetHighscores(int amount)
+    public async Task<IEnumerable<Highscore>> GetHighscoresAsync(int amount)
     {
-        return _db.AimTrainerGameHighscores
+        return await _db.AimTrainerGameHighscores
             .OrderByDescending(h => h.Score)
             .ThenBy(h => h.Date)
-            .Take(amount);
+            .Take(amount)
+            .ToListAsync()
+            .ConfigureAwait(false);
     }
 
     private static DotInfo NextDotInfo(Random random, Vec2<int> screenSize, Bounds<int> spawnTime)

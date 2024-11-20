@@ -3,6 +3,7 @@ using backend.DotCountGame.Logic;
 using backend.DotCountGame.Models;
 using backend.DotCountGame.Settings;
 using backend.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.DotCountGame.Services;
 
@@ -13,30 +14,38 @@ public class DefaultDotCountGameService : IDotCountGameService
     public DefaultDotCountGameService(GamesDbContext dbContext)
         => _dbContext = dbContext;
 
-    public DotCountCanvas GenerateNextCanvas(IDotCanvasGenerator canvasGenerator, int maxDotCount)
-        => canvasGenerator.GenerateNextCanvas(
-            new Bounds<int>(GameSettings.DotCount.LowerLimit, maxDotCount)
-        );
-
-    public List<DotCountGameScore> GetLeaderboard(ushort numberOfScores)
-        => _dbContext
-                .DotCountGameScores
-                .OrderByDescending(score => score.Value)
-                .ThenBy(score => score.Date)
-                .Take(numberOfScores)
-                .ToList();
-
-    public void AddScore(DotCountGameScore newScore)
+    public async Task<DotCountCanvas> GenerateNextCanvasAsync(IDotCanvasGenerator canvasGenerator, int maxDotCount)
     {
-        foreach (DotCountGameScore score in _dbContext.DotCountGameScores)
+        return await Task.Run(() =>
+            canvasGenerator.GenerateNextCanvas(
+                new Bounds<int>(GameSettings.DotCount.LowerLimit, maxDotCount)
+            )
+        ).ConfigureAwait(false);
+    }
+
+    public async Task<List<DotCountGameScore>> GetLeaderboardAsync(ushort numberOfScores)
+    {
+        return await _dbContext
+            .DotCountGameScores
+            .OrderByDescending(score => score.Value)
+            .ThenBy(score => score.Date)
+            .Take(numberOfScores)
+            .ToListAsync()
+            .ConfigureAwait(false);
+    }
+
+    public async Task AddScoreAsync(DotCountGameScore newScore)
+    {
+        var existingScore = await _dbContext.DotCountGameScores
+            .FirstOrDefaultAsync(score => score.Username == newScore.Username)
+            .ConfigureAwait(false);
+
+        if (existingScore != null)
         {
-            if (newScore.Username == score.Username)
-            {
-                return;
-            }
+            return;
         }
 
-        _dbContext.Add(newScore);
-        _dbContext.SaveChanges();
+        await _dbContext.AddAsync(newScore).ConfigureAwait(false);
+        await _dbContext.SaveChangesAsync().ConfigureAwait(false);
     }
 }

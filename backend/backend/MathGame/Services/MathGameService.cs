@@ -1,5 +1,6 @@
 using System.Globalization;
 using backend.MathGame.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace backend.MathGame;
@@ -14,16 +15,21 @@ public class MathGameService
     {
         _context = context;
         _cache = cache;
-        LoadPuzzles();
+        LoadPuzzlesAsync().Wait(); // Ensure puzzles are loaded asynchronously.
     }
 
-    private void LoadPuzzles()
+    private async Task LoadPuzzlesAsync()
     {
         try
         {
             if (!_cache.TryGetValue("Puzzles", out List<string>? puzzles) || puzzles == null)
             {
-                puzzles = [.. _context.Puzzles.Select(p => p.Content)];
+                puzzles = await _context.Puzzles
+                    .Where(p => p.Content != null)
+                    .Select(p => p.Content!)
+                    .ToListAsync()
+                    .ConfigureAwait(false);
+
                 if (!puzzles.Any())
                 {
                     throw new PuzzlesNotFoundException("No puzzles found in the database.");
@@ -62,7 +68,7 @@ public class MathGameService
         }
     }
 
-    public string? GetNextPuzzle()
+    public async Task<string?> GetNextPuzzleAsync()
     {
         var puzzles = _cache.Get<List<string>>("Puzzles");
         if (puzzles == null || puzzles.Count == 0)
@@ -72,16 +78,17 @@ public class MathGameService
 
         int puzzleIndex = _cache.GetOrCreate("PuzzleIndex", entry =>
         {
-            entry.SlidingExpiration = TimeSpan.FromMinutes(30); // Optional expiration
+            entry.SlidingExpiration = TimeSpan.FromMinutes(30);
             return 0;
         });
 
         string puzzle = puzzles[puzzleIndex];
         _cache.Set("PuzzleIndex", (puzzleIndex + 1) % puzzles.Count);
+        await Task.CompletedTask.ConfigureAwait(false);
         return puzzle;
     }
 
-    public bool CheckAnswer(string puzzle, string answer)
+    public async Task<bool> CheckAnswerAsync(string puzzle, string answer)
     {
         var tokens = puzzle.Split(' ');
         if (tokens.Length != 3) { return false; }
@@ -118,6 +125,7 @@ public class MathGameService
                 return false;
         }
 
+        await Task.CompletedTask.ConfigureAwait(false);
         return correctAnswer.HasValue &&
                int.TryParse(answer, NumberStyles.Integer, CultureInfo.InvariantCulture, out int userAnswer) &&
                userAnswer == correctAnswer.Value;
