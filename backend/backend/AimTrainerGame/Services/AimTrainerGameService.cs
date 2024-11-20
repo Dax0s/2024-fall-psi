@@ -15,7 +15,7 @@ public class AimTrainerGameService : IAimTrainerGameService
         _db = db;
     }
 
-    public async Task<(List<DotInfo>, DifficultySettings)> StartGameAsync(GameStartRequest gameInfo)
+    public async Task<(List<DotInfo>, DifficultySettings)> StartGame(GameStartRequest gameInfo)
     {
         var difficultySettings = GameSettings.GetDifficultySettings(gameInfo.difficulty);
 
@@ -30,7 +30,7 @@ public class AimTrainerGameService : IAimTrainerGameService
         return (dotInfoList, difficultySettings);
     }
 
-    public async Task<Highscore> EndGameAsync(GameEndRequest gameInfo)
+    public async Task<Highscore> EndGame(GameEndRequest gameInfo)
     {
         var hs = new Highscore
         {
@@ -46,7 +46,7 @@ public class AimTrainerGameService : IAimTrainerGameService
         return hs;
     }
 
-    public async Task<IEnumerable<Highscore>> GetHighscoresAsync(int amount)
+    public async Task<IEnumerable<Highscore>> GetHighscores(int amount)
     {
         return await _db.AimTrainerGameHighscores
             .OrderByDescending(h => h.Score)

@@ -6,7 +6,7 @@ namespace backend.AimTrainerGame.Services;
 
 public interface IAimTrainerGameService
 {
-    public Task<(List<DotInfo>, DifficultySettings)> StartGameAsync(GameStartRequest gameInfo);
-    public Task<Highscore> EndGameAsync(GameEndRequest gameInfo);
-    public Task<IEnumerable<Highscore>> GetHighscoresAsync(int amount);
+    public Task<(List<DotInfo>, DifficultySettings)> StartGame(GameStartRequest gameInfo);
+    public Task<Highscore> EndGame(GameEndRequest gameInfo);
+    public Task<IEnumerable<Highscore>> GetHighscores(int amount);
 }

@@ -6,7 +6,7 @@ namespace backend.DotCountGame.Services;
 
 public interface IDotCountGameService
 {
-    Task<DotCountCanvas> GenerateNextCanvasAsync(IDotCanvasGenerator canvasGenerator, int maxDotCount);
-    Task<List<DotCountGameScore>> GetLeaderboardAsync(ushort numberOfScores);
-    Task AddScoreAsync(DotCountGameScore newScore);
+    Task<DotCountCanvas> GenerateNextCanvas(IDotCanvasGenerator canvasGenerator, int maxDotCount);
+    Task<List<DotCountGameScore>> GetLeaderboard(ushort numberOfScores);
+    Task AddScore(DotCountGameScore newScore);
 }

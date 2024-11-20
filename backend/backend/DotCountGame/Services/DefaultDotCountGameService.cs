@@ -14,7 +14,7 @@ public class DefaultDotCountGameService : IDotCountGameService
     public DefaultDotCountGameService(GamesDbContext dbContext)
         => _dbContext = dbContext;
 
-    public async Task<DotCountCanvas> GenerateNextCanvasAsync(IDotCanvasGenerator canvasGenerator, int maxDotCount)
+    public async Task<DotCountCanvas> GenerateNextCanvas(IDotCanvasGenerator canvasGenerator, int maxDotCount)
     {
         return await Task.Run(() =>
             canvasGenerator.GenerateNextCanvas(
@@ -23,7 +23,7 @@ public class DefaultDotCountGameService : IDotCountGameService
         ).ConfigureAwait(false);
     }
 
-    public async Task<List<DotCountGameScore>> GetLeaderboardAsync(ushort numberOfScores)
+    public async Task<List<DotCountGameScore>> GetLeaderboard(ushort numberOfScores)
     {
         return await _dbContext
             .DotCountGameScores
@@ -34,7 +34,7 @@ public class DefaultDotCountGameService : IDotCountGameService
             .ConfigureAwait(false);
     }
 
-    public async Task AddScoreAsync(DotCountGameScore newScore)
+    public async Task AddScore(DotCountGameScore newScore)
     {
         var existingScore = await _dbContext.DotCountGameScores
             .FirstOrDefaultAsync(score => score.Username == newScore.Username)

@@ -17,20 +17,20 @@ public class AimTrainerGameController : ControllerBase
     }
 
     [HttpPost("StartGame")]
-    public async Task<ActionResult<GameStartResponse>> StartGameAsync([FromBody] GameStartRequest gameInfo)
+    public async Task<ActionResult<GameStartResponse>> StartGame([FromBody] GameStartRequest gameInfo)
     {
         if ((int)gameInfo.difficulty is < 0 or > 2)
         {
             return BadRequest();
         }
 
-        var (dots, difficultySettings) = await _service.StartGameAsync(gameInfo).ConfigureAwait(false);
+        var (dots, difficultySettings) = await _service.StartGame(gameInfo).ConfigureAwait(false);
 
         return Ok(new GameStartResponse(dots, difficultySettings.dotCount, difficultySettings.timeToLive));
     }
 
     [HttpGet("Highscores")]
-    public async Task<ActionResult<IEnumerable<Highscore>>> GetHighscoresAsync([FromQuery] int amount = 10)
+    public async Task<ActionResult<IEnumerable<Highscore>>> GetHighscores([FromQuery] int amount = 10)
     {
         if (amount < 1)
         {
@@ -39,13 +39,13 @@ public class AimTrainerGameController : ControllerBase
 
         amount = Math.Min(amount, 100);
 
-        var highscores = await _service.GetHighscoresAsync(amount).ConfigureAwait(false);
+        var highscores = await _service.GetHighscores(amount).ConfigureAwait(false);
 
         return Ok(highscores);
     }
 
     [HttpPost("Highscores")]
-    public async Task<ActionResult<Highscore>> EndGameAsync([FromBody] GameEndRequest gameInfo)
+    public async Task<ActionResult<Highscore>> EndGame([FromBody] GameEndRequest gameInfo)
     {
         if (string.IsNullOrWhiteSpace(gameInfo.Username))
         {
@@ -57,7 +57,7 @@ public class AimTrainerGameController : ControllerBase
             return BadRequest();
         }
 
-        var highscore = await _service.EndGameAsync(gameInfo).ConfigureAwait(false);
+        var highscore = await _service.EndGame(gameInfo).ConfigureAwait(false);
 
         return Ok(highscore);
     }

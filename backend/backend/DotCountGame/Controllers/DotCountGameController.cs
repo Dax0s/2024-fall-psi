@@ -18,7 +18,7 @@ public class DotCountGameController : ControllerBase
         => _gameService = gameService;
 
     [HttpPost("getcanvas")]
-    public async Task<ActionResult<DotCountCanvas>> GetCanvasAsync([FromBody] int maxDotCount)
+    public async Task<ActionResult<DotCountCanvas>> GetCanvas([FromBody] int maxDotCount)
     {
         if (!GameSettings.DotCount.WithinBounds(maxDotCount))
         {
@@ -26,24 +26,24 @@ public class DotCountGameController : ControllerBase
         }
 
         var canvas = await _gameService
-            .GenerateNextCanvasAsync(new DefaultDotCanvasGenerator(), maxDotCount)
+            .GenerateNextCanvas(new DefaultDotCanvasGenerator(), maxDotCount)
             .ConfigureAwait(false);
 
         return Ok(canvas);
     }
 
     [HttpGet("leaderboard")]
-    public async Task<ActionResult<List<DotCountGameScore>>> GetLeaderboardAsync([FromQuery] ushort numberOfScores = 10)
+    public async Task<ActionResult<List<DotCountGameScore>>> GetLeaderboard([FromQuery] ushort numberOfScores = 10)
     {
         var leaderboard = await _gameService
-            .GetLeaderboardAsync(numberOfScores)
+            .GetLeaderboard(numberOfScores)
             .ConfigureAwait(false);
 
         return Ok(leaderboard);
     }
 
     [HttpPost("score")]
-    public async Task<ActionResult> AddScoreAsync([FromBody] ScoreCreationInfo newScoreCreationInfo)
+    public async Task<ActionResult> AddScore([FromBody] ScoreCreationInfo newScoreCreationInfo)
     {
         var newScore = new DotCountGameScore
         {
@@ -53,7 +53,7 @@ public class DotCountGameController : ControllerBase
             Date = DateTime.UtcNow,
         };
 
-        await _gameService.AddScoreAsync(newScore).ConfigureAwait(false);
+        await _gameService.AddScore(newScore).ConfigureAwait(false);
 
         return Ok();
     }
