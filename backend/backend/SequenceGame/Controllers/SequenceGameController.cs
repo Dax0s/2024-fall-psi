@@ -1,3 +1,4 @@
+using backend.SequenceGame.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.SequenceGame.Controllers;
@@ -6,19 +7,28 @@ namespace backend.SequenceGame.Controllers;
 [Route("api/[controller]")]
 public class SequenceGameController : ControllerBase
 {
-    private List<int> NextSequence { get; set; } = new List<int>();
+    private readonly ISequenceGameService _service;
+
+    public SequenceGameController(ISequenceGameService service)
+    {
+        _service = service;
+    }
 
     [HttpGet("getSequence")]
     public ActionResult<List<int>> GetSequence([FromQuery] string sequence = "")
     {
-        Random random = new Random();
-
         if (!string.IsNullOrEmpty(sequence))
         {
-            NextSequence = sequence.Split(',').Select(int.Parse).ToList();
-        }
-        NextSequence.Add(random.Next(minValue: 1, maxValue: 10));
+            var parts = sequence.Split(',');
 
-        return Ok(NextSequence);
+            var isValidSequence = parts.All(part => int.TryParse(part, out var number) && number is >= 1 and <= 9);
+
+            if (!isValidSequence)
+            {
+                return BadRequest();
+            }
+        }
+
+        return Ok(_service.GetSequence(sequence));
     }
 }
