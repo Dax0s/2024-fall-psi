@@ -19,19 +19,19 @@ public class ReactionTimeGameController : ControllerBase
         => Ok(_gameService.NextWaitDuration());
 
     [HttpGet("leaderboard")]
-    public ActionResult<List<ReactionTimeGameScore>> GetLeaderboard([FromQuery] ushort numberOfScores = 10)
-        => Ok(_gameService.GetLeaderboard(numberOfScores));
+    public async Task<ActionResult<List<ReactionTimeGameScore>>> GetLeaderboard([FromQuery] ushort numberOfScores = 10)
+        => Ok(await _gameService.GetLeaderboardAsync(numberOfScores).ConfigureAwait(false));
 
     [HttpPost("score")]
-    public ActionResult AddScore([FromBody] ScoreCreationInfo newScoreCreationInfo)
+    public async Task<ActionResult> AddScore([FromBody] ScoreCreationInfo newScoreCreationInfo)
     {
-        _gameService.AddScore(new ReactionTimeGameScore
+        await _gameService.AddScoreAsync(new ReactionTimeGameScore
         {
             Id = Guid.NewGuid(),
             Username = newScoreCreationInfo.Username,
             Value = newScoreCreationInfo.Value,
             Date = DateTime.UtcNow,
-        });
+        }).ConfigureAwait(false); ;
         return Ok();
     }
 }

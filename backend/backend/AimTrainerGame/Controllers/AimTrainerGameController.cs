@@ -17,20 +17,20 @@ public class AimTrainerGameController : ControllerBase
     }
 
     [HttpPost("StartGame")]
-    public ActionResult<GameStartResponse> StartGame([FromBody] GameStartRequest gameInfo)
+    public async Task<ActionResult<GameStartResponse>> StartGame([FromBody] GameStartRequest gameInfo)
     {
         if ((int)gameInfo.difficulty is < 0 or > 2)
         {
             return BadRequest();
         }
 
-        var (dots, difficultySettings) = _service.StartGame(gameInfo);
+        var (dots, difficultySettings) = await _service.StartGame(gameInfo).ConfigureAwait(false);
 
         return Ok(new GameStartResponse(dots, difficultySettings.dotCount, difficultySettings.timeToLive));
     }
 
     [HttpGet("Highscores")]
-    public ActionResult<IEnumerable<Highscore>> GetHighscores([FromQuery] int amount = 10)
+    public async Task<ActionResult<IEnumerable<Highscore>>> GetHighscores([FromQuery] int amount = 10)
     {
         if (amount < 1)
         {
@@ -39,13 +39,15 @@ public class AimTrainerGameController : ControllerBase
 
         amount = Math.Min(amount, 100);
 
-        return Ok(_service.GetHighscores(amount));
+        var highscores = await _service.GetHighscores(amount).ConfigureAwait(false);
+
+        return Ok(highscores);
     }
 
     [HttpPost("Highscores")]
-    public ActionResult<Highscore> EndGame([FromBody] GameEndRequest gameInfo)
+    public async Task<ActionResult<Highscore>> EndGame([FromBody] GameEndRequest gameInfo)
     {
-        if (gameInfo.Username.Trim().Length == 0)
+        if (string.IsNullOrWhiteSpace(gameInfo.Username))
         {
             return BadRequest();
         }
@@ -55,6 +57,9 @@ public class AimTrainerGameController : ControllerBase
             return BadRequest();
         }
 
-        return Ok(_service.EndGame(gameInfo));
+        var highscore = await _service.EndGame(gameInfo).ConfigureAwait(false);
+
+        return Ok(highscore);
     }
+
 }

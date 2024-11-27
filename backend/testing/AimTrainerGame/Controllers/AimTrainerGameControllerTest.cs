@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using backend.AimTrainerGame.Controllers;
 using backend.AimTrainerGame.Data;
 using backend.AimTrainerGame.Models;
@@ -33,14 +34,14 @@ public class AimTrainerGameControllerTest
     #region StartGame Tests
 
     [Fact]
-    public void StartGame_ValidRequest_ReturnsOkResult()
+    public async Task StartGame_ValidRequest_ReturnsOkResult()
     {
         var request = new GameStartRequest(Difficulty.Easy, new Vec2<int>(1920, 1080));
         _service
             .Setup(s => s.StartGame(It.IsAny<GameStartRequest>()))
-            .Returns(([], _mockDifficultySettings));
+            .ReturnsAsync((new List<DotInfo>(), _mockDifficultySettings));
 
-        var result = _controller.StartGame(request);
+        var result = await _controller.StartGame(request).ConfigureAwait(true);
 
         Assert.IsType<ActionResult<GameStartResponse>>(result);
         Assert.IsType<OkObjectResult>(result.Result);
@@ -50,11 +51,11 @@ public class AimTrainerGameControllerTest
     [InlineData(-1)]
     [InlineData(5)]
     [InlineData(4)]
-    public void StartGame_InvalidDifficulty_ReturnsBadRequest(int difficulty)
+    public async Task StartGame_InvalidDifficulty_ReturnsBadRequest(int difficulty)
     {
         var request = new GameStartRequest((Difficulty)difficulty, new Vec2<int>(1920, 1080));
 
-        var result = _controller.StartGame(request);
+        var result = await _controller.StartGame(request).ConfigureAwait(true);
 
         Assert.IsType<BadRequestResult>(result.Result);
     }
@@ -66,7 +67,7 @@ public class AimTrainerGameControllerTest
     [Theory]
     [InlineData(1)]
     [InlineData(10)]
-    public void GetHighscores_ValidRequest_ReturnsOkResult(int amount)
+    public async Task GetHighscores_ValidRequest_ReturnsOkResult(int amount)
     {
         var highscores = new List<Highscore>(amount);
         for (var i = 0; i < amount; i++)
@@ -74,9 +75,9 @@ public class AimTrainerGameControllerTest
             highscores.Add(new Highscore());
         }
 
-        _service.Setup(s => s.GetHighscores(amount)).Returns(highscores);
+        _service.Setup(s => s.GetHighscores(amount)).ReturnsAsync(highscores);
 
-        var result = _controller.GetHighscores(amount);
+        var result = await _controller.GetHighscores(amount).ConfigureAwait(true);
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var resultValue = Assert.IsAssignableFrom<IEnumerable<Highscore>>(okResult.Value);
         Assert.Equal(highscores, resultValue);
@@ -85,9 +86,9 @@ public class AimTrainerGameControllerTest
     [Theory]
     [InlineData(-1)]
     [InlineData(0)]
-    public void GetHighscores_InValidRequest_ReturnsBadResult(int amount)
+    public async Task GetHighscores_InvalidRequest_ReturnsBadResult(int amount)
     {
-        var result = _controller.GetHighscores(amount);
+        var result = await _controller.GetHighscores(amount).ConfigureAwait(true);
         Assert.IsType<BadRequestObjectResult>(result.Result);
     }
 
@@ -96,15 +97,15 @@ public class AimTrainerGameControllerTest
     [InlineData(100)]
     [InlineData(1000)]
     [InlineData(2200)]
-    public void GetHighscores_ValidRequest_ReturnsMax100Highscores(int amount)
+    public async Task GetHighscores_ValidRequest_ReturnsMax100Highscores(int amount)
     {
         var expectedHighscores = new List<Highscore>(Math.Min(amount, MaxHighscoresReturned));
 
         _service
             .Setup(s => s.GetHighscores(It.IsInRange(1, 100, Range.Inclusive)))
-            .Returns(expectedHighscores);
+            .ReturnsAsync(expectedHighscores);
 
-        var result = _controller.GetHighscores(amount);
+        var result = await _controller.GetHighscores(amount).ConfigureAwait(true);
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var resultHighscores = Assert.IsAssignableFrom<IEnumerable<Highscore>>(okResult.Value);
         Assert.Equal(expectedHighscores, resultHighscores);
@@ -118,20 +119,20 @@ public class AimTrainerGameControllerTest
     [InlineData("Username", 4)]
     [InlineData("Domas", 10)]
     [InlineData("Zaidejas", 20)]
-    public void EndGame_ValidRequest_ReturnsOkResult(string username, int score)
+    public async Task EndGame_ValidRequest_ReturnsOkResult(string username, int score)
     {
         _service
             .Setup(s => s.EndGame(It.IsAny<GameEndRequest>()))
-            .Returns(new Highscore());
-        var result = _controller.EndGame(new GameEndRequest(username, score));
+            .ReturnsAsync(new Highscore());
+        var result = await _controller.EndGame(new GameEndRequest(username, score)).ConfigureAwait(true);
 
         Assert.IsType<OkObjectResult>(result.Result);
     }
 
     [Fact]
-    public void EndGame_EmptyUsername_ReturnsBadRequest()
+    public async Task EndGame_EmptyUsername_ReturnsBadRequest()
     {
-        var result = _controller.EndGame(new GameEndRequest("", 10));
+        var result = await _controller.EndGame(new GameEndRequest("", 10)).ConfigureAwait(true);
 
         Assert.IsType<BadRequestResult>(result.Result);
     }
@@ -140,9 +141,9 @@ public class AimTrainerGameControllerTest
     [InlineData(0)]
     [InlineData(-1)]
     [InlineData(int.MinValue)]
-    public void EndGame_ScoreLowerThan1_ReturnsBadRequest(int score)
+    public async Task EndGame_ScoreLowerThan1_ReturnsBadRequest(int score)
     {
-        var result = _controller.EndGame(new GameEndRequest("Username", score));
+        var result = await _controller.EndGame(new GameEndRequest("Username", score)).ConfigureAwait(true);
 
         Assert.IsType<BadRequestResult>(result.Result);
     }
