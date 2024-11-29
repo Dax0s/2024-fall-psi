@@ -2,5 +2,6 @@ namespace backend.SequenceGame.Services;
 
 public interface ISequenceGameService
 {
-    public List<int> GetSequence(string sequence = "");
+    public bool ParseAndValidateSequence(string sequence = "");
+    public List<int> ExtendSequence();
 }

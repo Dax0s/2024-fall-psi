@@ -17,18 +17,9 @@ public class SequenceGameController : ControllerBase
     [HttpGet("getSequence")]
     public ActionResult<List<int>> GetSequence([FromQuery] string sequence = "")
     {
-        if (!string.IsNullOrEmpty(sequence))
-        {
-            var parts = sequence.Split(',');
+        var isValid = _service.ParseAndValidateSequence(sequence);
+        if (!isValid) return BadRequest();
 
-            var isValidSequence = parts.All(part => int.TryParse(part, out var number) && number is >= 1 and <= 9);
-
-            if (!isValidSequence)
-            {
-                return BadRequest();
-            }
-        }
-
-        return Ok(_service.GetSequence(sequence));
+        return Ok(_service.ExtendSequence());
     }
 }
