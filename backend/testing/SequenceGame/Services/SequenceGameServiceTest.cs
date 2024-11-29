@@ -11,7 +11,8 @@ public class SequenceGameServiceTest
     [Fact]
     public void GetSequence_EmptyInput_ShouldReturnSequenceWithRandomNumber()
     {
-        var result = _service.GetSequence("");
+        _service.ParseAndValidateSequence("");
+        var result = _service.ExtendSequence();
 
         Assert.Single(result);
         Assert.InRange(result.First(), 1, 9);
@@ -22,7 +23,8 @@ public class SequenceGameServiceTest
     {
         const string validSequence = "1,2,3";
 
-        var result = _service.GetSequence(validSequence);
+        _service.ParseAndValidateSequence(validSequence);
+        var result = _service.ExtendSequence();
 
         Assert.True(result.Count > 3);
         Assert.InRange(result.Last(), 1, 9);

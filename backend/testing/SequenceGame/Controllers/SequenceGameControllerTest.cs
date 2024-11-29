@@ -24,7 +24,8 @@ public class SequenceGameControllerTest
     public void GetSequence_ValidSequence_ReturnsOkResult()
     {
         const string validSequence = "1,2,3";
-        _service.Setup(s => s.GetSequence(validSequence)).Returns([1, 2, 3, 4]);
+        _service.Setup(s => s.ParseAndValidateSequence(validSequence)).Returns(true);
+        _service.Setup(s => s.ExtendSequence()).Returns([1, 2, 3, 4]);
 
         var result = _controller.GetSequence(validSequence);
 
@@ -35,7 +36,8 @@ public class SequenceGameControllerTest
     [Fact]
     public void GetSequence_EmptySequence_ReturnsOkResult()
     {
-        _service.Setup(s => s.GetSequence("")).Returns([1]);
+        _service.Setup(s => s.ParseAndValidateSequence("")).Returns(true);
+        _service.Setup(s => s.ExtendSequence()).Returns([1]);
 
         var result = _controller.GetSequence("");
 
