@@ -18,7 +18,10 @@ public class SequenceGameController : ControllerBase
     public ActionResult<List<int>> GetSequence([FromQuery] string sequence = "")
     {
         var isValid = _service.ParseAndValidateSequence(sequence);
-        if (!isValid) return BadRequest();
+        if (!isValid)
+        {
+            return BadRequest();
+        }
 
         return Ok(_service.ExtendSequence());
     }
