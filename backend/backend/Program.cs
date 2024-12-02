@@ -3,6 +3,7 @@ using backend.DotCountGame.Services;
 using backend.MathGame;
 using backend.MemoryGameWithNumbers.Services;
 using backend.ReactionTimeGame.Services;
+using backend.SequenceGame.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend;
@@ -36,6 +37,7 @@ public class Program
         builder.Services.AddScoped<IAimTrainerGameService, AimTrainerGameService>();
         builder.Services.AddScoped<IReactionTimeGameService, DefaultReactionTimeGameService>();
         builder.Services.AddScoped<IDotCountGameService, DefaultDotCountGameService>();
+        builder.Services.AddScoped<ISequenceGameService, SequenceGameService>();
         builder.Services.AddScoped<MathGameService>();
         builder.Services.AddScoped<MemoryGameService>();
 
