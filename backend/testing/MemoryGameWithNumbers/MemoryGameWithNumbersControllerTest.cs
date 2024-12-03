@@ -64,7 +64,11 @@ public class MemoryGameWithNumbersControllerTests
 
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
         Assert.Equal(400, badRequestResult.StatusCode);
-        Assert.Equal("Game not started.", badRequestResult.Value);
+
+        // Assert the anonymous object structure
+        var errorResponse = badRequestResult.Value;
+        Assert.NotNull(errorResponse);
+        Assert.Equal("Game not started.", errorResponse.GetType().GetProperty("error")?.GetValue(errorResponse));
     }
 
     [Fact]

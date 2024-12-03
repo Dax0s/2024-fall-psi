@@ -23,12 +23,24 @@ public class MemoryGameWithNumbersController : ControllerBase
     [HttpPost("attempt")]
     public ActionResult<bool> CheckAttempt([FromBody] List<int?> userAttempt)
     {
+        if (userAttempt.Count == 0)
+        {
+            return BadRequest(new { error = "Invalid attempt. The input is null or empty." });
+        }
+
         if (_memoryGameService.IsGameStarted() == false)
         {
-            return BadRequest("Game not started.");
+            return BadRequest(new { error = "Game not started." });
         }
 
         return Ok(_memoryGameService.CheckAttempt(userAttempt));
+    }
+
+    [HttpPost("restart")]
+    public IActionResult RestartGame()
+    {
+        _memoryGameService.ResetGame();
+        return Ok(new { message = "Game has been restarted." });
     }
 
 }
