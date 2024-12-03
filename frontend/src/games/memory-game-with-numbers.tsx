@@ -3,7 +3,7 @@ import { BACKEND_URL } from '@/utils/constants';
 
 const MemoryGameWithNumbers = () => {
   const [grid, setGrid] = useState<(number | null)[]>([]);
-  const [clickedNumbers, setClickedNumbers] = useState<number[]>([]);
+  const [clickedNumbers, setClickedNumbers] = useState<(number | null)[]>([]);
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [showNumbers, setShowNumbers] = useState(true);
   const [result, setResult] = useState<string | null>(null);
