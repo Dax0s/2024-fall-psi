@@ -23,7 +23,7 @@ public class MemoryGameWithNumbersController : ControllerBase
     [HttpPost("attempt")]
     public ActionResult<bool> CheckAttempt([FromBody] List<int?> userAttempt)
     {
-        if (userAttempt == null || !userAttempt.Any())
+        if (userAttempt.Count == 0)
         {
             return BadRequest(new { error = "Invalid attempt. The input is null or empty." });
         }

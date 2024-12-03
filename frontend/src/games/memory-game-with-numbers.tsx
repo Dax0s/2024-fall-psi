@@ -6,26 +6,11 @@ const MemoryGameWithNumbers = () => {
   const [clickedNumbers, setClickedNumbers] = useState<(number | null)[]>([]);
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [showNumbers, setShowNumbers] = useState(true);
-  const [result, setResult] = useState<string | null>(null);
   const [victoryList, setVictoryList] = useState<number[]>([1]);
   const [lost, setLost] = useState(false);
   const [maxNumber, setMaxNumber] = useState<number>(1);
+  const [score, setScore] = useState<number>(0); // State to track the score
   const TIMER = 3000;
-
-  useEffect(() => {
-    if (clickedNumbers.length === victoryList.length) {
-      verifySequence();
-    }
-  }, [clickedNumbers]);
-
-  useEffect(() => {
-    if (result === 'Correct!') {
-      const newNumber = maxNumber;
-      setVictoryList((prevList) => [...prevList, newNumber]);
-      setTimeout(() => {}, TIMER);
-      startGame();
-    }
-  }, [maxNumber]);
 
   const startGame = async (initialMaxNumber?: number) => {
     const numberToUse = initialMaxNumber ?? maxNumber;
@@ -42,7 +27,6 @@ const MemoryGameWithNumbers = () => {
 
       setTimeout(() => {
         setShowNumbers(false);
-        setResult('');
       }, TIMER);
     } catch (error) {
       console.error('Error starting game:', error);
@@ -56,55 +40,50 @@ const MemoryGameWithNumbers = () => {
       setLost(false);
       setClickedNumbers([]);
       setShowNumbers(true);
-      setResult(null);
       setVictoryList([1]);
       setMaxNumber(1);
+      setScore(0); // Reset score on restart
       await startGame(1);
     } catch (error) {
       console.error('Error restarting game:', error);
-      setResult('Failed to restart. Please try again.');
     }
   };
 
-  const handleClick = (num: number | null) => {
-    if (num === null) {
-      setResult('You lose. Try again! Your score: ' + (victoryList.length - 1));
-      setLost(true);
-      setShowNumbers(true);
-      return;
-    }
-
+  const handleClick = async (num: number | null) => {
     const currentIndex = clickedNumbers.length;
-    if (num !== victoryList[currentIndex]) {
-      setResult('You lose. Try again! Your score: ' + (victoryList.length - 1));
+    if (num === null || num !== victoryList[currentIndex]) {
       setLost(true);
       setShowNumbers(true);
+      setScore(victoryList.length - 1); // Update the score when the player loses
       return;
     }
 
-    setClickedNumbers([...clickedNumbers, num]);
-    setGrid((prevGrid) => [...prevGrid]);
-  };
+    const newClickedNumbers = [...clickedNumbers, num];
+    setClickedNumbers(newClickedNumbers);
 
-  const verifySequence = async () => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/MemoryGameWithNumbers/attempt`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(clickedNumbers),
-      });
+    if (newClickedNumbers.length === victoryList.length) {
+      try {
+        const response = await fetch(`${BACKEND_URL}/MemoryGameWithNumbers/attempt`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newClickedNumbers),
+        });
 
-      const isCorrect = await response.json();
-      if (isCorrect) {
-        setResult('Correct!');
-        setMaxNumber((prevMax) => prevMax + 1);
-      } else {
-        setResult('You lose. Try again! Your score: ' + (victoryList.length - 1));
-        setLost(true);
-        setShowNumbers(true);
+        const isCorrect = await response.json();
+        if (isCorrect) {
+          const newMaxNumber = maxNumber + 1;
+          setVictoryList((prevList) => [...prevList, newMaxNumber]);
+          setMaxNumber(newMaxNumber);
+          setScore(victoryList.length); // Increment score for correct sequence
+          startGame(newMaxNumber);
+        } else {
+          setLost(true);
+          setShowNumbers(true);
+          setScore(victoryList.length - 1); // Update the score when the player loses
+        }
+      } catch (error) {
+        console.error('Error verifying sequence:', error);
       }
-    } catch (error) {
-      console.error('Error verifying sequence:', error);
     }
   };
 
@@ -142,14 +121,8 @@ const MemoryGameWithNumbers = () => {
           ))}
         </div>
       )}
-      {result && (
-        <h2
-          className={`text-2xl font-semibold mt-6 ${
-            result === 'Correct!' ? 'text-green-400' : 'text-red-400'
-          }`}
-        >
-          {result}
-        </h2>
+      {lost && (
+        <h2 className="text-2xl font-semibold mt-6 text-red-400">You lose! Your score: {score}</h2>
       )}
       {lost && (
         <button
