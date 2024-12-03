@@ -3,7 +3,7 @@ namespace backend.MemoryGameWithNumbers.Services;
 public class MemoryGameService
 {
     private List<int?>? _correctSequence;
-    private bool _isGameStarted = false;
+    private bool _isGameStarted;
 
     public List<int?> StartGame(int maxNumber)
     {
@@ -14,17 +14,17 @@ public class MemoryGameService
                                      .Select(n => (int?)n)
                                      .ToList();
 
-    List<int?> gridNumbers = new List<int?>(_correctSequence.OrderBy(x => rand.Next()));
+        List<int?> gridNumbers = new List<int?>(_correctSequence.OrderBy(x => rand.Next()));
 
-    // Dynamically adjust the grid size based on the number of correct sequence numbers
-    int gridSize = Math.Max(16, _correctSequence.Count + 4);
+        // Dynamically adjust the grid size based on the number of correct sequence numbers
+        int gridSize = Math.Max(16, _correctSequence.Count + 4);
 
-    while (gridNumbers.Count < gridSize)
-    {
-        gridNumbers.Add(null);
-    }
+        while (gridNumbers.Count < gridSize)
+        {
+            gridNumbers.Add(null);
+        }
 
-    return gridNumbers.OrderBy(x => rand.Next()).ToList();
+        return gridNumbers.OrderBy(x => rand.Next()).ToList();
     }
 
     public bool CheckAttempt(List<int?> userAttempt)
@@ -46,14 +46,14 @@ public class MemoryGameService
     }
 
     public bool IsGameStarted()
-{
-    return _isGameStarted;
-}
+    {
+        return _isGameStarted;
+    }
 
-public void ResetGame()
-{
-    _isGameStarted = false;
-    _correctSequence = null;
-}
+    public void ResetGame()
+    {
+        _isGameStarted = false;
+        _correctSequence = null;
+    }
 
 }
