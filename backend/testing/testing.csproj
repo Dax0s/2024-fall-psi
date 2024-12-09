@@ -15,10 +15,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.10" /> <!-- Add this line -->
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\backend\backend.csproj" />
   </ItemGroup>
-  
 </Project>
