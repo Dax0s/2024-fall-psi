@@ -59,7 +59,7 @@ public class MathGameServiceTests : IAsyncLifetime
         _context.Puzzles.Add(new Puzzle { Content = "1 + 1" });
         await _context.SaveChangesAsync().ConfigureAwait(true);
 
-        var puzzle = await _service.GetNextPuzzleAsync().ConfigureAwait(false);
+        var puzzle = await _service.GetNextPuzzleAsync();
 
         Assert.NotNull(puzzle);
         Assert.Equal("1 + 1", puzzle);
