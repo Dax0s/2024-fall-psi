@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net8.0</TargetFrameworks>
-    
+    <Nullable></Nullable>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -20,5 +20,5 @@
   <ItemGroup>
     <ProjectReference Include="..\backend\backend.csproj" />
   </ItemGroup>
-  
+
 </Project>

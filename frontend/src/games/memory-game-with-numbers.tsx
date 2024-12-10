@@ -88,11 +88,11 @@ const MemoryGameWithNumbers = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-800 text-gray-100 p-6">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 text-white p-6">
       <h1 className="text-4xl font-extrabold mb-8">Memory Game</h1>
       {!isGameStarted && (
         <button
-          className="bg-gray-600 text-white text-lg font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-gray-500 transition duration-300"
+          className="bg-sky-400 text-white text-lg font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-sky-600 transition-colors duration-300"
           onClick={() => startGame(1)}
         >
           Start Game

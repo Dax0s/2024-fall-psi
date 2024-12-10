@@ -4,7 +4,7 @@ public class SequenceGameService : ISequenceGameService
 {
     private List<int> Sequence { get; set; } = [];
 
-    public bool ParseAndValidateSequence(string sequence = "")
+    public bool ParseAndValidateSequence(string sequence)
     {
         if (!string.IsNullOrEmpty(sequence))
         {

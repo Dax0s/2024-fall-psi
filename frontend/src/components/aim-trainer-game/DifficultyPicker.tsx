@@ -27,7 +27,7 @@ const DifficultyPicker = ({ defaultDifficulty, setParentDifficulty, className }:
 
   return (
     <div className={`${className} relative inline-block text-left`}>
-      <label htmlFor="difficulty-picker" className="block text-xs font-medium text-gray-700 mb-1">
+      <label htmlFor="difficulty-picker" className="block text-xs font-medium text-gray-500 mb-1">
         Difficulty:
       </label>
       <button
