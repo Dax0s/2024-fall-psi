@@ -11,12 +11,12 @@ const StartGameButton = ({ onClick, isLoading, className }: props) => {
       disabled={isLoading}
       className={`
                 ${className}
-                px-6 py-3 rounded-full font-semibold text-white
+                px-6 py-3 rounded-lg font-semibold text-white
                 transition-all duration-300 ease-in-out
                 ${
                   isLoading
                     ? 'bg-blue-400 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 hover:shadow-lg'
+                    : 'bg-sky-400 hover:bg-sky-600 active:bg-sky-800 hover:shadow-lg'
                 }
                 flex items-center justify-center
             `}

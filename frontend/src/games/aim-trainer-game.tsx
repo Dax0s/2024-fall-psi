@@ -63,7 +63,7 @@ async function fetchGameStartInfo(difficulty: Difficulty, width: number, height:
 }
 
 function styleElement(element: HTMLDivElement, { pos: { x, y } }: PointSpawnElement) {
-  element.className = 'w-24 h-24 bg-sky-500 rounded-full';
+  element.className = 'w-24 h-24 bg-sky-400 rounded-full';
   element.style.position = 'absolute';
   element.style.top = `${y + BORDER / 2}px`;
   element.style.left = `${x + BORDER / 2}px`;
@@ -198,47 +198,49 @@ const AimTrainerGame = () => {
   }, []);
 
   return (
-    <>
-      {!gameIsStarted ? (
-        <div className="m-4 absolute flex flex-col">
-          <p>Highscores: </p>
-          {loadingHighscores && 'Loading...'}
-          {highscores.map((h, i) => (
-            <p key={h.id}>
-              {i + 1}. {h.username} scored {h.score} on {new Date(h.date).toLocaleString('lt-LT')}
-            </p>
-          ))}
-        </div>
-      ) : null}
-      {gameIsStarted || dotsLeft > 0 ? (
-        <div className="m-4 absolute flex flex-col">
-          <p>Left: {dotsLeft}</p>
-        </div>
-      ) : null}
-      {gameIsStarted || score > 0 || dotsLeft > 0 ? (
-        <div className="m-4 absolute right-0 flex flex-col">
-          <p>Score: {score}</p>
-        </div>
-      ) : null}
-      {!gameIsStarted && dotsLeft === 0 ? (
-        <div className="flex flex-col items-center justify-center h-screen">
-          <DifficultyPicker
-            className={'my-4'}
-            defaultDifficulty={difficulty}
-            setParentDifficulty={setDifficulty}
-          />
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter username"
-            className="mb-4 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
-            maxLength={20}
-          />
-          <StartGameButton onClick={startGame} isLoading={isLoading} />
-        </div>
-      ) : null}
-    </>
+    <div className="relative text-center">
+      <header className="bg-gray-800 min-h-screen flex flex-col items-center justify-center text-white text-xl">
+        {!gameIsStarted ? (
+          <div className="absolute top-4 left-4 text-left">
+            <p>Highscores: </p>
+            {loadingHighscores && 'Loading...'}
+            {highscores.map((h, i) => (
+              <p key={h.id}>
+                {i + 1}. {h.username} scored {h.score} on {new Date(h.date).toLocaleString('lt-LT')}
+              </p>
+            ))}
+          </div>
+        ) : null}
+        {gameIsStarted || dotsLeft > 0 ? (
+          <div className="absolute top-4 left-4 text-left">
+            <p>Left: {dotsLeft}</p>
+          </div>
+        ) : null}
+        {gameIsStarted || score > 0 || dotsLeft > 0 ? (
+          <div className="absolute top-4 right-4 text-right">
+            <p>Score: {score}</p>
+          </div>
+        ) : null}
+        {!gameIsStarted && dotsLeft === 0 ? (
+          <div className="flex flex-col items-center justify-center h-screen">
+            <DifficultyPicker
+              className={'my-4'}
+              defaultDifficulty={difficulty}
+              setParentDifficulty={setDifficulty}
+            />
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter username"
+              className="mb-4 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-black"
+              maxLength={20}
+            />
+            <StartGameButton onClick={startGame} isLoading={isLoading} />
+          </div>
+        ) : null}
+      </header>
+    </div>
   );
 };
 

@@ -63,8 +63,8 @@ function DotCountGame() {
   }
 
   return (
-    <div className="app">
-      <header className="app-header">
+    <div className="text-center">
+      <header className="bg-gray-800 min-h-screen flex flex-col items-center justify-center text-white text-xl">
         <ResultsPage gameUrl={GAME_URL} score={calculateScore(results, gameSettings.maxDotCount)} />
       </header>
     </div>

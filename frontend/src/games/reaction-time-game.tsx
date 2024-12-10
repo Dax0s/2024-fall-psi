@@ -8,8 +8,8 @@ function Game() {
   const [tries, setTries] = useState<number[]>([]);
 
   return (
-    <div className="app">
-      <header className="app-header">
+    <div className="text-center">
+      <header className="bg-gray-800 min-h-screen flex flex-col items-center justify-center text-white text-xl">
         {inRange(tries.length, 0, 5) ? (
           <ReactionTimeButton tries={tries} setTries={(newTries: number[]) => setTries(newTries)} />
         ) : (

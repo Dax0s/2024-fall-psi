@@ -1,4 +1,3 @@
-import { BACKEND_URL } from '@/utils/constants';
 import { delay } from '@/utils/timing';
 import { useRef } from 'react';
 import {
@@ -100,8 +99,8 @@ function DotsPage(props: {
   }
 
   return (
-    <div className="app">
-      <header className="app-header">
+    <div className="text-center">
+      <header className="bg-gray-800 min-h-screen flex flex-col items-center justify-center text-white text-xl">
         <canvas
           ref={canvasRef}
           className="border rounded"
@@ -119,10 +118,10 @@ function DotsPage(props: {
             step={dotCountStep}
           />
           <button
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ml-4"
+            className="bg-sky-400 text-white px-4 py-2 rounded-lg transition-colors duration-300 hover:bg-sky-600 ml-4"
             onClick={handleAnswer}
           >
-            CHECK
+            Check
           </button>
         </div>
       </header>

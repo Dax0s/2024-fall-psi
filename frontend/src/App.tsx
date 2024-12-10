@@ -1,7 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { createBrowserRouter, RouterProvider, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import './App.css';
 
 const Loader = () => {
   const { gameName } = useParams();
@@ -37,11 +36,15 @@ function HomePage() {
   ];
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <div className="games-grid">
+    <div className="text-center">
+      <header className="bg-gray-800 min-h-screen flex flex-col items-center justify-center text-white text-xl">
+        <div className="grid grid-cols-3 gap-6">
           {games.map((game) => (
-            <Link key={game.path} to={game.path} className="grid-item">
+            <Link
+              key={game.path}
+              to={game.path}
+              className="p-5 text-center bg-sky-400 rounded-lg no-underline text-white transition-colors duration-300 hover:bg-sky-600"
+            >
               {game.name}
             </Link>
           ))}

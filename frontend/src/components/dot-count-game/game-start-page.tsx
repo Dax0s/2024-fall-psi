@@ -17,8 +17,8 @@ export function GameStartPage(props: { setSettings: (newSettings: GameSettings) 
   }
 
   return (
-    <div className="app">
-      <header className="app-header">
+    <div className="text-center">
+      <header className="bg-gray-800 min-h-screen flex flex-col items-center justify-center text-white text-xl">
         <div className="flex flex-col items-center justify-center h-screen">
           <h1 className="text-3xl font-bold mb-4">GUESS THE DOT COUNT</h1>
 
@@ -40,10 +40,10 @@ export function GameStartPage(props: { setSettings: (newSettings: GameSettings) 
           </div>
 
           <button
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
+            className="bg-sky-400 font-semibold text-white px-4 py-2 rounded-lg transition-colors duration-300 hover:bg-sky-600 mt-4"
             onClick={handleClick}
           >
-            GO
+            Start Game
           </button>
         </div>
       </header>
