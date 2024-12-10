@@ -27,7 +27,7 @@ public class SequenceGameControllerTest
         _service.Setup(s => s.ParseAndValidateSequence(validSequence)).Returns(true);
         _service.Setup(s => s.ExtendSequence()).Returns([1, 2, 3, 4]);
 
-        var result = _controller.GetSequence(null!);
+        var result = _controller.GetSequence(validSequence);
 
         Assert.IsType<ActionResult<List<int>>>(result);
         Assert.IsType<OkObjectResult>(result.Result);
