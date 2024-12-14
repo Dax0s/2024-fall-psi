@@ -24,27 +24,27 @@ public class DotCountGameControllerTests
     public async Task GetCanvas()
     {
         Assert.IsNotType<OkObjectResult>(
-            (await _controller.GetCanvas(GameSettings.DotCount.LowerLimit - 1).ConfigureAwait(false)).Result
+            (await _controller.GetCanvas(GameSettings.DotCount.LowerLimit - 1).ConfigureAwait(true)).Result
         );
         Assert.IsType<OkObjectResult>(
-            (await _controller.GetCanvas(GameSettings.DotCount.LowerLimit).ConfigureAwait(false)).Result
-        );
-
-        Assert.IsType<OkObjectResult>(
-            (await _controller.GetCanvas((GameSettings.DotCount.LowerLimit + GameSettings.DotCount.UpperLimit) / 2).ConfigureAwait(false)).Result
+            (await _controller.GetCanvas(GameSettings.DotCount.LowerLimit).ConfigureAwait(true)).Result
         );
 
         Assert.IsType<OkObjectResult>(
-            (await _controller.GetCanvas(GameSettings.DotCount.UpperLimit).ConfigureAwait(false)).Result
+            (await _controller.GetCanvas((GameSettings.DotCount.LowerLimit + GameSettings.DotCount.UpperLimit) / 2).ConfigureAwait(true)).Result
+        );
+
+        Assert.IsType<OkObjectResult>(
+            (await _controller.GetCanvas(GameSettings.DotCount.UpperLimit).ConfigureAwait(true)).Result
         );
         Assert.IsNotType<OkObjectResult>(
-            (await _controller.GetCanvas(GameSettings.DotCount.UpperLimit + 1).ConfigureAwait(false)).Result
+            (await _controller.GetCanvas(GameSettings.DotCount.UpperLimit + 1).ConfigureAwait(true)).Result
         );
     }
 
     [Fact]
     public async Task GetLeaderboard()
-        => Assert.IsType<OkObjectResult>((await _controller.GetLeaderboard(5).ConfigureAwait(false)).Result);
+        => Assert.IsType<OkObjectResult>((await _controller.GetLeaderboard(5).ConfigureAwait(true)).Result);
 
     [Fact]
     public async Task AddScore()
@@ -54,7 +54,7 @@ public class DotCountGameControllerTests
             Username = "name",
             Value = 100,
         };
-        Assert.IsType<OkResult>(await _controller.AddScore(score).ConfigureAwait(false));
+        Assert.IsType<OkResult>(await _controller.AddScore(score).ConfigureAwait(true));
     }
 
 }

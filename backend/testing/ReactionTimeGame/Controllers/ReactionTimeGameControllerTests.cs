@@ -25,7 +25,7 @@ public class ReactionTimeGameControllerTests
 
     [Fact]
     public async Task GetLeaderboard()
-        => Assert.IsType<OkObjectResult>((await _controller.GetLeaderboard().ConfigureAwait(false)).Result);
+        => Assert.IsType<OkObjectResult>((await _controller.GetLeaderboard().ConfigureAwait(true)).Result);
 
     [Fact]
     public async Task AddScore()
@@ -35,7 +35,7 @@ public class ReactionTimeGameControllerTests
             Username = "somePrettyUsername",
             Value = 42,
         };
-        Assert.IsType<OkResult>(await _controller.AddScore(newScoreCreationInfo).ConfigureAwait(false));
+        Assert.IsType<OkResult>(await _controller.AddScore(newScoreCreationInfo).ConfigureAwait(true));
     }
 
 }
