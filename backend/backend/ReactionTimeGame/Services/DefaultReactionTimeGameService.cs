@@ -22,19 +22,23 @@ public class DefaultReactionTimeGameService : IReactionTimeGameService
             .OrderByDescending(score => score.Value)
             .ThenBy(score => score.Date)
             .Take(numberOfScores)
-            .ToListAsync().ConfigureAwait(false);
+            .ToListAsync()
+            .ConfigureAwait(false);
 
-    public async Task AddScoreAsync(ReactionTimeGameScore newScore)
+    public async Task<bool> AddScoreAsync(ReactionTimeGameScore newScore)
     {
-        bool usernameExists = await _dbContext.ReactionTimeGameScores
-            .AnyAsync(score => score.Username == newScore.Username).ConfigureAwait(false);
+        var usernameExists = await _dbContext
+            .ReactionTimeGameScores
+            .AnyAsync(score => score.Username == newScore.Username)
+            .ConfigureAwait(false);
 
         if (usernameExists)
         {
-            return;
+            return false;
         }
 
         await _dbContext.ReactionTimeGameScores.AddAsync(newScore).ConfigureAwait(false);
         await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        return true;
     }
 }
