@@ -1,6 +1,6 @@
 using backend.AimTrainerGame.Services;
 using backend.DotCountGame.Services;
-using backend.MathGame;
+using backend.MathGame.Services;
 using backend.MemoryGameWithNumbers.Services;
 using backend.ReactionTimeGame.Services;
 using backend.SequenceGame.Services;
