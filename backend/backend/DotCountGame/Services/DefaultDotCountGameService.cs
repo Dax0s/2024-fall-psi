@@ -34,7 +34,7 @@ public class DefaultDotCountGameService : IDotCountGameService
             .ConfigureAwait(false);
     }
 
-    public async Task AddScore(DotCountGameScore newScore)
+    public async Task<bool> AddScore(DotCountGameScore newScore)
     {
         var existingScore = await _dbContext.DotCountGameScores
             .FirstOrDefaultAsync(score => score.Username == newScore.Username)
@@ -42,10 +42,11 @@ public class DefaultDotCountGameService : IDotCountGameService
 
         if (existingScore != null)
         {
-            return;
+            return false;
         }
 
         await _dbContext.AddAsync(newScore).ConfigureAwait(false);
         await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        return true;
     }
 }

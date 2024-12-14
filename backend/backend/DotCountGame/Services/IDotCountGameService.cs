@@ -8,5 +8,5 @@ public interface IDotCountGameService
 {
     Task<DotCountCanvas> GenerateNextCanvas(IDotCanvasGenerator canvasGenerator, int maxDotCount);
     Task<List<DotCountGameScore>> GetLeaderboard(ushort numberOfScores);
-    Task AddScore(DotCountGameScore newScore);
+    Task<bool> AddScore(DotCountGameScore newScore);
 }

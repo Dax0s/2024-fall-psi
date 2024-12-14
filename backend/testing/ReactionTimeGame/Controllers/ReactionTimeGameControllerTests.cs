@@ -1,11 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using Xunit;
-using Moq;
-
+using System.Threading.Tasks;
 using backend.ReactionTimeGame.Controllers;
 using backend.ReactionTimeGame.Services;
-using System.Threading.Tasks;
 using backend.Utils;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using Xunit;
 
 namespace testing.ReactionTimeGame.Controllers;
 
@@ -22,16 +21,11 @@ public class ReactionTimeGameControllerTests
 
     [Fact]
     public void Start()
-    {
-        Assert.True(_controller.Start().Result is OkObjectResult);
-    }
+        => Assert.IsType<OkObjectResult>(_controller.Start().Result);
 
     [Fact]
     public async Task GetLeaderboard()
-    {
-        var result = await _controller.GetLeaderboard();
-        Assert.True(result.Result is OkObjectResult);
-    }
+        => Assert.IsType<OkObjectResult>((await _controller.GetLeaderboard().ConfigureAwait(false)).Result);
 
     [Fact]
     public async Task AddScore()
@@ -41,9 +35,7 @@ public class ReactionTimeGameControllerTests
             Username = "somePrettyUsername",
             Value = 42,
         };
-        var result = await _controller.AddScore(newScoreCreationInfo);
-
-        Assert.True(result is OkResult);
+        Assert.IsType<OkResult>(await _controller.AddScore(newScoreCreationInfo).ConfigureAwait(false));
     }
 
 }

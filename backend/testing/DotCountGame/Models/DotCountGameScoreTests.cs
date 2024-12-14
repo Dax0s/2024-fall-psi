@@ -1,7 +1,6 @@
 using System;
-using Xunit;
-
 using backend.DotCountGame.Models;
+using Xunit;
 
 namespace testing.DotCountGame.Models;
 

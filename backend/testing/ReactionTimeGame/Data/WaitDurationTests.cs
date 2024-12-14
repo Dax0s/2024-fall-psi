@@ -1,6 +1,5 @@
-using Xunit;
-
 using backend.ReactionTimeGame.Data;
+using Xunit;
 
 namespace testing.ReactionTimeGame.Data;
 

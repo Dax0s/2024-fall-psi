@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Xunit;
-
 using backend;
 using backend.ReactionTimeGame.Models;
 using backend.ReactionTimeGame.Services;
 using backend.ReactionTimeGame.Settings;
+using Microsoft.EntityFrameworkCore;
+using Xunit;
 
 namespace testing.ReactionTimeGame.Services;
 
