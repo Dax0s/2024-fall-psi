@@ -1,11 +1,13 @@
 using System.Threading.Tasks;
+using backend;
 using backend.MathGame.Models;
+using backend.MathGame.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Testcontainers.PostgreSql;
 using Xunit;
 
-namespace backend.MathGame.Tests;
+namespace testing.MathGame.Services;
 
 public class MathGameServiceTests : IAsyncLifetime
 {

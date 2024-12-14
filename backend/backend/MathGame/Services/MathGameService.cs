@@ -3,7 +3,7 @@ using backend.MathGame.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace backend.MathGame;
+namespace backend.MathGame.Services;
 
 public class MathGameService
 {

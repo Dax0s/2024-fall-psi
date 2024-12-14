@@ -5,6 +5,8 @@ using backend.MemoryGameWithNumbers.Services;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
+namespace testing.MemoryGameWithNumbers.Controllers;
+
 public class MemoryGameWithNumbersControllerTests
 {
     private const int SuccessStatusCode = 200;

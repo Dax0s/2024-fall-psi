@@ -1,7 +1,8 @@
 using backend.MathGame.Models;
+using backend.MathGame.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace backend.MathGame;
+namespace backend.MathGame.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
