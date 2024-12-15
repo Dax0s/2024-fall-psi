@@ -1,3 +1,3 @@
-namespace backend.ReactionTimeGame.Models;
+namespace backend.ReactionTimeGame.Data;
 
 public record WaitDuration(int MillisecondsToWait);

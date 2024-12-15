@@ -24,7 +24,6 @@ public class Program
 
         builder.Services.AddDbContextPool<GamesDbContext>(opt =>
             opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
         // Add services to the container.
 
         builder.Services.AddControllers();
