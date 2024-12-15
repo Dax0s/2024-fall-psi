@@ -32,7 +32,7 @@ public class DefaultDotCountGameServiceTests
 
         for (uint i = 0; i < 5; ++i)
         {
-            var canvas = await _service.GenerateNextCanvas(dotCanvasGenerator, maxDotCount).ConfigureAwait(false);
+            var canvas = await _service.GenerateNextCanvas(dotCanvasGenerator, maxDotCount).ConfigureAwait(true);
 
             Assert.InRange(canvas.Dots.Count, GameSettings.DotCount.LowerLimit, GameSettings.DotCount.UpperLimit);
 
