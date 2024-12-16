@@ -71,7 +71,7 @@ const PuzzleRush = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-800">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
         <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">Math Game</h1>
         <div className="puzzle">

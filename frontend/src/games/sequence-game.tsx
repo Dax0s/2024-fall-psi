@@ -62,30 +62,32 @@ const SequenceGame = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen pt-10 bg-amber-200">
-      <header className="text-4xl">Remember the sequence!</header>
-      <div className="flex flex-col justify-center items-center flex-grow gap-5">
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          {Array.from({ length: 9 }, (_, index) => {
-            const buttonId = index + 1;
-            return (
-              <div
-                className={`aspect-square w-24 h-24 cursor-pointer ${litUpButtonId === buttonId ? 'bg-amber-400' : 'bg-amber-600'}`}
-                key={'button-' + buttonId}
-                onClick={() => handleClick(buttonId)}
-              ></div>
-            );
-          })}
+    <div className="text-center">
+      <header className="bg-gray-800 min-h-screen flex flex-col items-center justify-center text-white text-xl">
+        <header className="text-4xl m-6">Remember the sequence!</header>
+        <div className="flex flex-col justify-center items-center flex-grow gap-5">
+          <div className="grid grid-cols-3 gap-4 mb-4">
+            {Array.from({ length: 9 }, (_, index) => {
+              const buttonId = index + 1;
+              return (
+                <div
+                  className={`aspect-square w-24 h-24 cursor-pointer ${litUpButtonId === buttonId ? 'bg-sky-250' : 'bg-sky-400'}`}
+                  key={'button-' + buttonId}
+                  onClick={() => handleClick(buttonId)}
+                ></div>
+              );
+            })}
+          </div>
+          {!isGameStarted && (
+            <button
+              className="bg-sky-400 p-3 text-white font-semibold rounded-lg transition-colors duration-300 hover:bg-sky-600"
+              onClick={getSequence}
+            >
+              Start Game
+            </button>
+          )}
         </div>
-        {!isGameStarted && (
-          <button
-            className="bg-amber-600 p-2 text-white font-bold hover:bg-amber-500"
-            onClick={getSequence}
-          >
-            Start Game
-          </button>
-        )}
-      </div>
+      </header>
     </div>
   );
 };

@@ -29,8 +29,8 @@ function LatestResultPage(props: {
   }
 
   return (
-    <div className="app">
-      <header className="app-header">
+    <div className="text-center">
+      <header className="bg-gray-800 min-h-screen flex flex-col items-center justify-center text-white text-xl">
         <div className="flex flex-col space-y-4 mt-10">
           <div className="flex justify-center">
             <label className="text-lg font-medium" id="resultLabel">
@@ -38,10 +38,10 @@ function LatestResultPage(props: {
             </label>
           </div>
           <button
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ml-4"
+            className="bg-sky-400 text-white px-4 py-2 rounded-lg transition-colors duration-300 hover:bg-sky-600 ml-4"
             onClick={prepareForNextRound}
           >
-            NEXT ROUND
+            Next Round
           </button>
         </div>
       </header>

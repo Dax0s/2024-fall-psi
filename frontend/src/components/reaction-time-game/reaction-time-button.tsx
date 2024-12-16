@@ -34,7 +34,7 @@ export function ReactionTimeButton(props: {
   const [reactionTimeLabel, setReactionTimeLabel] = useState('TEST YOUR REACTION TIME');
 
   const [buttonLabel, setButtonLabel] = useState('PRESS ME TO START');
-  const [buttonClass, setButtonClass] = useState('bg-white text-black');
+  const [buttonClass, setButtonClass] = useState('bg-sky-400 text-white');
 
   const [averageLabel, setAverageLabel] = useState('');
 
@@ -99,7 +99,7 @@ export function ReactionTimeButton(props: {
 
     reactionState.current = ReactionState.BASE;
     setButtonLabel('TRY AGAIN');
-    setButtonClass('bg-white text-black');
+    setButtonClass('bg-sky-400 text-white');
 
     setReactionTimeLabel('REACTION TIME: ' + Math.floor(reactionTime) + ' ms');
     setAverageLabel('AVERAGE REACTION TIME: ' + Math.floor(averageReactionTime) + ' ms');
