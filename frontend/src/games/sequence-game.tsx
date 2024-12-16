@@ -71,7 +71,7 @@ const SequenceGame = () => {
               const buttonId = index + 1;
               return (
                 <div
-                  className={`aspect-square w-24 h-24 cursor-pointer ${litUpButtonId === buttonId ? 'bg-sky-300' : 'bg-sky-400'}`}
+                  className={`aspect-square w-24 h-24 cursor-pointer ${litUpButtonId === buttonId ? 'bg-sky-250' : 'bg-sky-400'}`}
                   key={'button-' + buttonId}
                   onClick={() => handleClick(buttonId)}
                 ></div>

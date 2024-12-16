@@ -8,7 +8,7 @@ const Loader = () => {
   const GamePage = lazy(() => import(`./games/${gameName}.tsx`));
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className='bg-gray-800 min-h-screen' />}>
       <GamePage />
     </Suspense>
   );
